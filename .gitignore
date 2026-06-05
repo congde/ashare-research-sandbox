@@ -1,1 +1,7 @@
 book/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.codex/
+playbook/my-playbook.md

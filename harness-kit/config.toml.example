@@ -1,0 +1,25 @@
+# Codex 项目级配置示例 —— 复制到 .codex/config.toml 或 ~/.codex/config.toml
+
+[model]
+default = "gpt-4.1"
+
+[sandbox]
+# 默认在沙箱内执行；写文件需审批
+mode = "workspace-write"
+network = "restricted"
+
+[approval]
+# 以下操作触发人工审批
+require_for = ["shell", "network", "write-outside-workspace"]
+
+[project]
+name = "codexDemo"
+root = "."
+
+[rules]
+# 加载 harness-kit 规则
+paths = ["harness-kit/rules/*.md"]
+
+[hooks]
+pre_commit = "harness-kit/hooks/pre-commit.sh"
+post_task = "harness-kit/hooks/post-task.sh"
