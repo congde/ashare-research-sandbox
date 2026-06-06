@@ -1,14 +1,19 @@
-name: Codex Autofix
+name: Courseware Check
 
 on:
   workflow_dispatch:
   pull_request:
     paths:
-      - 'app/**'
-      - 'challenges/**'
+      - 'AGENTS.md'
+      - 'Makefile'
+      - 'docs/**'
+      - 'labs/**'
+      - 'skills/**'
+      - 'scripts/**'
+      - 'requirements.txt'
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,21 +23,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: |
-          python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt
 
-      - name: Run tests
-        id: test
-        run: pytest app/tests -q
-        continue-on-error: true
-
-      - name: Codex exec fix (dry-run template)
-        if: steps.test.outcome == 'failure'
-        run: |
-          echo "→ 此处接入: codex exec -a never '修复 pytest 失败，验收: make test'"
-          echo "→ 需配置 CODEX_API_KEY secret，本模板默认 dry-run"
-          bash scripts/codex-exec-fix.sh --dry-run
-
-      - name: Fail if tests failed
-        if: steps.test.outcome == 'failure'
-        run: exit 1
+      - name: Verify executable courseware
+        run: make check
