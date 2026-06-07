@@ -26,6 +26,9 @@ match the files and commands that actually exist.
 Run the narrow lab check while editing:
 
 ```bash
+make lab-00
+make lab-04
+make lab-09
 make lab-01
 make lab-16
 ```
