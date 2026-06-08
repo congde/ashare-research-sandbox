@@ -1,0 +1,49 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36">
+  <diagram id="page1" name="fig12_3_risk_levels">
+    <mxGraphModel dx="1006" dy="781" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;判断标准：变更影响 / 错误代价 / 可逆性 / 团队成熟度&lt;/font&gt;" vertex="1">
+          <mxGeometry height="24" width="380" x="240" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" value="L0 自动执行" vertex="1">
+          <mxGeometry height="30" width="80" x="170" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" value="格式化、lint 修复、文档生成 可逆 / 影响零 / 无审批" vertex="1">
+          <mxGeometry height="30" width="340" x="260" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" value="自动合并" vertex="1">
+          <mxGeometry height="30" width="80" x="610" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="7" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" value="L1 自动 PR" vertex="1">
+          <mxGeometry height="30" width="80" x="170" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="8" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" value="简单 Bug 修复、类型补全、依赖升级 可逆 / 影响小 / 1 人审查" vertex="1">
+          <mxGeometry height="30" width="340" x="260" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="9" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" value="审查后合并" vertex="1">
+          <mxGeometry height="30" width="80" x="610" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" value="L2 协助执行" vertex="1">
+          <mxGeometry height="30" width="80" x="170" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" value="中等重构、新功能开发 可逆 / 影响中 / 2 人审查 + CI 全绿" vertex="1">
+          <mxGeometry height="30" width="340" x="260" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" value="审批后合并" vertex="1">
+          <mxGeometry height="30" width="80" x="610" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" value="L3 仅建议" vertex="1">
+          <mxGeometry height="40" width="80" x="170" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="14" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" value="认证授权、支付、Schema 变更、删除 不完全可逆 / 影响大 / 资深 + 二次确认" vertex="1">
+          <mxGeometry height="40" width="340" x="260" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="15" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" value="人工执行" vertex="1">
+          <mxGeometry height="40" width="80" x="610" y="260" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

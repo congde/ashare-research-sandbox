@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-24" agent="Codex Book v6" version="22.1.16" type="device">
+  <diagram id="page1" name="fig12_5_codex_review_triggers">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+<mxCell id="2" value="图 12-5　Codex CLI 的三处审查触发点：终端 → PR → CI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=1;align=center;verticalAlign=middle;fontSize=17;fontColor=#1E293B;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="0" y="40" width="1200" height="36" as="geometry"/></mxCell>
+<mxCell id="3" value="推荐模型：GPT-5.5（OpenAI 官方推荐用于代码审查的强一致性场景）" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" vertex="1" edge="0" parent="1"><mxGeometry x="0" y="90" width="1200" height="24" as="geometry"/></mxCell>
+<mxCell id="4" value="① 终端（pre-commit）
+
+本地 /review
+--sandbox=read-only
+阻断含致命问题的 commit" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="50" y="190" width="320" height="200" as="geometry"/></mxCell>
+<mxCell id="5" value="② Pull Request（云端）
+
+GitHub PR @codex /review
+→ 自动留 inline 评论
+→ 设置可开自动评每个 PR" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="430" y="190" width="320" height="200" as="geometry"/></mxCell>
+<mxCell id="6" value="③ CI（headless）
+
+codex exec --review
+非交互输出结构化报告
+配合分支保护门禁" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="810" y="190" width="340" height="200" as="geometry"/></mxCell>
+<mxCell id="7" value="" style="endArrow=classic;html=1;strokeColor=#3B82F6;strokeWidth=1.8;" edge="1" parent="1" source="4" target="5"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="8" value="" style="endArrow=classic;html=1;strokeColor=#3B82F6;strokeWidth=1.8;" edge="1" parent="1" source="5" target="6"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="9" value="输入：未提交变更
+（uncommitted）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="50" y="420" width="320" height="80" as="geometry"/></mxCell>
+<mxCell id="10" value="输入：PR diff + 依赖文件 + 测试" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="430" y="420" width="320" height="80" as="geometry"/></mxCell>
+<mxCell id="11" value="输入：完整 PR 上下文 + AGENTS.md" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="810" y="420" width="340" height="80" as="geometry"/></mxCell>
+<mxCell id="12" value="输出：prioritized findings（不修改代码） · 标注严重级（P0/P1/P2）· 给出修复建议但要求人工执行" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#8B5CF6;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="50" y="530" width="1100" height="70" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

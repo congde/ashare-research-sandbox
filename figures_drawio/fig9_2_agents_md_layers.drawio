@@ -1,0 +1,34 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram id="page1" name="fig9_2_agents_md_layers">
+    <mxGraphModel dx="1454" dy="1116" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="620" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3" value="越靠近当前工作目录优先级越高；AGENTS.override.md 可紧急覆盖" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="392.5" y="170" width="380" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="~/.codex/AGENTS.md     全局级　个人偏好（常用工具、编码习惯）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="355" y="194" width="455" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="&lt;repo&gt;/AGENTS.md     仓库级　团队规范（架构约定、测试要求）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="355" y="240" width="455" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="&lt;repo&gt;/backend/AGENTS.md     模块级　模块特定约束（如禁用外部网络）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="355" y="290" width="455" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="" style="endArrow=classic;html=1;strokeWidth=1.8;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="194" as="sourcePoint" />
+            <mxPoint x="340" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8" value="优先级&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;whiteSpace=wrap;fontStyle=1;rotation=-90;" parent="1" vertex="1">
+          <mxGeometry x="290" y="240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="跨工具标准：Codex / Copilot / Cursor / Windsurf 共用此规范（Agentic AI Foundation 托管）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="350" y="340" width="460" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

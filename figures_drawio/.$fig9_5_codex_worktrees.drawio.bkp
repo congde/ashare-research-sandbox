@@ -1,0 +1,61 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram id="page1" name="fig9_5_codex_worktrees">
+    <mxGraphModel dx="2118" dy="781" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3" value="每个 worktree 独立工作树；并行勘察自然延伸到并行修改" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-30" y="320" width="1100" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="cyXXDmKTkotM5aJQ1tCI-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyXXDmKTkotM5aJQ1tCI-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyXXDmKTkotM5aJQ1tCI-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="主仓库 / main （不被 AI 触碰）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="120" y="195" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cyXXDmKTkotM5aJQ1tCI-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5" target="8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value=".codex/worktrees/ feature-feedback" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="160" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cyXXDmKTkotM5aJQ1tCI-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="6" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value=".codex/worktrees/ fix-emotion-bug" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="200" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cyXXDmKTkotM5aJQ1tCI-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="7" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value=".codex/worktrees/ refactor-memory" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="240" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="Codex session A feat 分支" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="600" y="160" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="Codex session B fix 分支" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="600" y="200" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="Codex session C refactor 分支" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="600" y="245" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="tmux 面板" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="800" y="200" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="可选 --tmux" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="810" y="240" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="codex --worktree feature-feedback --tmux     # 一行命令：建 worktree、切分支、起 tmux、跑 Codex" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="120" y="290" width="760" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-24" agent="Codex Book v6" version="22.1.16" type="device">
+  <diagram id="page1" name="fig12_1_ci_autofix">
+    <mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+<mxCell id="2" value="图 12-1　CI 自修复闭环（workflow_run 触发）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=1;align=center;verticalAlign=middle;fontSize=17;fontColor=#1E293B;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="0" y="40" width="1100" height="36" as="geometry"/></mxCell>
+<mxCell id="3" value="① CI 构建失败" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=11;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="30" y="150" width="180" height="110" as="geometry"/></mxCell>
+<mxCell id="4" value="② workflow_run
+触发 Codex" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=11;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="250" y="150" width="180" height="110" as="geometry"/></mxCell>
+<mxCell id="5" value="③ Codex 分析日志
+定位根因" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=11;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="470" y="150" width="180" height="110" as="geometry"/></mxCell>
+<mxCell id="6" value="④ 应用最小修复
+(sandbox=workspace-write)" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=11;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="690" y="150" width="180" height="110" as="geometry"/></mxCell>
+<mxCell id="7" value="⑤ 重新运行
+本地检查" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=11;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="910" y="150" width="180" height="110" as="geometry"/></mxCell>
+<mxCell id="8" value="" style="endArrow=classic;html=1;strokeColor=#3B82F6;strokeWidth=1.8;" edge="1" parent="1" source="3" target="4"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="9" value="" style="endArrow=classic;html=1;strokeColor=#3B82F6;strokeWidth=1.8;" edge="1" parent="1" source="4" target="5"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="10" value="" style="endArrow=classic;html=1;strokeColor=#3B82F6;strokeWidth=1.8;" edge="1" parent="1" source="5" target="6"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="11" value="" style="endArrow=classic;html=1;strokeColor=#3B82F6;strokeWidth=1.8;" edge="1" parent="1" source="6" target="7"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="12" value="⑥ 创建 PR
+(Auto-generated)" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="30" y="360" width="220" height="90" as="geometry"/></mxCell>
+<mxCell id="13" value="⑦ 人工审查
+（不能自动合并）" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="280" y="360" width="220" height="90" as="geometry"/></mxCell>
+<mxCell id="14" value="⑧ 合并到主线" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="540" y="360" width="220" height="90" as="geometry"/></mxCell>
+<mxCell id="15" value="⑨ 触发新一轮 CI" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="790" y="360" width="220" height="90" as="geometry"/></mxCell>
+<mxCell id="16" value="" style="endArrow=classic;html=1;strokeColor=#2C3E50;strokeWidth=1.8;" edge="1" parent="1" source="12" target="13"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="17" value="" style="endArrow=classic;html=1;strokeColor=#2C3E50;strokeWidth=1.8;" edge="1" parent="1" source="13" target="14"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="18" value="" style="endArrow=classic;html=1;strokeColor=#2C3E50;strokeWidth=1.8;" edge="1" parent="1" source="14" target="15"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="19" value="" style="endArrow=classic;html=1;strokeColor=#10B981;strokeWidth=1.8;" edge="1" parent="1" source="7" target="12"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="20" value="成本控制：只在 main 分支失败时触发 · 诊断用 gpt-4o-mini · 修复用 gpt-4o · 限定 --files 范围" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#6B7280;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="30" y="540" width="1040" height="100" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

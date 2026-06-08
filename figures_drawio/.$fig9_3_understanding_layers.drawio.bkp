@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-24" agent="Codex Book v6" version="22.1.16" type="device">
+  <diagram id="page1" name="fig9_3_understanding_layers">
+    <mxGraphModel dx="1300" dy="620" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="620" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+<mxCell id="2" value="图 9-3　代码理解的四层金字塔" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=1;align=center;verticalAlign=middle;fontSize=17;fontColor=#1E293B;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="0" y="40" width="1300" height="36" as="geometry"/></mxCell>
+<mxCell id="3" value="第一层　目录结构层：项目有哪些模块？如何组织？" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="120" y="470" width="800" height="80" as="geometry"/></mxCell>
+<mxCell id="4" value="Codex 自动勘察可完成" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" vertex="1" edge="0" parent="1"><mxGeometry x="935" y="500" width="240" height="30" as="geometry"/></mxCell>
+<mxCell id="5" value="第二层　接口层：每个模块对外暴露什么？入口/出口在哪里？" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="180" y="370" width="680" height="80" as="geometry"/></mxCell>
+<mxCell id="6" value="Codex 自动勘察可完成" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" vertex="1" edge="0" parent="1"><mxGeometry x="875" y="400" width="240" height="30" as="geometry"/></mxCell>
+<mxCell id="7" value="第三层　实现层：核心业务逻辑如何实现？数据流向？" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="240" y="270" width="560" height="80" as="geometry"/></mxCell>
+<mxCell id="8" value="与 Codex 交互式探索" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" vertex="1" edge="0" parent="1"><mxGeometry x="815" y="300" width="240" height="30" as="geometry"/></mxCell>
+<mxCell id="9" value="第四层　隐含知识层：哪些假设没说？哪些是只可意会的？" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=12;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="300" y="170" width="440" height="80" as="geometry"/></mxCell>
+<mxCell id="10" value="需结合人工判断" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" vertex="1" edge="0" parent="1"><mxGeometry x="755" y="200" width="240" height="30" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

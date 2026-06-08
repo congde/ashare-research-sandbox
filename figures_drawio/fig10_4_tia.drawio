@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-24" agent="Codex Book v6" version="22.1.16" type="device">
+  <diagram id="page1" name="fig10_4_tia">
+    <mxGraphModel dx="1100" dy="640" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+<mxCell id="2" value="图 10-4　测试影响分析（TIA）：把 30 分钟反馈压到 3 分钟" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=1;align=center;verticalAlign=middle;fontSize=17;fontColor=#1E293B;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="0" y="40" width="1100" height="36" as="geometry"/></mxCell>
+<mxCell id="3" value="100% 测试全跑" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=14;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="80" y="200" width="460" height="90" as="geometry"/></mxCell>
+<mxCell id="4" value="传统模式　约 30 分钟反馈" style="text;html=1;align=center;verticalAlign=middle;fontSize=14;fontColor=#2C3E50;whiteSpace=wrap;strokeColor=none;fillColor=none;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="80" y="320" width="460" height="30" as="geometry"/></mxCell>
+<mxCell id="5" value="20%" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=14;fontColor=#1F2937;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="560" y="200" width="92" height="90" as="geometry"/></mxCell>
+<mxCell id="6" value="跳过 80%" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#2C3E50;strokeWidth=1.4;align=center;verticalAlign=middle;fontSize=14;fontColor=#1F2937;" vertex="1" edge="0" parent="1"><mxGeometry x="652" y="200" width="368" height="90" as="geometry"/></mxCell>
+<mxCell id="7" value="AI 测试影响分析（TIA）　约 3 分钟反馈，覆盖 87% 缺陷" style="text;html=1;align=center;verticalAlign=middle;fontSize=14;fontColor=#2C3E50;whiteSpace=wrap;strokeColor=none;fillColor=none;fontStyle=1;" vertex="1" edge="0" parent="1"><mxGeometry x="560" y="320" width="460" height="30" as="geometry"/></mxCell>
+<mxCell id="8" value="AI 综合考虑：代码变更熵 · 历史失败率 · 覆盖率热点 三个维度" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#6B7280;whiteSpace=wrap;strokeColor=none;fillColor=none;" vertex="1" edge="0" parent="1"><mxGeometry x="0" y="480" width="1100" height="24" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
