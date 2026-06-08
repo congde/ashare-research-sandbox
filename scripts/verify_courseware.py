@@ -5,9 +5,11 @@ from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLISHABLE_CHAPTERS = (
-    ROOT / "docs/v2/01-第一张工单.md",
-    ROOT / "docs/v2/04-AGENTS项目说明.md",
-    ROOT / "docs/v2/16-Skills沉淀.md",
+    ROOT / "docs/v2/01-第一个委托.md",
+    ROOT / "docs/v2/04-调研与整理.md",
+    ROOT / "docs/v2/09-Skills工作流.md",
+    ROOT / "docs/v2/14-Bug与热修复.md",
+    ROOT / "docs/v2/20-Playbook与推广.md",
 )
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 

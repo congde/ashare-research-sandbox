@@ -2,15 +2,10 @@
 
 ## Facts
 
-- Obsidian publishes a personal-use license with optional paid Sync and Publish
-  add-ons. Source: https://obsidian.md/pricing
-- Notion publishes Free / Plus / Business tiers with documented page-history
-  limits on Free. Source: https://www.notion.so/pricing
-- Obsidian desktop stores notes as local Markdown files; mobile sync typically
-  relies on Obsidian Sync or a self-managed folder sync setup. Source:
-  https://help.obsidian.md/Obsidian/Obsidian+Sync
-- Notion requires network access for most editing flows across desktop and
-  mobile clients. Source: https://www.notion.so/help/category/mobile
+- Obsidian publishes a personal-use license with optional paid Sync and Publish add-ons. Source: https://obsidian.md/pricing
+- Notion publishes Free / Plus / Business tiers with documented page-history limits on Free. Source: https://www.notion.so/pricing
+- Obsidian desktop stores notes as local Markdown files; mobile sync typically relies on Obsidian Sync or a self-managed folder sync setup. Source: https://help.obsidian.md/Obsidian/Obsidian+Sync
+- Notion requires network access for most editing flows across desktop and mobile clients. Source: https://www.notion.so/help/category/mobile
 
 ## Inferences
 
