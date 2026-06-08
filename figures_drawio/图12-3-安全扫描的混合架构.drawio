@@ -1,0 +1,70 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram id="fig-12-3" name="图 12-3：安全扫描的混合架构">
+    <mxGraphModel dx="1513" dy="1120" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="box2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;strokeWidth=1;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="140" width="280" x="480" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="box1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;strokeWidth=1;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="80" width="270" x="190" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="n1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontColor=#000000;" value="代码变更" vertex="1">
+          <mxGeometry height="40" width="40" x="140" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="bVLhzmknCftzDDDmYMJo-1" edge="1" parent="1" source="n2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontColor=#000000;" target="n3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontColor=#000000;" value="SAST / CodeQL /&lt;br&gt;Semgrep 初筛" vertex="1">
+          <mxGeometry height="50" width="140" x="210" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="n3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontColor=#000000;" value="告警列表" vertex="1">
+          <mxGeometry height="45" width="90" x="360" y="192.5" as="geometry" />
+        </mxCell>
+        <mxCell id="n4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontColor=#000000;" value="Codex&lt;br&gt;结合上下文精排" vertex="1">
+          <mxGeometry height="45" width="110" x="490" y="192.5" as="geometry" />
+        </mxCell>
+        <mxCell id="n5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontColor=#000000;" value="真阳性&lt;br&gt;+ 修复建议" vertex="1">
+          <mxGeometry height="50" width="100" x="645" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="n6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontColor=#000000;" value="疑似误报&lt;br&gt;+ 理由" vertex="1">
+          <mxGeometry height="50" width="100" x="645" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="n7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;fontColor=#000000;" value="人工安全审查" vertex="1">
+          <mxGeometry height="70" width="60" x="780" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;fontColor=#000000;" target="n2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;fontColor=#000000;" target="n4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;fontColor=#000000;" target="n5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontColor=#000000;" target="n6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="n5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;fontColor=#000000;" target="n7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;fontColor=#000000;" target="n7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="layer1" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#000000;" value="确定性工具层" vertex="1">
+          <mxGeometry height="30" width="200" x="200" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="layer2" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#000000;" value="AI 精排层" vertex="1">
+          <mxGeometry height="30" width="150" x="500" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="layer3" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#000000;" value="人工决策层" vertex="1">
+          <mxGeometry height="30" width="70" x="770" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontFamily=Microsoft YaHei;fontSize=11;fontColor=#000000;" value="传统 SAST 工具提供可重复的确定性初筛；Codex 结合代码上下文降低噪声、解释告警并生成修复建议；最终由人工安全审查做决策。" vertex="1">
+          <mxGeometry height="40" width="660" x="160" y="280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
