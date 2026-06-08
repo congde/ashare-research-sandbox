@@ -1,0 +1,89 @@
+<mxfile host="65bd71144e">
+    <diagram id="fig6" name="Hit@1 Performance Funnel">
+        <mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="720" pageHeight="520" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Issue-ID Hit@1 by pipeline stage (Run 1, N=309)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="24" width="560" height="28" as="geometry"/>
+                </mxCell>
+                <!-- axes -->
+                <mxCell id="yaxis" value="" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#333333;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="100" y="420" as="sourcePoint"/>
+                        <mxPoint x="100" y="80" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="xaxis" value="" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#333333;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="100" y="420" as="sourcePoint"/>
+                        <mxPoint x="640" y="420" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ylab" value="Hit@1 (%)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;fontStyle=2;rotation=-90;" parent="1" vertex="1">
+                    <mxGeometry x="28" y="230" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <!-- grid + y ticks -->
+                <mxCell id="g20" value="" style="endArrow=none;html=1;strokeColor=#DDDDDD;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="352" as="sourcePoint"/><mxPoint x="640" y="352" as="targetPoint"/></mxGeometry>
+                </mxCell>
+                <mxCell id="t20" value="20" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="342" width="30" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="g40" value="" style="endArrow=none;html=1;strokeColor=#DDDDDD;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="284" as="sourcePoint"/><mxPoint x="640" y="284" as="targetPoint"/></mxGeometry>
+                </mxCell>
+                <mxCell id="t40" value="40" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="274" width="30" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="g60" value="" style="endArrow=none;html=1;strokeColor=#DDDDDD;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="216" as="sourcePoint"/><mxPoint x="640" y="216" as="targetPoint"/></mxGeometry>
+                </mxCell>
+                <mxCell id="t60" value="60" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="206" width="30" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="g80" value="" style="endArrow=none;html=1;strokeColor=#DDDDDD;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="148" as="sourcePoint"/><mxPoint x="640" y="148" as="targetPoint"/></mxGeometry>
+                </mxCell>
+                <mxCell id="t80" value="80" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="138" width="30" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="g100" value="" style="endArrow=none;html=1;strokeColor=#DDDDDD;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="80" as="sourcePoint"/><mxPoint x="640" y="80" as="targetPoint"/></mxGeometry>
+                </mxCell>
+                <mxCell id="t100" value="100" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="52" y="70" width="38" height="18" as="geometry"/>
+                </mxCell>
+                <!-- bars: scale 340px = 100% -->
+                <mxCell id="b1" value="42.1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F7FF;strokeColor=#333333;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="276" width="88" height="144" as="geometry"/>
+                </mxCell>
+                <mxCell id="b2" value="56.3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B3E0FF;strokeColor=#333333;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="316" y="228" width="88" height="192" as="geometry"/>
+                </mxCell>
+                <mxCell id="b3" value="81.2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4DA3FF;strokeColor=#333333;fontColor=#FFFFFF;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="452" y="144" width="88" height="276" as="geometry"/>
+                </mxCell>
+                <mxCell id="l1" value="Hybrid recall" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="164" y="428" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="l2" value="Rerank (top-50)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="428" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="l3" value="LLM election" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="436" y="428" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <!-- delta annotations -->
+                <mxCell id="d1" value="+14.2 pp" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="268" y="248" width="52" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="d2" value="+24.9 pp" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="404" y="118" width="52" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" value="Qwen3.5-27B decision; stock bge-reranker-large. Values from Run 1 (Table exp-hitk)." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontColor=#888888;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="468" width="520" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

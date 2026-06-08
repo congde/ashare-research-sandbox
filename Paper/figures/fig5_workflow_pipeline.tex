@@ -1,0 +1,52 @@
+% fig5_workflow_pipeline.tex — LangGraph workflow pipeline (placeholder)
+\tikzset{
+  block/.style={
+    rectangle, draw=black!70, fill=cyan!8, rounded corners=2pt,
+    align=center, font=\scriptsize, inner sep=4pt, minimum width=3.4cm
+  },
+  llmblock/.style={
+    block, fill=violet!10, minimum width=3.6cm
+  },
+  parblock/.style={
+    block, fill=orange!12, minimum width=3.6cm
+  },
+  endnode/.style={
+    ellipse, draw=black!70, fill=green!10,
+    minimum width=1.2cm, minimum height=0.65cm,
+    align=center, font=\small\bfseries
+  },
+  arr/.style={-{Stealth[length=2mm]}, semithick, draw=black!65}
+}
+
+\begin{tikzpicture}[
+  node distance=0.55cm and 1.2cm,
+  >=Stealth
+]
+
+\node[block, minimum height=1.1cm] (a) {%
+  \textbf{analyze}\\[-2pt]\tiny truncate history · reply\_language · user text};
+\node[block, below=of a, minimum height=0.85cm] (g) {%
+  \textbf{guest\_mode}\\[-2pt]\tiny no user\_id $\to$ guest · is\_guest\_mode};
+\node[llmblock, below=of g, minimum height=1.15cm] (c) {%
+  \textbf{classify\_scene}\\[-2pt]\tiny LLM · early return / CONTINUE pass-through};
+
+\node[block, below left=1.0cm and 2.0cm of c, minimum height=1.0cm] (k) {%
+  \textbf{kb\_only\_retrieval}\\[-2pt]\tiny hybrid Top-K · skip MCP/rules};
+\node[parblock, below right=1.0cm and 2.0cm of c, minimum height=1.1cm] (p) {%
+  \textbf{parallel\_retrieval}\\[-2pt]\tiny FAQ+MCP · rule inject · rare early return};
+
+\node[llmblock, below=1.6cm of c, yshift=-0.4cm, minimum height=1.0cm] (l) {%
+  \textbf{llm\_result}\\[-2pt]\tiny pick issue\_id · ANSWER/CLARIFY};
+\node[endnode, below=of l] (end) {END};
+
+\draw[arr] (a) -- (g);
+\draw[arr] (g) -- (c);
+\draw[arr] (c.west) -| node[above, font=\tiny, pos=0.25] {kb\_only} (k.north);
+\draw[arr] (c.east) -| node[above, font=\tiny, pos=0.25] {parallel} (p.north);
+\draw[arr] (c.east) -- ++(2.8,0) |- node[right, font=\tiny, pos=0.7] {early\_return} (end.east);
+\draw[arr] (k.south) |- (l.west);
+\draw[arr] (p.south) |- node[right, font=\tiny] {continue} (l.east);
+\draw[arr] (p.east) -- ++(1.0,0) |- node[right, font=\tiny, pos=0.75] {early\_return} (end.east);
+\draw[arr] (l) -- (end);
+
+\end{tikzpicture}

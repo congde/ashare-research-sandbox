@@ -1,0 +1,11 @@
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+# Allow committed figure exports for Overleaf / draw.io workflow
+!figures/*.pdf
+*.synctex.gz
+*.bbl
+*.blg

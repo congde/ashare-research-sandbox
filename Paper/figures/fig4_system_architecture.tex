@@ -1,0 +1,59 @@
+% fig4_system_architecture.tex — three-layer logical architecture (placeholder)
+\tikzset{
+  layer/.style={
+    rectangle, draw=black!55, fill=gray!6, rounded corners=4pt,
+    minimum width=11.5cm, inner sep=10pt
+  },
+  block/.style={
+    rectangle, draw=black!70, fill=cyan!8, rounded corners=2pt,
+    minimum height=0.75cm, align=center, font=\scriptsize
+  },
+  llmblock/.style={
+    block, fill=violet!10, minimum width=2.6cm
+  },
+  ruleblock/.style={
+    block, fill=orange!12, minimum width=2.8cm
+  },
+  db/.style={
+    cylinder, draw=black!60, fill=blue!10, shape border rotate=90,
+    aspect=0.28, minimum height=0.55cm, minimum width=1.6cm,
+    align=center, font=\scriptsize
+  },
+  arr/.style={-{Stealth[length=2mm]}, semithick, draw=black!65},
+  link/.style={semithick, draw=blue!40}
+}
+
+\begin{tikzpicture}[
+  node distance=0.55cm and 0.45cm,
+  >=Stealth
+]
+
+\node[layer, minimum height=1.1cm, label={[font=\small\bfseries]above:Client layer}] (client) {};
+\node[block, minimum width=2.0cm] (a1) at ([xshift=-2.2cm]client.center) {Chat UI};
+\node[block, minimum width=2.4cm] (a2) at ([xshift=1.8cm]client.center) {Session / KCBot};
+\draw[arr] (a1) -- (a2);
+
+\node[layer, below=0.7cm of client, minimum height=2.4cm, label={[font=\small\bfseries]above:CS Agent}] (agent) {};
+\node[block, minimum width=2.8cm] (c1) at ([xshift=-3.4cm, yshift=0.35cm]agent.center)
+  {Workflow orchestrator\\[-2pt]\tiny guest · routing · state};
+\node[llmblock] (c2) at ([xshift=-0.2cm, yshift=0.35cm]agent.center)
+  {Two-stage LLM\\[-2pt]\tiny classify · selection};
+\node[block, minimum width=3.0cm] (c3) at ([xshift=3.2cm, yshift=0.35cm]agent.center)
+  {FAQ hybrid retrieval\\[-2pt]\tiny BM25 · dense · RRF · Rerank};
+\node[ruleblock] (c4) at ([xshift=-0.2cm, yshift=-0.75cm]agent.center)
+  {Rule retrieval\\[-2pt]\tiny MCP · match · inject};
+\draw[arr] (c1) -- (c2);
+\draw[arr] (c2) -- (c3);
+\draw[arr] (c2) -- (c4);
+
+\node[layer, below=0.7cm of agent, minimum height=1.0cm, label={[font=\small\bfseries]above:AI Infra}] (infra) {};
+\node[db] (d1) at ([xshift=-3.6cm]infra.center) {FAQ\\KB};
+\node[db] (d2) at ([xshift=-1.2cm]infra.center) {MCP\\service};
+\node[db] (d3) at ([xshift=1.2cm]infra.center) {Rule\\engine};
+\node[db] (d4) at ([xshift=3.6cm]infra.center) {LLM\\inference};
+\draw[link] (d1) -- (d2) -- (d3) -- (d4);
+
+\draw[arr] (a2.south) -- ++(0,-0.25) -| (c1.north);
+\draw[arr] (c4.south) -- ++(0,-0.2) -| ([xshift=1.2cm]infra.north);
+
+\end{tikzpicture}

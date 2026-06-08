@@ -1,0 +1,49 @@
+% fig1_classify_control_flow.tex — classify-stage control flow (placeholder; edit draw.io source)
+\tikzset{
+  rblock/.style={
+    rectangle, draw=black!70, fill=cyan!8, rounded corners=2pt,
+    minimum height=0.6cm, minimum width=2.2cm, align=center, font=\scriptsize
+  },
+  decision/.style={
+    diamond, draw=black!70, fill=yellow!12, aspect=2.0,
+    inner sep=1pt, align=center, font=\scriptsize
+  },
+  outblock/.style={
+    rectangle, draw=black!70, fill=green!10, rounded corners=2pt,
+    minimum height=0.6cm, minimum width=2.4cm, align=center, font=\scriptsize
+  },
+  fuseblock/.style={
+    rectangle, draw=black!70, fill=violet!10, rounded corners=2pt,
+    minimum height=0.65cm, minimum width=2.6cm, align=center, font=\scriptsize
+  },
+  rarrow/.style={-{Stealth[length=2mm]}, semithick, draw=black!65}
+}
+
+\begin{tikzpicture}[
+  node distance=0.45cm and 0.8cm,
+  >=Stealth
+]
+
+\node[rblock, minimum width=3.0cm] (q) {User Query $+$ History};
+\node[rblock, below=of q] (guard) {Input Guard / Risk};
+\node[rblock, below=of guard, minimum width=3.2cm] (classify)
+  {LLM Classify Scene\\[-1pt]tool, slots, $\tilde{q}$, action};
+\node[decision, below=of classify] (route1) {Special\\[-1pt]action?};
+\node[outblock, right=1.4cm of route1] (end) {END (no retrieval)};
+\node[decision, below=of route1] (route2) {is\_guest\_mode?};
+\node[rblock, below left=0.9cm and 1.2cm of route2] (kbonly) {kb\_only\_retrieval};
+\node[rblock, below right=0.9cm and 1.2cm of route2] (parallel) {parallel\_retrieval};
+\node[fuseblock, below=1.1cm of route2, yshift=-0.5cm, minimum width=3.0cm] (decide)
+  {llm\_result\\issue\_id election};
+
+\draw[rarrow] (q) -- (guard);
+\draw[rarrow] (guard) -- (classify);
+\draw[rarrow] (classify) -- (route1);
+\draw[rarrow] (route1) -- node[above, font=\tiny] {yes} (end);
+\draw[rarrow] (route1) -- node[right, font=\tiny] {no} (route2);
+\draw[rarrow] (route2.west) -| node[above left, font=\tiny, pos=0.25] {guest} (kbonly.north);
+\draw[rarrow] (route2.east) -| node[above right, font=\tiny, pos=0.25] {member} (parallel.north);
+\draw[rarrow] (kbonly.south) |- (decide.west);
+\draw[rarrow] (parallel.south) |- (decide.east);
+
+\end{tikzpicture}

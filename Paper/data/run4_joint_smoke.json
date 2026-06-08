@@ -1,0 +1,32 @@
+{
+  "run": "run4_joint",
+  "rerank_model": "out_bge_rerank_ft",
+  "skip_llm": false,
+  "jsonl": "/Users/bigiongyuan/Documents/GitHub/ai-kia-assistant/scripts/kcbot_test/线上数据验证集.cleaned.jsonl",
+  "metrics": {
+    "n": 3,
+    "stages": {
+      "recall": {
+        "hit@1": 0.0,
+        "hit@3": 0.0,
+        "hit@5": 33.33,
+        "hit@10": 33.33,
+        "hit@15": 33.33,
+        "hit@20": 33.33,
+        "hit@50": 66.67
+      },
+      "rerank": {
+        "hit@1": 0.0,
+        "hit@3": 0.0,
+        "hit@5": 33.33,
+        "hit@10": 33.33,
+        "hit@15": 33.33,
+        "hit@20": 33.33,
+        "hit@50": 66.67
+      },
+      "llm": {
+        "hit@1": 0.0
+      }
+    }
+  }
+}
