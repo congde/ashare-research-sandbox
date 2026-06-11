@@ -27,15 +27,33 @@ Run the narrow lab check while editing:
 
 ```bash
 make lab-00
+make lab-03
 make lab-04
 make lab-09
 make lab-01
 make lab-16
 ```
 
+On Windows PowerShell, use the cross-platform runner instead:
+
+```powershell
+py scripts/course.py lab-00
+py scripts/course.py lab-03
+py scripts/course.py lab-04
+py scripts/course.py lab-09
+py scripts/course.py lab-01
+py scripts/course.py lab-16
+```
+
 Before finishing a repository-wide change, run:
 
 ```bash
 make check
+```
+
+On Windows PowerShell:
+
+```powershell
+py scripts/course.py check
 ```
 

@@ -1,0 +1,662 @@
+#!/usr/bin/env python3
+"""Generate supplementary chapter flowchart PNGs and draw.io source pages."""
+
+from __future__ import annotations
+
+import textwrap
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
+
+ROOT = Path(__file__).resolve().parents[1]
+ASSETS = ROOT / "docs" / "v2" / "assets"
+DRAWIO_OUT = ASSETS / "chapters-03-20-supplementary.drawio"
+
+WIDTH, HEIGHT = 1440, 810
+BG = "#F7F8FB"
+TITLE_COLOR = "#101A33"
+SUB_COLOR = "#596983"
+ARROW = "#63738C"
+
+BOX_STYLES = {
+    "step": ("#FFFFFF", "#2563EB"),
+    "step2": ("#FFFFFF", "#0891B2"),
+    "step3": ("#FFFFFF", "#0F9B8E"),
+    "warn": ("#FFFFFF", "#F59E0B"),
+    "ok": ("#E8F5E9", "#2E7D32"),
+    "fail": ("#FFEBEE", "#C62828"),
+    "decision": ("#F5F5F5", "#616161"),
+}
+
+STYLE_TO_DRAWIO = {
+    "step": "#2563EB",
+    "step2": "#0891B2",
+    "step3": "#0F9B8E",
+    "warn": "#F59E0B",
+    "ok": "#2E7D32",
+    "fail": "#C62828",
+    "decision": "#616161",
+}
+
+
+def _font_candidates() -> list[Path]:
+    windir = Path("C:/Windows/Fonts")
+    names = [
+        "msyh.ttc",
+        "msyhbd.ttc",
+        "simhei.ttf",
+        "simsun.ttc",
+        "arial.ttf",
+    ]
+    paths = [windir / name for name in names if (windir / name).is_file()]
+    paths.append(Path("arial.ttf"))
+    return paths
+
+
+def _load_font(size: int):
+    for path in _font_candidates():
+        try:
+            return ImageFont.truetype(str(path), size)
+        except OSError:
+            continue
+    return ImageFont.load_default()
+
+
+def load_fonts() -> tuple:
+    return _load_font(34), _load_font(20), _load_font(22), _load_font(18)
+
+
+def wrap(text: str, width: int = 10) -> str:
+    if any("\u4e00" <= ch <= "\u9fff" for ch in text):
+        width = min(width, 8)
+    return "\n".join(textwrap.wrap(text, width=width))
+
+
+def draw_box(
+    draw: ImageDraw.ImageDraw,
+    xywh: tuple[int, int, int, int],
+    text: str,
+    style: str,
+    font,
+    radius: int = 14,
+) -> None:
+    x, y, w, h = xywh
+    fill, stroke = BOX_STYLES[style]
+    if style == "decision":
+        cx, cy = x + w // 2, y + h // 2
+        pts = [(cx, y), (x + w, cy), (cx, y + h), (x, cy)]
+        draw.polygon(pts, fill=fill, outline=stroke, width=4)
+    else:
+        draw.rounded_rectangle((x, y, x + w, y + h), radius=radius, outline=stroke, width=4, fill=fill)
+    bbox = draw.multiline_textbbox((0, 0), wrap(text), font=font, spacing=6, align="center")
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    draw.multiline_text(
+        (x + (w - tw) // 2, y + (h - th) // 2),
+        wrap(text),
+        fill=TITLE_COLOR,
+        font=font,
+        spacing=6,
+        align="center",
+    )
+
+
+def arrow_h(draw, x1, y, x2, label: str | None = None, font=None) -> None:
+    draw.line((x1, y, x2, y), fill=ARROW, width=4)
+    draw.polygon([(x2, y), (x2 - 12, y - 7), (x2 - 12, y + 7)], fill=ARROW)
+    if label and font:
+        draw.text(((x1 + x2) // 2 - 10, y - 28), label, fill=SUB_COLOR, font=font)
+
+
+def arrow_v(draw, x, y1, y2, label: str | None = None, font=None) -> None:
+    draw.line((x, y1, x, y2), fill=ARROW, width=4)
+    draw.polygon([(x, y2), (x - 7, y2 - 12), (x + 7, y2 - 12)], fill=ARROW)
+    if label and font:
+        draw.text((x + 12, (y1 + y2) // 2 - 10), label, fill=SUB_COLOR, font=font)
+
+
+def render_diagram(spec: dict, output: Path) -> None:
+    title_font, sub_font, body_font, small_font = load_fonts()
+    img = Image.new("RGB", (WIDTH, HEIGHT), BG)
+    draw = ImageDraw.Draw(img)
+    draw.text((80, 48), spec["title"], fill=TITLE_COLOR, font=title_font)
+    draw.text((80, 98), spec.get("subtitle", ""), fill=SUB_COLOR, font=sub_font)
+
+    for node in spec["nodes"]:
+        draw_box(draw, node["box"], node["text"], node["style"], body_font)
+    for edge in spec.get("edges", []):
+        label = edge.get("label")
+        if edge["kind"] == "h":
+            x1, y, x2 = edge["coords"]
+            arrow_h(draw, x1, y, x2, label, small_font)
+        else:
+            x, y1, y2 = edge["coords"]
+            arrow_v(draw, x, y1, y2, label, small_font)
+    if foot := spec.get("footer"):
+        draw.rounded_rectangle((300, 690, 1140, 770), radius=12, fill="#101A33")
+        draw.text((330, 712), foot, fill="#FFFFFF", font=body_font)
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    img.save(output)
+
+
+def h_edges(*pairs: tuple[int, int, int], labels: dict[int, str] | None = None) -> list[dict]:
+    labels = labels or {}
+    return [
+        {"kind": "h", "coords": pair, "label": labels.get(i)}
+        for i, pair in enumerate(pairs)
+    ]
+
+
+def lane(
+    x: int,
+    y: int,
+    w: int,
+    h: int,
+    texts: list[str],
+    styles: list[str] | None = None,
+) -> tuple[list[dict], list[dict]]:
+    styles = styles or ["step", "step2", "step3", "warn", "ok"] * 3
+    gap = 20
+    nodes = []
+    edges = []
+    cx = x
+    for i, text in enumerate(texts):
+        style = styles[i % len(styles)]
+        nodes.append({"box": (cx, y, w, h), "text": text, "style": style})
+        if i > 0:
+            prev = nodes[i - 1]["box"]
+            edges.append({"kind": "h", "coords": (prev[0] + prev[2], y + h // 2, cx)})
+        cx += w + gap
+    return nodes, edges
+
+
+DIAGRAMS: dict[str, dict] = {
+    "chapter-02-design-loop.png": {
+        "title": "验收设计闭环",
+        "subtitle": "从用途与风险出发，落到可执行检查与失败动作",
+        "page": "图2-3 验收设计闭环",
+        "nodes": [
+            {"box": (80, 300, 200, 110), "text": "任务用途", "style": "step"},
+            {"box": (320, 300, 200, 110), "text": "主要风险", "style": "step2"},
+            {"box": (560, 300, 200, 110), "text": "定义证据", "style": "step3"},
+            {"box": (800, 300, 170, 110), "text": "证据足够？", "style": "decision"},
+            {"box": (1020, 300, 200, 110), "text": "验收矩阵", "style": "ok"},
+            {"box": (800, 480, 220, 100), "text": "补充检查或降级", "style": "fail"},
+        ],
+        "edges": h_edges((280, 355, 315), (520, 355, 555), (760, 355, 795), (970, 355, 1015))
+        + [{"kind": "v", "coords": (885, 410, 475), "label": "否"}, {"kind": "h", "coords": (970, 355, 1015), "label": "是"}],
+        "footer": "验收标准应在开工前设计，而不是交付后补写。",
+    },
+    "chapter-03-capability-decision.png": {
+        "title": "入口能力决策",
+        "subtitle": "按任务依赖选择入口，而不是按习惯",
+        "page": "图3-1 入口能力决策",
+        "nodes": [
+            {"box": (80, 310, 190, 100), "text": "读懂 Brief", "style": "step"},
+            {"box": (310, 310, 190, 100), "text": "列出能力需求", "style": "step2"},
+            {"box": (540, 310, 190, 100), "text": "入口可满足？", "style": "decision"},
+            {"box": (770, 250, 220, 100), "text": "写工作区说明", "style": "ok"},
+            {"box": (770, 420, 220, 100), "text": "停止或降级", "style": "fail"},
+            {"box": (1040, 250, 240, 100), "text": "执行并留证据", "style": "warn"},
+        ],
+        "edges": h_edges((270, 360, 305), (500, 360, 535), (990, 300, 1035))
+        + [{"kind": "h", "coords": (730, 300, 765), "label": "是"}, {"kind": "v", "coords": (635, 410, 415), "label": "否"}],
+        "footer": "正确入口决定 Codex 能看见什么、能做什么。",
+    },
+    "chapter-04-claim-ledger.png": {
+        "title": "主张台账流程",
+        "subtitle": "先证明每句话站得住，再写正式报告",
+        "page": "图4-1 主张台账流程",
+        "nodes": [
+            {"box": (60, 310, 160, 100), "text": "研究问题", "style": "step"},
+            {"box": (250, 310, 160, 100), "text": "来源候选", "style": "step2"},
+            {"box": (440, 310, 160, 100), "text": "证据摘录", "style": "step3"},
+            {"box": (630, 310, 180, 100), "text": "最小主张", "style": "warn"},
+            {"box": (850, 250, 180, 100), "text": "形成推断", "style": "ok"},
+            {"box": (850, 400, 180, 100), "text": "进入 Unknowns", "style": "fail"},
+            {"box": (1070, 250, 180, 100), "text": "形成建议", "style": "ok"},
+        ],
+        "edges": h_edges((220, 360, 245), (410, 360, 435), (600, 360, 625), (810, 360, 845), (1030, 300, 1065))
+        + [{"kind": "h", "coords": (810, 300, 845), "label": "支持"}, {"kind": "v", "coords": (720, 410, 395), "label": "不足"}],
+        "footer": "结论必须能够沿证据链回到来源。",
+    },
+    "chapter-05-publish-pipeline.png": {
+        "title": "可发版流水线",
+        "subtitle": "分层转换，避免为连贯而补事实",
+        "page": "图5-1 可发版流水线",
+        "nodes": [
+            {"box": (50, 310, 150, 100), "text": "原始素材", "style": "step"},
+            {"box": (230, 310, 150, 100), "text": "事实与未知", "style": "step2"},
+            {"box": (410, 310, 150, 100), "text": "受众结构", "style": "step3"},
+            {"box": (590, 310, 130, 100), "text": "草稿", "style": "warn"},
+            {"box": (750, 310, 150, 100), "text": "事实审查", "style": "step"},
+            {"box": (930, 310, 150, 100), "text": "承诺风险审查", "style": "step2"},
+            {"box": (1110, 310, 140, 100), "text": "可发版", "style": "ok"},
+        ],
+        "edges": h_edges((200, 360, 225), (380, 360, 405), (560, 360, 585), (720, 360, 745), (900, 360, 925), (1080, 360, 1105)),
+        "footer": "写完只是草稿，可发布需要多重审查。",
+    },
+    "chapter-06-evidence-gates.png": {
+        "title": "证据门推进流程",
+        "subtitle": "计划阶段以证据结束，而不是以忙碌结束",
+        "page": "图6-2 证据门推进",
+        "nodes": [
+            {"box": (80, 310, 170, 100), "text": "目标", "style": "step"},
+            {"box": (290, 310, 200, 100), "text": "列出最大不确定性", "style": "step2"},
+            {"box": (530, 310, 200, 100), "text": "设计最小验证动作", "style": "step3"},
+            {"box": (770, 310, 170, 100), "text": "证据足够？", "style": "decision"},
+            {"box": (990, 250, 200, 100), "text": "进入下一里程碑", "style": "ok"},
+            {"box": (990, 420, 200, 100), "text": "停止/补充/调整范围", "style": "fail"},
+            {"box": (1230, 250, 150, 100), "text": "更新 Handoff", "style": "warn"},
+        ],
+        "edges": h_edges((250, 360, 285), (490, 360, 525), (730, 360, 765), (1190, 300, 1225))
+        + [{"kind": "h", "coords": (940, 300, 985), "label": "是"}, {"kind": "v", "coords": (855, 410, 415), "label": "否"}],
+        "footer": "长任务需要检查点，不能只在终点验收。",
+    },
+    "chapter-07-mcp-audit.png": {
+        "title": "MCP 调用审计时序",
+        "subtitle": "每次调用都要回答目的、范围、结果与后果",
+        "page": "图7-2 MCP 审计",
+        "nodes": [
+            {"box": (60, 310, 180, 100), "text": "人给出任务与权限边界", "style": "step"},
+            {"box": (280, 310, 180, 100), "text": "Codex 判断是否需要调用", "style": "step2"},
+            {"box": (500, 310, 160, 100), "text": "MCP 最小范围请求", "style": "step3"},
+            {"box": (700, 310, 160, 100), "text": "返回结果或错误", "style": "warn"},
+            {"box": (900, 250, 200, 100), "text": "区分工具事实与推断", "style": "ok"},
+            {"box": (900, 420, 200, 100), "text": "输出 Unknowns 与降级", "style": "fail"},
+            {"box": (1140, 250, 220, 100), "text": "交付结果与审计记录", "style": "ok"},
+        ],
+        "edges": h_edges((240, 360, 275), (460, 360, 495), (660, 360, 695), (860, 360, 895), (1100, 300, 1135))
+        + [{"kind": "v", "coords": (800, 410, 415), "label": "失败"}],
+        "footer": "工具有权限，不等于当前任务获得了使用全部权限的授权。",
+    },
+    "chapter-08-browser-state-machine.png": {
+        "title": "浏览器流程状态机",
+        "subtitle": "记录动作前状态、动作与动作后状态",
+        "page": "图8-2 浏览器状态机",
+        "nodes": [
+            {"box": (80, 310, 150, 100), "text": "首页已加载", "style": "step"},
+            {"box": (270, 310, 150, 100), "text": "打开提交页", "style": "step2"},
+            {"box": (460, 310, 150, 100), "text": "提交空表单", "style": "step3"},
+            {"box": (650, 250, 180, 100), "text": "显示必填提示", "style": "ok"},
+            {"box": (650, 420, 180, 100), "text": "补充必填字段", "style": "warn"},
+            {"box": (870, 310, 180, 100), "text": "提交合法表单", "style": "step3"},
+            {"box": (1090, 310, 150, 100), "text": "成功状态", "style": "ok"},
+        ],
+        "edges": h_edges((230, 360, 265), (420, 360, 455), (830, 360, 865), (1050, 360, 1085))
+        + [{"kind": "v", "coords": (740, 410, 360), "label": "返回"}, {"kind": "h", "coords": (610, 300, 645)}],
+        "footer": "可见操作也必须能够复现和检查。",
+    },
+    "chapter-09-skill-extraction.png": {
+        "title": "从真实轨迹提炼 Skill",
+        "subtitle": "稳定重复才值得封装，情境判断留给人",
+        "page": "图9-2 Skill 提炼",
+        "nodes": [
+            {"box": (60, 310, 170, 100), "text": "真实任务轨迹 x3", "style": "step"},
+            {"box": (270, 310, 170, 100), "text": "找稳定输入与步骤", "style": "step2"},
+            {"box": (480, 310, 190, 100), "text": "定义适用/不适用", "style": "step3"},
+            {"box": (710, 310, 170, 100), "text": "加入模板与验证", "style": "warn"},
+            {"box": (920, 310, 170, 100), "text": "试跑三类样本", "style": "step3"},
+            {"box": (1130, 310, 150, 100), "text": "结果稳定？", "style": "decision"},
+            {"box": (1130, 480, 150, 100), "text": "收窄场景重做", "style": "fail"},
+            {"box": (1310, 310, 110, 100), "text": "发布 Skill", "style": "ok"},
+        ],
+        "edges": h_edges((230, 360, 265), (440, 360, 475), (670, 360, 705), (880, 360, 915), (1090, 360, 1125))
+        + [{"kind": "h", "coords": (1280, 360, 1305), "label": "是"}, {"kind": "v", "coords": (1205, 410, 475), "label": "否"}],
+        "footer": "不是每次成功都值得封装，稳定重复才值得。",
+    },
+    "chapter-10-automation-envelope.png": {
+        "title": "自动化权限包络线",
+        "subtitle": "先定义最多允许做到哪里，再定义何时运行",
+        "page": "图10-2 自动化包络",
+        "nodes": [
+            {"box": (60, 310, 140, 100), "text": "触发", "style": "step"},
+            {"box": (240, 310, 150, 100), "text": "只读收集", "style": "step2"},
+            {"box": (430, 310, 150, 100), "text": "生成草稿", "style": "step3"},
+            {"box": (620, 310, 150, 100), "text": "自动验证", "style": "warn"},
+            {"box": (810, 310, 150, 100), "text": "人工审批？", "style": "decision"},
+            {"box": (1000, 250, 180, 100), "text": "发布/写入/发送", "style": "ok"},
+            {"box": (1000, 420, 180, 100), "text": "记录原因并停止", "style": "fail"},
+        ],
+        "edges": h_edges((200, 360, 235), (390, 360, 425), (580, 360, 615), (770, 360, 805))
+        + [{"kind": "h", "coords": (960, 300, 995), "label": "通过"}, {"kind": "v", "coords": (885, 410, 415), "label": "拒绝/失败"}],
+        "footer": "只有触发器没有停止条件的，不是完整自动化。",
+    },
+    "chapter-11-data-pipeline.png": {
+        "title": "数据处理三段流水线",
+        "subtitle": "先剖析、再转换、最后对账与复算",
+        "page": "图11-2 数据流水线",
+        "nodes": [
+            {"box": (60, 310, 150, 100), "text": "原始输入", "style": "step"},
+            {"box": (250, 310, 150, 100), "text": "只读剖析", "style": "step2"},
+            {"box": (440, 310, 170, 100), "text": "结构质量可接受？", "style": "decision"},
+            {"box": (650, 250, 150, 100), "text": "转换到新输出", "style": "ok"},
+            {"box": (650, 420, 150, 100), "text": "异常清单/停止", "style": "fail"},
+            {"box": (840, 310, 130, 100), "text": "总量对账", "style": "step3"},
+            {"box": (1010, 310, 130, 100), "text": "样本复算", "style": "warn"},
+            {"box": (1180, 310, 150, 100), "text": "交付与记录", "style": "ok"},
+        ],
+        "edges": h_edges((210, 360, 245), (390, 360, 435), (800, 360, 835), (970, 360, 1005), (1140, 360, 1175))
+        + [{"kind": "h", "coords": (610, 300, 645), "label": "是"}, {"kind": "v", "coords": (525, 410, 415), "label": "否"}],
+        "footer": "数据处理要留下从输入到输出的可复查轨迹。",
+    },
+    "chapter-12-rules-compile.png": {
+        "title": "把规则编译成执行清单",
+        "subtitle": "护栏要能改变实际行为，而不是复述愿望",
+        "page": "图12-2 规则编译",
+        "nodes": [
+            {"box": (120, 280, 220, 100), "text": "AGENTS.md / README / 配置", "style": "step"},
+            {"box": (400, 280, 180, 100), "text": "提取约束", "style": "step2"},
+            {"box": (620, 200, 180, 90), "text": "开工前检查", "style": "step3"},
+            {"box": (620, 310, 180, 90), "text": "写入与权限边界", "style": "warn"},
+            {"box": (620, 420, 180, 90), "text": "结束前验证", "style": "step3"},
+            {"box": (860, 310, 200, 100), "text": "形成执行计划", "style": "ok"},
+            {"box": (1100, 310, 200, 100), "text": "遇阻力仍遵守护栏", "style": "ok"},
+        ],
+        "edges": [
+            {"kind": "h", "coords": (340, 330, 395)},
+            {"kind": "h", "coords": (580, 245, 615)},
+            {"kind": "h", "coords": (580, 355, 615)},
+            {"kind": "h", "coords": (580, 465, 615)},
+            {"kind": "h", "coords": (800, 360, 855)},
+            {"kind": "h", "coords": (1060, 360, 1095)},
+        ],
+        "footer": "护栏不是阻止执行，而是限制错误影响范围。",
+    },
+    "chapter-13-recon-loop.png": {
+        "title": "假设驱动的勘察循环",
+        "subtitle": "先交地图，再交代码",
+        "page": "图13-2 勘察循环",
+        "nodes": [
+            {"box": (60, 310, 160, 100), "text": "目标行为", "style": "step"},
+            {"box": (260, 310, 160, 100), "text": "提出入口假设", "style": "step2"},
+            {"box": (460, 310, 180, 100), "text": "搜索符号/命令/测试", "style": "step3"},
+            {"box": (680, 310, 170, 100), "text": "阅读高信号文件", "style": "warn"},
+            {"box": (890, 310, 170, 100), "text": "证据支持假设？", "style": "decision"},
+            {"box": (890, 480, 170, 100), "text": "调整假设", "style": "fail"},
+            {"box": (1100, 250, 200, 100), "text": "记录调用链与影响面", "style": "ok"},
+            {"box": (1100, 400, 200, 100), "text": "形成修改候选", "style": "warn"},
+        ],
+        "edges": h_edges((220, 360, 255), (420, 360, 455), (640, 360, 675), (850, 360, 885))
+        + [{"kind": "v", "coords": (975, 410, 475), "label": "否"}, {"kind": "h", "coords": (1060, 300, 1095), "label": "是"}],
+        "footer": "进入陌生代码库，先交地图，再交代码。",
+    },
+    "chapter-14-red-green.png": {
+        "title": "先红后绿的热修复闭环",
+        "subtitle": "热修复追求最小、可证、可回退",
+        "page": "图14-2 红绿闭环",
+        "nodes": [
+            {"box": (60, 310, 150, 100), "text": "复现失败", "style": "step"},
+            {"box": (250, 310, 190, 100), "text": "失败符合 ticket？", "style": "decision"},
+            {"box": (480, 420, 180, 100), "text": "停止并重新诊断", "style": "fail"},
+            {"box": (480, 250, 150, 100), "text": "定位最小根因", "style": "step2"},
+            {"box": (670, 250, 150, 100), "text": "最小修改", "style": "step3"},
+            {"box": (860, 250, 150, 100), "text": "目标测试通过", "style": "ok"},
+            {"box": (1050, 250, 200, 100), "text": "检查差异与剩余风险", "style": "warn"},
+        ],
+        "edges": [
+            {"kind": "h", "coords": (210, 360, 245)},
+            {"kind": "h", "coords": (440, 300, 475), "label": "是"},
+            {"kind": "v", "coords": (345, 410, 415), "label": "否"},
+            {"kind": "h", "coords": (630, 300, 665)},
+            {"kind": "h", "coords": (820, 300, 855)},
+            {"kind": "h", "coords": (1010, 300, 1045)},
+        ],
+        "footer": "没有先红，绿色通过不能证明修复了目标问题。",
+    },
+    "chapter-15-vertical-slice.png": {
+        "title": "可审查竖切",
+        "subtitle": "每个阶段交付有限但完整的行为",
+        "page": "图15-2 竖切交付",
+        "nodes": [
+            {"box": (120, 220, 300, 90), "text": "竖切1：最小输入→核心逻辑→可见输出→测试", "style": "step"},
+            {"box": (120, 340, 300, 90), "text": "竖切2：边界输入→异常处理→用户反馈→测试", "style": "step2"},
+            {"box": (120, 460, 300, 90), "text": "竖切3：用户入口→端到端路径→测试", "style": "step3"},
+            {"box": (500, 310, 220, 110), "text": "每阶段可独立验证与回滚", "style": "decision"},
+            {"box": (780, 250, 240, 100), "text": "更新 Handoff 与下一目标", "style": "ok"},
+            {"box": (780, 400, 240, 100), "text": "停止/缩小范围/回滚", "style": "fail"},
+            {"box": (1060, 250, 220, 100), "text": "进入下一竖切", "style": "warn"},
+        ],
+        "edges": [
+            {"kind": "v", "coords": (270, 310, 335)},
+            {"kind": "v", "coords": (270, 430, 455)},
+            {"kind": "h", "coords": (420, 355, 495)},
+            {"kind": "h", "coords": (720, 300, 775), "label": "通过"},
+            {"kind": "v", "coords": (610, 420, 395), "label": "失败"},
+            {"kind": "h", "coords": (1020, 300, 1055)},
+        ],
+        "footer": "长任务需要检查点，不能只在终点验收。",
+    },
+    "chapter-16-review-priority.png": {
+        "title": "按风险优先级做 Review",
+        "subtitle": "有限时间里先查最可能伤人的问题",
+        "page": "图16-2 Review 优先级",
+        "nodes": [
+            {"box": (200, 250, 240, 90), "text": "P0 安全/数据/权限", "style": "fail"},
+            {"box": (500, 250, 240, 90), "text": "P1 行为契约与边界", "style": "warn"},
+            {"box": (800, 250, 240, 90), "text": "P2 可维护性与测试", "style": "step2"},
+            {"box": (1100, 250, 200, 90), "text": "P3 风格与命名", "style": "step"},
+            {"box": (500, 420, 400, 90), "text": "输出分级 findings + 证据 + 建议动作", "style": "ok"},
+            {"box": (500, 550, 400, 90), "text": "拒绝时写清信任受损点与复盘", "style": "step3"},
+        ],
+        "edges": [
+            {"kind": "h", "coords": (440, 295, 495)},
+            {"kind": "h", "coords": (740, 295, 795)},
+            {"kind": "h", "coords": (1040, 295, 1095)},
+            {"kind": "v", "coords": (700, 340, 415)},
+            {"kind": "v", "coords": (700, 510, 545)},
+        ],
+        "footer": "审查不是挑错，而是建立可被团队接受的交付。",
+    },
+    "chapter-17-parallel-deps.png": {
+        "title": "并行任务依赖与所有权",
+        "subtitle": "并行提升速度，也放大协调和集成风险",
+        "page": "图17-2 并行依赖",
+        "nodes": [
+            {"box": (60, 310, 150, 100), "text": "拆分工作", "style": "step"},
+            {"box": (250, 310, 150, 100), "text": "划分所有权", "style": "step2"},
+            {"box": (440, 310, 150, 100), "text": "隔离分支/Worktree", "style": "step3"},
+            {"box": (630, 310, 130, 100), "text": "运行 CI", "style": "warn"},
+            {"box": (800, 310, 170, 100), "text": "失败可分类？", "style": "decision"},
+            {"box": (800, 480, 170, 100), "text": "升级/人工介入", "style": "fail"},
+            {"box": (1010, 250, 150, 100), "text": "修复并复跑", "style": "ok"},
+            {"box": (1010, 400, 150, 100), "text": "合并与集成验证", "style": "warn"},
+            {"box": (1200, 310, 150, 100), "text": "更新 Handoff", "style": "ok"},
+        ],
+        "edges": h_edges((210, 360, 245), (400, 360, 435), (590, 360, 625), (760, 360, 795), (1160, 360, 1195))
+        + [{"kind": "v", "coords": (885, 410, 475), "label": "否"}, {"kind": "h", "coords": (970, 300, 1005), "label": "是"}],
+        "footer": "并行之前先划分所有权，而不是先开四个线程。",
+    },
+    "chapter-18-eval-loop.png": {
+        "title": "评测改进循环",
+        "subtitle": "可靠性需要被测量，而不是只靠感觉",
+        "page": "图18-2 评测循环",
+        "nodes": [
+            {"box": (80, 310, 170, 100), "text": "收集 Trace", "style": "step"},
+            {"box": (290, 310, 170, 100), "text": "定义 Rubric", "style": "step2"},
+            {"box": (500, 310, 150, 100), "text": "运行 Eval", "style": "step3"},
+            {"box": (690, 310, 170, 100), "text": "分数可解释？", "style": "decision"},
+            {"box": (690, 480, 170, 100), "text": "修订 Rubric/样本", "style": "fail"},
+            {"box": (900, 250, 180, 100), "text": "改进 Brief/Skill/护栏", "style": "ok"},
+            {"box": (900, 400, 180, 100), "text": "复跑对照组", "style": "warn"},
+            {"box": (1120, 310, 180, 100), "text": "记录版本与结论", "style": "ok"},
+        ],
+        "edges": h_edges((250, 360, 285), (460, 360, 495), (650, 360, 685), (1080, 360, 1115))
+        + [{"kind": "v", "coords": (775, 410, 475), "label": "否"}, {"kind": "h", "coords": (860, 300, 895), "label": "是"}],
+        "footer": "从一次成功到可重复改进，需要轨迹、标准与评测。",
+    },
+    "chapter-19-delivery-bundle.png": {
+        "title": "毕业交付包流转",
+        "subtitle": "不同证据最终汇入同一个可审查交付包",
+        "page": "图19-2 交付包流转",
+        "nodes": [
+            {"box": (80, 310, 150, 100), "text": "调研与来源", "style": "step"},
+            {"box": (270, 310, 150, 100), "text": "实现与验证", "style": "step2"},
+            {"box": (460, 310, 150, 100), "text": "文档与说明", "style": "step3"},
+            {"box": (650, 310, 150, 100), "text": "Handoff 交接", "style": "warn"},
+            {"box": (840, 310, 170, 100), "text": "阶段闸门通过？", "style": "decision"},
+            {"box": (840, 480, 170, 100), "text": "退回补证据", "style": "fail"},
+            {"box": (1050, 310, 200, 100), "text": "毕业交付包", "style": "ok"},
+            {"box": (1280, 310, 120, 100), "text": "答辩验收", "style": "ok"},
+        ],
+        "edges": h_edges((230, 360, 265), (420, 360, 455), (610, 360, 645), (800, 360, 835), (1250, 360, 1275))
+        + [{"kind": "v", "coords": (925, 410, 475), "label": "否"}, {"kind": "h", "coords": (1010, 360, 1045), "label": "是"}],
+        "footer": "综合交付要求不同证据最终汇入同一个交付包。",
+    },
+    "chapter-20-playbook-ladder.png": {
+        "title": "Playbook 推广阶梯",
+        "subtitle": "推广不是复制提示词，而是复制经过验证的工作方式",
+        "page": "图20-2 推广阶梯",
+        "nodes": [
+            {"box": (100, 310, 180, 100), "text": "个人实践", "style": "step"},
+            {"box": (330, 310, 180, 100), "text": "沉淀 Playbook", "style": "step2"},
+            {"box": (560, 310, 180, 100), "text": "小组试点", "style": "step3"},
+            {"box": (790, 310, 180, 100), "text": "评测与责任确认", "style": "warn"},
+            {"box": (1020, 310, 180, 100), "text": "团队采用？", "style": "decision"},
+            {"box": (1020, 480, 180, 100), "text": "继续试点或拒绝", "style": "fail"},
+            {"box": (1240, 310, 150, 100), "text": "持续治理", "style": "ok"},
+        ],
+        "edges": h_edges((280, 360, 325), (510, 360, 555), (740, 360, 785), (970, 360, 1015))
+        + [{"kind": "h", "coords": (1200, 360, 1235), "label": "是"}, {"kind": "v", "coords": (1110, 410, 475), "label": "否"}],
+        "footer": "工作手册要指导判断，而不是堆规则。",
+    },
+}
+
+
+def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
+    diagram = ET.Element("diagram", id=page_id, name=page_name)
+    model = ET.SubElement(
+        diagram,
+        "mxGraphModel",
+        {
+            "dx": "1440",
+            "dy": "810",
+            "grid": "1",
+            "gridSize": "10",
+            "guides": "1",
+            "tooltips": "1",
+            "connect": "1",
+            "arrows": "1",
+            "fold": "1",
+            "page": "1",
+            "pageScale": "1",
+            "pageWidth": "1440",
+            "pageHeight": "810",
+            "background": BG,
+        },
+    )
+    root = ET.SubElement(model, "root")
+    ET.SubElement(root, "mxCell", id="0")
+    ET.SubElement(root, "mxCell", id="1", parent="0")
+
+    title_cell = ET.SubElement(
+        root,
+        "mxCell",
+        {
+            "id": f"{page_id}-title",
+            "value": spec["title"],
+            "style": "text;html=1;strokeColor=none;fillColor=none;fontSize=36;fontColor=#101A33;fontStyle=1;align=left;",
+            "vertex": "1",
+            "parent": "1",
+        },
+    )
+    ET.SubElement(title_cell, "mxGeometry", {"x": "80", "y": "55", "width": "1100", "height": "55", "as": "geometry"})
+
+    sub_cell = ET.SubElement(
+        root,
+        "mxCell",
+        {
+            "id": f"{page_id}-sub",
+            "value": spec.get("subtitle", ""),
+            "style": "text;html=1;strokeColor=none;fillColor=none;fontSize=20;fontColor=#596983;align=left;",
+            "vertex": "1",
+            "parent": "1",
+        },
+    )
+    ET.SubElement(sub_cell, "mxGeometry", {"x": "80", "y": "115", "width": "1100", "height": "35", "as": "geometry"})
+
+    for idx, node in enumerate(spec.get("nodes", [])):
+        x, y, w, h = node["box"]
+        stroke = STYLE_TO_DRAWIO.get(node["style"], "#2563EB")
+        fill = "#E8F5E9" if node["style"] == "ok" else "#FFEBEE" if node["style"] == "fail" else "#FFFFFF"
+        if node["style"] == "decision":
+            shape = "rhombus;whiteSpace=wrap;html=1;"
+        else:
+            shape = "rounded=1;whiteSpace=wrap;html=1;"
+        cell = ET.SubElement(
+            root,
+            "mxCell",
+            {
+                "id": f"{page_id}-n{idx}",
+                "value": node["text"],
+                "style": f"{shape}fillColor={fill};strokeColor={stroke};strokeWidth=3;fontColor=#101A33;fontSize=20;",
+                "vertex": "1",
+                "parent": "1",
+            },
+        )
+        ET.SubElement(cell, "mxGeometry", {"x": str(x), "y": str(y), "width": str(w), "height": str(h), "as": "geometry"})
+
+    for idx, edge in enumerate(spec.get("edges", [])):
+        label = edge.get("label") or ""
+        cell = ET.SubElement(
+            root,
+            "mxCell",
+            {
+                "id": f"{page_id}-e{idx}",
+                "value": label,
+                "style": "endArrow=classic;html=1;strokeColor=#63738C;strokeWidth=4;fontSize=16;fontColor=#596983;",
+                "edge": "1",
+                "parent": "1",
+            },
+        )
+        ET.SubElement(cell, "mxGeometry", {"relative": "1", "as": "geometry"})
+
+    if foot := spec.get("footer"):
+        foot_cell = ET.SubElement(
+            root,
+            "mxCell",
+            {
+                "id": f"{page_id}-foot",
+                "value": foot,
+                "style": "rounded=1;whiteSpace=wrap;html=1;fillColor=#101A33;strokeColor=none;fontColor=#FFFFFF;fontSize=22;",
+                "vertex": "1",
+                "parent": "1",
+            },
+        )
+        ET.SubElement(foot_cell, "mxGeometry", {"x": "300", "y": "650", "width": "840", "height": "85", "as": "geometry"})
+
+    return diagram
+
+
+def write_drawio() -> None:
+    mxfile = ET.Element(
+        "mxfile",
+        {
+            "host": "app.diagrams.net",
+            "modified": "2026-06-10T00:00:00.000Z",
+            "agent": "codexDemo",
+            "version": "24.7.17",
+            "type": "device",
+        },
+    )
+    for filename, spec in DIAGRAMS.items():
+        page_id = filename.replace(".png", "").replace("chapter-", "supp-")
+        mxfile.append(build_drawio_page(page_id, spec["page"], spec))
+    tree = ET.ElementTree(mxfile)
+    ET.indent(tree, space="  ")
+    DRAWIO_OUT.parent.mkdir(parents=True, exist_ok=True)
+    tree.write(DRAWIO_OUT, encoding="unicode", xml_declaration=True)
+
+
+def main() -> int:
+    for filename, spec in DIAGRAMS.items():
+        render_diagram(spec, ASSETS / filename)
+        print(f"wrote {filename}")
+    write_drawio()
+    print(f"wrote {DRAWIO_OUT.relative_to(ROOT)} ({len(DIAGRAMS)} pages)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -11,7 +11,13 @@ Read [ticket.md](ticket.md), then compare `starter/` with `solution/`.
 ## Verify the teaching fixture
 
 ```bash
-bash labs/01-first-ticket/verify.sh
+make lab-01
+```
+
+Windows PowerShell:
+
+```powershell
+py scripts/course.py lab-01
 ```
 
 The script proves two things:
