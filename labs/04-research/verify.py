@@ -27,6 +27,7 @@ UNKNOWN_PATTERN = re.compile(r"^-\s+U\d+:", re.IGNORECASE)
 FACT_REF_PATTERN = re.compile(r"\bF\d+\b", re.IGNORECASE)
 INFERENCE_REF_PATTERN = re.compile(r"\bI\d+\b", re.IGNORECASE)
 ID_PATTERN = re.compile(r"^-\s+([FIRU]\d+):", re.IGNORECASE)
+SOURCE_CARD_PATTERN = re.compile(r"^###\s+(S\d+)\s*$", re.IGNORECASE | re.MULTILINE)
 
 
 def section_body(text: str, heading: str) -> str:
@@ -37,6 +38,34 @@ def section_body(text: str, heading: str) -> str:
         if other != heading and other in body:
             body = body.split(other, 1)[0]
     return body.strip()
+
+
+def report_claim_ids(text: str) -> set[str]:
+    return {
+        match.group(1).upper()
+        for line in text.splitlines()
+        if (match := ID_PATTERN.search(line.strip()))
+    }
+
+
+def table_rows(text: str, heading: str, header: str) -> list[list[str]]:
+    return [
+        [cell.strip() for cell in line.strip().strip("|").split("|")]
+        for line in section_body(text, heading).splitlines()
+        if line.strip().startswith("|")
+        and "---" not in line
+        and header not in line
+    ]
+
+
+def source_cards_by_id(text: str) -> dict[str, str]:
+    cards = {}
+    source_cards = section_body(text, "## Source cards")
+    matches = list(SOURCE_CARD_PATTERN.finditer(source_cards))
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(source_cards)
+        cards[match.group(1).upper()] = source_cards[match.end() : end]
+    return cards
 
 
 def verify(report_path: Path) -> list[str]:
@@ -217,6 +246,106 @@ def verify_package(package_path: Path) -> list[str]:
     return errors
 
 
+def verify_traceability(report_path: Path, package_path: Path) -> list[str]:
+    report_text = report_path.read_text(encoding="utf-8")
+    package_text = package_path.read_text(encoding="utf-8")
+    errors = []
+
+    report_ids = report_claim_ids(report_text)
+    ledger_rows = table_rows(package_text, "## Claim ledger", "| ID |")
+    active_ledger_ids = {
+        row[0].upper()
+        for row in ledger_rows
+        if len(row) >= 5 and row[4].lower() in {"accepted", "open"}
+    }
+
+    missing_from_ledger = report_ids - active_ledger_ids
+    if missing_from_ledger:
+        errors.append(
+            "report claims missing from active claim ledger: "
+            + ", ".join(sorted(missing_from_ledger))
+        )
+
+    missing_from_report = active_ledger_ids - report_ids
+    if missing_from_report:
+        errors.append(
+            "active claim ledger entries missing from report: "
+            + ", ".join(sorted(missing_from_report))
+        )
+
+    cards = source_cards_by_id(package_text)
+    source_ids = set(cards)
+    accepted_fact_rows = [
+        row
+        for row in ledger_rows
+        if len(row) >= 5
+        and row[0].upper().startswith("F")
+        and row[4].lower() == "accepted"
+    ]
+    facts_without_source_cards = {
+        row[0].upper()
+        for row in accepted_fact_rows
+        if not re.search(r"\bS\d+\b", row[3], re.IGNORECASE)
+    }
+    if facts_without_source_cards:
+        errors.append(
+            "accepted Facts must reference source cards: "
+            + ", ".join(sorted(facts_without_source_cards))
+        )
+    missing_source_cards = {
+        source_id.upper()
+        for row in accepted_fact_rows
+        for source_id in re.findall(r"\bS\d+\b", row[3], re.IGNORECASE)
+        if source_id.upper() not in source_ids
+    }
+    if missing_source_cards:
+        errors.append(
+            "accepted Facts reference missing source cards: "
+            + ", ".join(sorted(missing_source_cards))
+        )
+
+    facts = section_body(report_text, "## Facts")
+    fact_urls = {
+        match.group(1).upper(): SOURCE_PATTERN.findall(line)
+        for line in facts.splitlines()
+        if (match := ID_PATTERN.search(line.strip()))
+    }
+    for row in accepted_fact_rows:
+        fact_id = row[0].upper()
+        referenced_cards = [
+            cards[source_id.upper()]
+            for source_id in re.findall(r"\bS\d+\b", row[3], re.IGNORECASE)
+            if source_id.upper() in cards
+        ]
+        card_urls = {
+            url
+            for card in referenced_cards
+            for url in SOURCE_PATTERN.findall(card)
+        }
+        if card_urls and not card_urls.intersection(fact_urls.get(fact_id, [])):
+            errors.append(f"{fact_id} report URL does not match its source card")
+
+    review_rows = table_rows(package_text, "## Source review log", "| Fact ID |")
+    reviewed_fact_ids = {
+        row[0].upper()
+        for row in review_rows
+        if len(row) >= 2 and "not reviewed" not in row[1].lower()
+    }
+    pricing_fact_ids = {
+        row[0].upper()
+        for row in accepted_fact_rows
+        if any(
+            "pricing" in card.lower()
+            for source_id in re.findall(r"\bS\d+\b", row[3], re.IGNORECASE)
+            if (card := cards.get(source_id.upper()))
+        )
+    }
+    if pricing_fact_ids and not reviewed_fact_ids.intersection(pricing_fact_ids):
+        errors.append("source review log needs at least one reviewed pricing Fact")
+
+    return errors
+
+
 def main() -> int:
     root = Path(__file__).resolve().parents[2]
     args = sys.argv[1:]
@@ -252,6 +381,7 @@ def main() -> int:
             print(f"research package not found: {package_target}")
             return 2
         errors.extend(verify_package(package_target))
+        errors.extend(verify_traceability(target, package_target))
     if errors:
         for error in errors:
             print(f"ERROR: {error}")

@@ -42,4 +42,7 @@ Windows PowerShell:
 
 Passing the script does not prove that a source supports a claim. Complete the
 manual source review log in your research package before considering the lab
-finished.
+finished. When both files are supplied, the verifier also checks that the
+report and active claim ledger contain the same claim IDs, accepted Facts point
+to existing source cards, report Fact URLs match those cards, and at least one
+pricing Fact was reviewed.
