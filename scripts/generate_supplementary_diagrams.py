@@ -648,7 +648,7 @@ def write_drawio() -> None:
         {
             "host": "app.diagrams.net",
             "modified": "2026-06-10T00:00:00.000Z",
-            "agent": "codexDemo",
+            "agent": "ashare-research-sandbox",
             "version": "24.7.17",
             "type": "device",
         },

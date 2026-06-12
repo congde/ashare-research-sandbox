@@ -1,8 +1,8 @@
-# codexDemo
+# ashare-research-sandbox
 
-**Codex 个人助手实战课 · 配套交付仓库**
+**Codex 创意交付实战课 · 配套交付仓库**
 
-> 从日常委托到可验收交付
+> A 股投资研究与模拟策略验证台 · 从一个模糊想法，到可用、可验证、可复用的第一版
 
 这个仓库不是代码示例合集，而是专栏的交付训练场。每个任务都应留下可检查的 Brief、产物与验收证据。
 
@@ -11,8 +11,8 @@
 macOS / Linux：
 
 ```bash
-git clone https://github.com/congde/codexDemo.git
-cd codexDemo
+git clone https://github.com/congde/ashare-research-sandbox.git
+cd ashare-research-sandbox
 make setup    # 创建虚拟环境并安装依赖
 make check    # 运行全量课程资产验收
 ```
@@ -20,8 +20,8 @@ make check    # 运行全量课程资产验收
 Windows PowerShell（不要求安装 Make）：
 
 ```powershell
-git clone https://github.com/congde/codexDemo.git
-cd codexDemo
+git clone https://github.com/congde/ashare-research-sandbox.git
+cd ashare-research-sandbox
 py scripts/course.py setup
 py scripts/course.py check
 ```
@@ -32,7 +32,7 @@ py scripts/course.py check
 ## 仓库结构
 
 ```
-codexDemo/
+ashare-research-sandbox/
 ├── AGENTS.md          # Codex 自动读取的项目级工作说明
 ├── docs/              # 20 讲正文、写作大纲与立项文档
 ├── labs/              # 与章节配套的可运行实验
@@ -50,6 +50,8 @@ codexDemo/
 
 ## 配套实验
 
+贯穿课程的可运行项目是 [A 股投资研究与模拟策略验证台](labs/10-a-share-research/README.md)。它使用虚构标的和固定样本完成研究摘要、简单策略回测、风险展示与浏览器验收。
+
 macOS / Linux：
 
 ```bash
@@ -57,6 +59,7 @@ make lab-00   # 讲 1：Brief 结构验收
 make lab-03   # 讲 3：入口决策与工作区合同验收
 make lab-04   # 讲 4：调研报告来源验收
 make lab-09   # 讲 9：weekly-brief Skill 验收
+make lab-10   # A 股研究与模拟策略验证台
 make lab-01   # 讲 14：热修复 fixture 验收
 make lab-16   # 讲 13：repo-readiness Skill 验收
 make check    # 运行全部课程资产验收

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A 股投资研究与模拟策略验证台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Codex 创意交付课程项目</p>
+    <h1>A 股投资研究与模拟策略验证台</h1>
+    <p>用固定历史样本完成研究、回测和风险解释。它不会荐股，也不能下单。</p>
+  </header>
+  <main>
+    <section class="warning" id="warnings"></section>
+    <section>
+      <h2 id="company">加载研究摘要...</h2>
+      <div class="grid">
+        <article><h3>事实</h3><ul id="facts"></ul></article>
+        <article><h3>解释</h3><p id="interpretation"></p></article>
+        <article><h3>仍然未知</h3><ul id="unknowns"></ul></article>
+      </div>
+      <h3>来源卡</h3>
+      <div class="sources" id="sources"></div>
+    </section>
+    <section>
+      <h2>简单双均线回测</h2>
+      <form id="backtest-form">
+        <label>短均线 <input id="short" type="number" value="3" min="2"></label>
+        <label>长均线 <input id="long" type="number" value="7" min="3"></label>
+        <button type="submit">运行固定样本回测</button>
+      </form>
+      <p id="error" class="error"></p>
+      <div class="metrics" id="metrics"></div>
+      <div class="chart" id="chart" aria-label="策略权益曲线"></div>
+      <p class="chart-note">悬停柱形可查看日期、权益、收盘价与双均线数值。</p>
+      <h3>交易记录</h3>
+      <div id="trades"></div>
+      <h3>假设与限制</h3>
+      <ul id="assumptions"></ul>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

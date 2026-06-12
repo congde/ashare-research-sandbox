@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`codexDemo` is a companion workspace for a Codex delivery course. This is
+`ashare-research-sandbox` is a companion workspace for a Codex delivery course. This is
 confirmed by `README.md` and the publishable drafts under `docs/v2/`.
 
 ## Entrypoints

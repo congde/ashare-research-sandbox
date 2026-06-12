@@ -93,6 +93,7 @@ TASKS = {
         "skills/weekly-brief/scripts/verify_report.py",
         "labs/09-weekly-brief-skill/sample-report.md",
     ),
+    "lab-10": lambda: python_lab("labs/10-a-share-research/verify.py"),
     "lab-01": lab_01,
     "lab-16": lambda: python_lab(
         "skills/repo-readiness/scripts/verify_report.py",
@@ -103,7 +104,7 @@ TASKS = {
 
 
 def check() -> None:
-    for task in ("lab-00", "lab-03", "lab-04", "lab-06", "lab-09", "lab-01", "lab-16", "courseware-check"):
+    for task in ("lab-00", "lab-03", "lab-04", "lab-06", "lab-09", "lab-10", "lab-01", "lab-16", "courseware-check"):
         print(f"==> {task}", flush=True)
         TASKS[task]()
     print("All courseware checks passed.")

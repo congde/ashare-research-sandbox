@@ -1,4 +1,4 @@
-# codexDemo project instructions
+# ashare-research-sandbox 项目说明
 
 This repository is the companion workspace for a Codex delivery course. Treat
 course prose and executable labs as one product: examples in `docs/v2/` must
@@ -43,6 +43,7 @@ py scripts/course.py lab-03
 py scripts/course.py lab-04
 py scripts/course.py lab-06
 py scripts/course.py lab-09
+py scripts/course.py lab-10
 py scripts/course.py lab-01
 py scripts/course.py lab-16
 ```

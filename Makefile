@@ -1,4 +1,4 @@
-.PHONY: setup check courseware-check lab-00 lab-03 lab-04 lab-06 lab-09 lab-01 lab-16
+.PHONY: setup check courseware-check lab-00 lab-03 lab-04 lab-06 lab-09 lab-10 lab-01 lab-16
 
 PYTHON ?= python3
 
@@ -19,6 +19,9 @@ lab-06:
 
 lab-09:
 	$(PYTHON) scripts/course.py lab-09
+
+lab-10:
+	$(PYTHON) scripts/course.py lab-10
 
 lab-01:
 	$(PYTHON) scripts/course.py lab-01
