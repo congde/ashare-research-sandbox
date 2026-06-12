@@ -1,11 +1,11 @@
 ## Goal
 
-Help me compare two note-taking apps for personal use.
+帮我比较两款适合个人使用的笔记应用。
 
 ## Context
 
-I work on Windows and need sync between laptop and phone.
+我使用 Windows，需要在笔记本电脑和手机之间同步笔记。
 
 ## Constraints
 
-Keep the comparison under 800 words.
+比较内容不超过 800 字。

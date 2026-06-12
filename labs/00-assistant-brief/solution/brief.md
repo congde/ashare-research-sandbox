@@ -1,28 +1,32 @@
 ## Goal
 
-Produce a one-page comparison of Obsidian and Notion for a solo knowledge worker
-who needs offline access on Windows and iOS sync.
+判断一个 8 人项目团队是否值得从腾讯文档迁移到飞书文档，
+并为后续试用或迁移计划提供依据。
 
 ## Context
 
-- Primary use: project notes, meeting summaries, and weekly planning.
-- Current pain: notes scattered across Markdown files and browser tabs.
-- Attach or cite official pricing and platform support pages only.
+- 使用者主要记录项目方案、会议纪要、进度表和复盘文档。
+- 当前痛点是格式保真、评论与权限保留、团队采用成本和迁移成本。
+- 当前资料主要存放在腾讯文档的项目空间中。
+- 本次调研服务于团队试点决定，不直接作出采购或全量迁移决定。
 
 ## Constraints
 
-- Maximum 800 words in the final report.
-- Do not recommend a winner; list trade-offs only.
-- Mark anything not found in cited sources as unknown.
+- 不扩大到公司级办公平台替换或采购决策。
+- 必须覆盖格式、评论、权限、历史记录和长期可迁移性。
+- 关键事实必须附来源 URL，优先使用官方资料。
+- 不替我作出最终迁移决定。
 
 ## Done when
 
-- Report includes sections: Facts, Inferences, Recommendations, Unknowns.
-- Every fact bullet cites a source URL or attached document section.
-- I can verify at least one pricing fact against the official site.
-- Output is saved as `reports/app-comparison.md`.
+- 输出一份不超过 1200 字的调研报告。
+- 报告包含 Facts、Inferences、Recommendations、Unknowns。
+- 每条关键事实都附来源 URL。
+- 每条建议都说明依据的事实、目标或约束。
+- 输出保存为 `reports/app-comparison.md`。
 
 ## Open questions
 
-- Do I need real-time collaboration? (Assume no unless I confirm later.)
-- Is local-first storage a hard requirement? (Yes.)
+- 是否需要实时多人协作？暂时假设不需要，但必须标明假设。
+- 是否有公司数据合规要求？未知，不得自行推断。
+- 团队愿意为哪个目标版本付费？未知，需要列为决策点。

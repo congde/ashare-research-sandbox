@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .codex/
+outputs/
+*.drawio.bkp
 playbook/my-playbook.md
 labs/00-assistant-brief/my-brief.md
 labs/03-entry-workspace/my-entry-decision.md

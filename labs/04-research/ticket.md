@@ -1,12 +1,13 @@
-# Ticket: compare offline-first note apps
+# Ticket: evaluate Tencent Docs to Feishu Docs migration
 
-You need a short research report to decide whether to migrate personal notes to
-Obsidian or stay on Notion.
+You need a short research report for an 8-person project team deciding whether
+to pilot a migration from 腾讯文档 to 飞书文档.
 
 ## Input materials
 
-- Official Obsidian pricing and sync documentation
-- Official Notion pricing and platform documentation
+- Official 腾讯文档 product documentation
+- Official 飞书文档 product and pricing documentation
+- A representative project space for a later migration test
 
 ## Output
 
@@ -18,9 +19,9 @@ Use traceable IDs:
 - Recommendations use `R1`, `R2`, ... and declare `Supports: I...`.
 - Unknowns use `U1`, `U2`, ... and include both `Impact:` and `Next check:`.
 
-Do not invent pricing or platform support. A source URL is not enough by
-itself: manually record whether at least two important Facts are fully,
-partially, or not supported by their source.
+Do not invent pricing, migration fidelity, or team requirements. A source URL
+is not enough by itself: manually record whether at least two important Facts
+are fully, partially, or not supported by their source.
 
 ## Done when
 

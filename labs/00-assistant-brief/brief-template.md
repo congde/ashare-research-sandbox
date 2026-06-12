@@ -1,24 +1,23 @@
-# Brief template
+# 任务说明模板
 
-Copy this file and fill every section before delegating to Codex.
+复制本文件，填完每一栏后再委托给 Codex。
 
 ## Goal
 
-What outcome do you need? One or two sentences.
+你需要什么结果？用一两句话说清楚。
 
 ## Context
 
-What background, files, links, or constraints does the assistant need?
+助手需要知道哪些背景、文件、链接或前提？
 
 ## Constraints
 
-What must not happen? Scope limits, tone, tools, deadlines.
+哪些事情不能做？范围限制、语气、工具、截止时间等。
 
 ## Done when
 
-How will you verify completion? Use checkable criteria (structure, sources,
-sample checks, commands)—not "looks good".
+怎样验收才算完成？写可检查的条件（结构、来源、抽样核对、命令等）——不要写「看起来不错」。
 
 ## Open questions
 
-What is still unclear? List items the assistant should not guess.
+还有哪些不清楚？列出助手不应自行猜测的事项。

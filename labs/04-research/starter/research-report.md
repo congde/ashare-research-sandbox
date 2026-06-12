@@ -1,18 +1,17 @@
-# Obsidian vs Notion
+# 腾讯文档 vs 飞书文档
 
 ## Facts
 
-- Obsidian is free for personal use and works offline.
-- Notion is better for teams and has generous free tiers.
-- Both support mobile apps.
+- 飞书文档功能更多，更适合团队。
+- 腾讯文档迁移到飞书文档后不会丢失任何内容。
 
 ## Inferences
 
-- Obsidian is the better choice for solo offline work.
+- 飞书文档一定更适合这个 8 人项目团队。
 
 ## Recommendations
 
-- Switch to Obsidian immediately.
+- 立即把全部项目文档迁移到飞书文档。
 
 ## Unknowns
 

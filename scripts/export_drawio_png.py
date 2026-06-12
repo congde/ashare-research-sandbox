@@ -71,14 +71,15 @@ def export_with_drawio(drawio: Path, page: str | None, output: Path, width: int)
     return output.is_file()
 
 
-def parse_boxes(root: ET.Element) -> list[tuple[str, str, int, int, int, int]]:
-    boxes: list[tuple[str, str, int, int, int, int]] = []
+def parse_boxes(root: ET.Element) -> list[tuple[str, str, str, int, int, int, int]]:
+    boxes: list[tuple[str, str, str, int, int, int, int]] = []
     for cell in root.iter("mxCell"):
         if cell.get("edge") == "1":
             continue
         value = cell.get("value") or ""
+        value = re.sub(r"<br\s*/?>", "\n", value, flags=re.IGNORECASE)
         text = html.unescape(re.sub(r"<[^>]+>", "", value)).strip()
-        if not text or len(text) > 80:
+        if not text or len(text) > 240:
             continue
         geom = cell.find("mxGeometry")
         if geom is None:
@@ -94,9 +95,24 @@ def parse_boxes(root: ET.Element) -> list[tuple[str, str, int, int, int, int]]:
             continue
         if w < 80 or h < 40:
             continue
-        boxes.append((cell.get("id", ""), text, x, y, w, h))
-    boxes.sort(key=lambda item: (item[3], item[2]))
+        boxes.append((cell.get("id", ""), cell.get("style", ""), text, x, y, w, h))
+    boxes.sort(key=lambda item: (item[4], item[3]))
     return boxes
+
+
+def wrap_text(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.ImageFont, width: int) -> str:
+    lines: list[str] = []
+    for paragraph in text.splitlines() or [""]:
+        current = ""
+        for char in paragraph:
+            candidate = current + char
+            if current and draw.textlength(candidate, font=font) > width:
+                lines.append(current)
+                current = char
+            else:
+                current = candidate
+        lines.append(current)
+    return "\n".join(lines)
 
 
 def fallback_render(drawio: Path, output: Path, page_name: str | None) -> bool:
@@ -145,9 +161,6 @@ def fallback_render(drawio: Path, output: Path, page_name: str | None) -> bool:
         font = ImageFont.load_default()
         title_font = font
 
-    title = page_name or drawio.stem
-    draw.text((80, 40), title, fill="#101A33", font=title_font)
-
     box_by_id = {box[0]: box for box in boxes}
     for cell in root.iter("mxCell"):
         if cell.get("edge") != "1":
@@ -156,8 +169,8 @@ def fallback_render(drawio: Path, output: Path, page_name: str | None) -> bool:
         target = box_by_id.get(cell.get("target", ""))
         if not source or not target:
             continue
-        _, _, sx, sy, sw, sh = source
-        _, _, tx, ty, tw, th = target
+        _, _, _, sx, sy, sw, sh = source
+        _, _, _, tx, ty, tw, th = target
         draw.line(
             (sx + sw // 2, sy + sh // 2, tx + tw // 2, ty + th // 2),
             fill="#63738C",
@@ -165,10 +178,15 @@ def fallback_render(drawio: Path, output: Path, page_name: str | None) -> bool:
         )
 
     colors = ["#2563EB", "#0891B2", "#0F9B8E", "#F59E0B", "#7C3AED"]
-    for index, (_, text, x, y, w, h) in enumerate(boxes[:8]):
+    for index, (_, style, text, x, y, w, h) in enumerate(boxes):
         color = colors[index % len(colors)]
-        draw.rounded_rectangle((x, y, x + w, y + h), radius=12, outline=color, width=4, fill="#FFFFFF")
-        draw.multiline_text((x + 16, y + 20), text, fill="#101A33", font=font, spacing=6)
+        is_text_only = style.startswith("text;")
+        if not is_text_only:
+            draw.rounded_rectangle((x, y, x + w, y + h), radius=12, outline=color, width=4, fill="#FFFFFF")
+        text_font = title_font if h <= 70 and y < 180 else font
+        padding = 4 if is_text_only else 16
+        wrapped = wrap_text(draw, text, text_font, max(40, w - padding * 2))
+        draw.multiline_text((x + padding, y + padding), wrapped, fill="#101A33", font=text_font, spacing=6)
 
     output.parent.mkdir(parents=True, exist_ok=True)
     img.save(output)
