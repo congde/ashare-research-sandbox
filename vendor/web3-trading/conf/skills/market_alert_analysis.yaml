@@ -1,0 +1,99 @@
+# 币种异动分析技能 (Market Alert Analysis Skill)
+#
+# 功能: 当监测到特定市场异动（急涨急跌、新低、大单）时，触发即时归因分析与风险评估。
+# 触发场景 (Triggers):
+#   1. 【币对】出现【5min急速下跌】
+#   2. 【币对】出现【7日价格新低】
+#   3. 【币对】出现【大额卖出成交】
+#   4. 【币对】出现【巨额卖出挂单】
+#   5. 【币对】五分钟上涨2%
+#   6. 【币对】五分钟下跌2%
+#
+# 数据优先级: 优先使用实时工具数据（价格、费率、大单流向）确认异动真实性；
+# 使用 web_search 和 news 寻找突发原因（新闻、宏观、项目方动态）。
+
+name: crypto_market_alert_analysis
+
+summary: >-
+  Immediate diagnostic analysis triggered by specific market alerts.
+  Scenarios: 
+  1. [Pair] 5min rapid drop/rise (急速下跌/上涨 >2%).
+  2. [Pair] 7-day price low (7日价格新低).
+  3. [Pair] Large sell transaction/wall (大额卖出成交/巨额挂单).
+  Combines real-time indicators, news, and sentiment to explain the "Why" behind the move.
+  No direct trading advice (buy/sell), focus on risk assessment and cause analysis.
+  Use for queries like: "分析刚才的暴跌" / "为什么突然拉升" / "大额卖单影响" / "alert analysis".
+
+description: >-
+  Perform a rapid diagnostic evaluation when a market alert is triggered by:
+  1. Fetching investment outlook (Is this a trend reversal or noise?)
+  2. Fetching basic coin info (Context)
+  3. Fetching coin news (Breaking news check)
+  4. Fetching funding rates (Check for long/short squeeze or liquidation cascade)
+  5. Fetching market sentiment and fund flows (Whale activity check)
+  6. Fetching technical indicators (Focus on short-term reaction: RSI extremes, Bollinger Band breakout)
+  7. Multi-angle web_search: "Breaking news [Symbol]", "[Symbol] crash reason", "[Symbol] whale movement"
+
+  HARD CONSTRAINT (MANDATORY):
+  If this skill is selected, you MUST create at least ONE task for EACH required tool
+  listed in sub_tools. Do not omit any required tool.
+
+  ## Tool Parameter Mapping (IMPORTANT - Adjusted for Alerts):
+  
+  - **batch_indicator_calculation**:
+    * Context: 只查询一次，根据用户问题选择合适的 interval：
+      - 如果是5分钟异动（如“5min急速下跌/上涨”），interval 设为 "5min"
+      - 如果是7天新低（如“7日价格新低”），interval 设为 "1week"
+      - 如果是大额卖出成交/巨额卖出挂单，interval 设为 "1day"
+    * REQUIRED parameters:
+      - symbols: array of trading pairs (e.g., ["BTC-USDT"])
+      - indicators: ["RSI", "MACD", "BBANDS", "ATR", "EMA"]
+      - params: {"EMA": {"period": [50, 20]}}
+      - market_type: "spot" or "future"
+
+
+
+  - **cmc_currency_funding_rates**: 
+    * Critical for "Rapid Drop/Rise" alerts. High negative funding rates during a drop indicate long squeeze.
+
+  - **market_sentiment_and_fund_flows**: 
+    * Check for Exchange Inflows (often precedes dumps) or Outflows.
+
+  Data priority: Real-time tool data (Price, Volume, Funding Rate) is paramount for confirming the alert. 
+  Web search is secondary, used only to find the *cause*.
+
+  Use this skill when the system detects or user asks about:
+  - "5min急速下跌" / "5分钟下跌2%"
+  - "7日价格新低"
+  - "大额卖出成交" / "巨额卖出挂单"
+  - "Why did [Coin] just dump?"
+
+  Input: cryptocurrency symbol, market_type, and optional alert_context (e.g., "dropped 5% in 5min")
+  Output: Alert analysis report: Cause (News/Whale/Technical), Current Technical State (Overbought/Oversold), Risk Level.
+  Do NOT include specific buy/sell price targets.
+
+sub_tools:
+  - get_crypto_investment_outlook
+  - coins_news
+  - cmc_currency_funding_rates
+  - market_sentiment_and_fund_flows
+  - batch_indicator_calculation
+  - basic_indicators
+  - 24hour_basic_candlestick_data
+
+parameters:
+  - name: symbol
+    type: string
+    required: true
+    description: "Cryptocurrency symbol triggering the alert, e.g., BTC, ETH."
+  - name: market_type
+    type: string
+    required: false
+    default: "spot"
+    description: "Market type: spot or future."
+  - name: alert_context
+    type: string
+    required: false
+    description: "Description of the trigger event (e.g., '5min drop 5%', '7-day low', 'Large sell wall 1M USDT'). Helps focus the analysis."
+
+response_prompt_name: market_alert_analysis_synthesis_prompt

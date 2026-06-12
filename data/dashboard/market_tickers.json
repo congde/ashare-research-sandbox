@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "source": "fixture",
+  "quote": "USDT",
+  "count": 5,
+  "tickers": [
+    {"symbol": "BTC-USDT", "last": 95000, "changeRate": 0.012, "volValue": 125000000},
+    {"symbol": "ETH-USDT", "last": 3500, "changeRate": 0.008, "volValue": 82000000},
+    {"symbol": "SOL-USDT", "last": 180, "changeRate": 0.021, "volValue": 45000000},
+    {"symbol": "WEB3-DEMO-USDT", "last": 10.5, "changeRate": 0.015, "volValue": 120000},
+    {"symbol": "DOGE-USDT", "last": 0.18, "changeRate": -0.004, "volValue": 31000000}
+  ]
+}

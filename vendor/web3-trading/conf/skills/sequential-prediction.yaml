@@ -1,0 +1,1562 @@
+---
+name: sequential-prediction
+description: >
+  Time series forecasting with foundation models — data preparation, model selection
+  (TimesFM, Chronos, Moirai, Lag-Llama), patch-based tokenization, evaluation methodology,
+  probabilistic forecasting, and production deployment patterns.
+---
+
+# Sequential Prediction with Foundation Models
+
+Patterns and best practices for time series forecasting using pre-trained foundation models, covering the full pipeline from raw data to production inference. Grounded in the TimesFM architecture (Google Research, ICML 2024) and the broader foundation model ecosystem.
+
+## When to Activate
+
+- Building or evaluating a time series forecasting pipeline
+- Selecting a foundation model for sequential prediction tasks
+- Preprocessing temporal data (missing values, normalization, frequency alignment)
+- Designing evaluation methodology for forecasting experiments
+- Comparing foundation model approaches against statistical or supervised baselines
+- Deploying a forecasting model to production (batch or real-time)
+- Debugging poor forecast quality, data leakage, or distribution shift issues
+- Generating synthetic time series data for training or augmentation
+- Implementing probabilistic (quantile/distributional) forecasting
+
+---
+
+## 1. Core Concepts
+
+### 1.1 Foundation Model Landscape
+
+| Model | Architecture | Params | Output Type | Max Context | Strengths | Best For |
+|-------|-------------|--------|-------------|-------------|-----------|----------|
+| **TimesFM 2.5** | Decoder-only transformer | 200M | Quantiles + mean | 16,384 | Longest context, covariate support (XReg), flip invariance | General-purpose, long-horizon, zero-shot |
+| **Chronos** | T5 encoder-decoder | 8M-710M | Discrete token bins | 512 | Strong zero-shot, multiple sizes, good on diverse frequencies | Quick baseline, no fine-tuning budget |
+| **Moirai** | Any-variate transformer | 14M-311M | Mixture distribution | 5,000 | Multi-variate native, any-frequency, flexible distribution | Multi-channel sensor data, mixed frequencies |
+| **Lag-Llama** | LLaMA-based decoder | 6.5M | Student's t distribution | 1,024 | Lag-feature injection, open weights, lightweight | Probabilistic forecasting with heavy tails |
+| **PatchTST** | Patch-based encoder | ~10M | Point forecast | 512 | Channel-independent, strong supervised performance | Domain-specific fine-tuning |
+| **iTransformer** | Inverted attention | ~10M | Point forecast | 720 | Attention over variate dimension, captures cross-variable relations | High-dimensional multivariate |
+| **Timer** | GPT-style decoder | 67M-1B | Next-token | 2,048 | Unified generation paradigm, flexible horizon | Research, flexible generation |
+
+### 1.2 Key Architectural Ideas
+
+#### Patch-Based Tokenization
+
+Foundation models for time series break raw sequences into **non-overlapping patches** (analogous to tokens in LLMs). This reduces the sequence length fed to the transformer by a factor of `patch_len`, dramatically improving efficiency.
+
+```
+Raw series:     [x1, x2, x3, ..., x32, x33, ..., x64, ...]
+                |--- patch 1 (p=32) ---| |--- patch 2 ---|
+Tokens:         [    embedding_1,           embedding_2,  ...]
+```
+
+**TimesFM innovation — asymmetric patches**: `input_patch_len=32`, `output_patch_len=128`. Each input token predicts 128 future values (4x expansion), reducing autoregressive decode steps:
+
+```python
+# Autoregressive steps needed for horizon H with output_patch_len h:
+num_decode_steps = math.ceil(H / h)
+# H=512, h=128 → only 4 decode steps (vs 16 with h=32)
+```
+
+#### Reversible Instance Normalization (RevIN)
+
+Per-instance normalization that preserves scale at output. Critical for handling series with vastly different value ranges without explicit feature engineering:
+
+```python
+def revin(x: torch.Tensor, mu: torch.Tensor, sigma: torch.Tensor, reverse: bool = False) -> torch.Tensor:
+    """Reversible per-instance normalization."""
+    TOLERANCE = 1e-8
+    if reverse:
+        return x * sigma + mu                                        # denormalize
+    return (x - mu) / torch.where(sigma < TOLERANCE, 1.0, sigma)    # normalize
+```
+
+Statistics are computed incrementally per patch using Welford's online algorithm, allowing running mean/std to adapt as new patches are processed.
+
+#### Decoder-Only vs Encoder-Decoder
+
+| Aspect | Decoder-Only (TimesFM, Lag-Llama, Timer) | Encoder-Decoder (Chronos) |
+|--------|------------------------------------------|---------------------------|
+| Training | Parallel over entire context via causal mask | Encoder: bidirectional, Decoder: causal |
+| Inference | Autoregressive with KV-cache | Encode once, decode autoregressively |
+| Context flexibility | Natural for variable-length inputs | Fixed encoder window, then decode |
+| Complexity | Single stack | Two stacks, cross-attention |
+
+#### Positional Encoding for Time
+
+- **RoPE (Rotary Positional Embeddings)**: Used by TimesFM 2.5. Encodes relative positions via rotation matrices — naturally handles variable-length sequences and extrapolates to unseen positions.
+- **Sinusoidal**: Original Transformer PEs. Used in TimesFM v1.
+- **Frequency tokens**: Some models (TimesFM v1/v2) use explicit frequency indicators (0=high, 1=medium, 2=low) to condition generation on data granularity.
+
+---
+
+## 2. Data Preparation Pipeline
+
+### 2.1 Loading and Inspection
+
+```python
+import pandas as pd
+import numpy as np
+from typing import Optional
+
+
+def load_time_series(
+    path: str,
+    time_col: str,
+    value_col: str,
+    freq: Optional[str] = None,
+) -> pd.Series:
+    """Load a univariate time series from CSV with validation."""
+    df = pd.read_csv(path, parse_dates=[time_col])
+    df = df.sort_values(time_col).reset_index(drop=True)
+
+    # Detect frequency
+    inferred_freq = pd.infer_freq(df[time_col])
+    if inferred_freq is None and freq is None:
+        raise ValueError("Cannot infer frequency — provide freq parameter")
+
+    ts = df.set_index(time_col)[value_col]
+    ts.index.freq = freq or inferred_freq
+
+    # Report gaps
+    expected_len = len(pd.date_range(ts.index[0], ts.index[-1], freq=ts.index.freq))
+    actual_len = len(ts)
+    if actual_len < expected_len:
+        gap_pct = (expected_len - actual_len) / expected_len * 100
+        print(f"Warning: {gap_pct:.1f}% missing timestamps ({expected_len - actual_len} gaps)")
+
+    return ts
+
+
+def inspect_series(ts: pd.Series) -> dict:
+    """Compute diagnostic statistics for a time series."""
+    return {
+        "length": len(ts),
+        "freq": ts.index.freq,
+        "start": ts.index[0],
+        "end": ts.index[-1],
+        "nan_count": ts.isna().sum(),
+        "nan_pct": ts.isna().mean() * 100,
+        "mean": ts.mean(),
+        "std": ts.std(),
+        "min": ts.min(),
+        "max": ts.max(),
+        "zeros_pct": (ts == 0).mean() * 100,
+        "is_positive": (ts.dropna() >= 0).all(),
+    }
+```
+
+### 2.2 Missing Value Handling
+
+| Gap Size | Pattern | Method | Code |
+|----------|---------|--------|------|
+| 1-2 points | Random | Linear interpolation | `ts.interpolate(method='linear')` |
+| 3-10 points | Random | Seasonal interpolation | Custom (see below) |
+| >10 points | Systematic | Treat as separate series or flag | Split at gap boundary |
+| Leading NaNs | Common | Strip | `ts[ts.first_valid_index():]` |
+
+```python
+def interpolate_seasonal(
+    ts: pd.Series,
+    period: int,
+    max_gap: int = 10,
+) -> pd.Series:
+    """Fill gaps using seasonal decomposition + linear interpolation."""
+    filled = ts.copy()
+    nan_mask = filled.isna()
+
+    # For small gaps: use values from same seasonal position
+    for idx in filled.index[nan_mask]:
+        position = filled.index.get_loc(idx)
+        candidates = []
+        for offset in [-period, period, -2 * period, 2 * period]:
+            neighbor = position + offset
+            if 0 <= neighbor < len(filled) and not np.isnan(filled.iloc[neighbor]):
+                candidates.append(filled.iloc[neighbor])
+        if candidates:
+            filled.loc[idx] = np.mean(candidates)
+
+    # Remaining gaps: linear interpolation
+    filled = filled.interpolate(method='linear', limit=max_gap)
+    return filled
+```
+
+**TimesFM built-in handling**: TimesFM internally strips leading NaNs and applies linear interpolation. For most use cases, you can pass raw series with NaNs directly — but for best results, handle gaps explicitly before inference.
+
+### 2.3 Normalization and Stationarity
+
+**When to normalize manually vs. relying on the model:**
+
+| Scenario | Manual Normalization | Model Handles It |
+|----------|---------------------|-----------------|
+| TimesFM with `normalize_inputs=True` | No | Yes (RevIN) |
+| Chronos | No | Yes (mean scaling) |
+| PatchTST fine-tuning | Yes (Z-score per series) | No |
+| Cross-series comparison | Yes (scale-free metrics) | N/A |
+
+```python
+from statsmodels.tsa.stattools import adfuller
+
+
+def check_stationarity(ts: pd.Series, significance: float = 0.05) -> dict:
+    """ADF test for stationarity."""
+    result = adfuller(ts.dropna(), autolag='AIC')
+    return {
+        "adf_statistic": result[0],
+        "p_value": result[1],
+        "is_stationary": result[1] < significance,
+        "lags_used": result[2],
+        "critical_values": result[4],
+    }
+
+
+def make_stationary(ts: pd.Series, max_diffs: int = 2) -> tuple[pd.Series, int]:
+    """Apply differencing until stationary. Returns (differenced_series, num_diffs)."""
+    current = ts.copy()
+    for d in range(max_diffs):
+        if check_stationarity(current)["is_stationary"]:
+            return current, d
+        current = current.diff().dropna()
+    return current, max_diffs
+```
+
+### 2.4 Train/Validation/Test Split
+
+**Critical rule**: NEVER shuffle temporal data. Always use chronological splits.
+
+```python
+def temporal_split(
+    series: np.ndarray,
+    val_ratio: float = 0.1,
+    test_ratio: float = 0.2,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Chronological train/val/test split. No shuffling."""
+    n = len(series)
+    test_size = int(n * test_ratio)
+    val_size = int(n * val_ratio)
+    train_size = n - val_size - test_size
+
+    train = series[:train_size]
+    val = series[train_size:train_size + val_size]
+    test = series[train_size + val_size:]
+    return train, val, test
+```
+
+```
+|<------- train ------->|<-- val -->|<--- test --->|
+t0                       t1          t2             tN
+                         ^           ^
+                    val_start    test_start
+
+NEVER: random split → lookahead bias → inflated metrics
+```
+
+### 2.5 Frequency Alignment and Resampling
+
+```python
+def align_to_frequency(
+    ts: pd.Series,
+    target_freq: str,
+    agg_func: str = "mean",
+) -> pd.Series:
+    """Resample time series to target frequency."""
+    resampled = ts.resample(target_freq)
+    if agg_func == "mean":
+        return resampled.mean()
+    elif agg_func == "sum":
+        return resampled.sum()
+    elif agg_func == "last":
+        return resampled.last()
+    raise ValueError(f"Unknown agg_func: {agg_func}")
+
+
+# Common frequency codes:
+# 'T' / 'min' = minutely, 'H' / 'h' = hourly, 'D' = daily,
+# 'W' = weekly, 'MS' = month start, 'QS' = quarter start
+```
+
+---
+
+## 3. Model Usage Patterns
+
+### 3.1 TimesFM: End-to-End
+
+```python
+import torch
+import numpy as np
+import timesfm
+
+torch.set_float32_matmul_precision("high")
+
+# 1. Load pretrained model from Hugging Face
+model = timesfm.TimesFM_2p5_200M_torch.from_pretrained(
+    "google/timesfm-2.5-200m-pytorch"
+)
+
+# 2. Configure forecast settings
+config = timesfm.ForecastConfig(
+    max_context=1024,                     # max input length (padded/truncated)
+    max_horizon=256,                      # max forecast horizon
+    normalize_inputs=True,                # enable RevIN
+    use_continuous_quantile_head=True,     # smoother quantile curves (30M head)
+    force_flip_invariance=True,           # average forecast of x and -x
+    infer_is_positive=True,               # clamp to >= 0 when all inputs are positive
+    fix_quantile_crossing=True,           # sort quantiles to prevent crossing
+)
+model.compile(config)
+
+# 3. Forecast — accepts list of variable-length numpy arrays
+point_forecast, quantile_forecast = model.forecast(
+    horizon=96,
+    inputs=[
+        np.sin(np.linspace(0, 20, 500)),   # series 1
+        np.random.randn(200).cumsum(),      # series 2
+    ],
+)
+
+# point_forecast.shape:    (2, 96)         — mean prediction
+# quantile_forecast.shape: (2, 96, 10)     — [mean, q0.1, q0.2, ..., q0.9]
+# quantile_forecast[:, :, 5] is the median (0.5 quantile)
+```
+
+**TimesFM with Covariates (XReg):**
+
+```python
+# Two modes:
+# "xreg + timesfm": fit linear model on targets → forecast residuals with TimesFM
+# "timesfm + xreg": forecast with TimesFM → fit linear model on residuals
+
+point_fc, quantile_fc = model.forecast_with_covariates(
+    inputs=[sales_history],
+    dynamic_numerical_covariates={
+        "price": [price_history_and_future],
+        "temperature": [temp_history_and_future],
+    },
+    dynamic_categorical_covariates={
+        "day_of_week": [dow_history_and_future],
+    },
+    static_numerical_covariates={
+        "store_area": [150.0],
+    },
+    xreg_mode="xreg + timesfm",
+    normalize_xreg_target_per_input=True,
+)
+```
+
+### 3.2 Chronos: End-to-End
+
+```python
+import torch
+import numpy as np
+from chronos import ChronosPipeline
+
+pipeline = ChronosPipeline.from_pretrained(
+    "amazon/chronos-t5-large",       # options: tiny, mini, small, base, large
+    device_map="auto",
+    torch_dtype=torch.bfloat16,
+)
+
+context = torch.tensor(np.sin(np.linspace(0, 20, 500)))
+
+# Generate probabilistic forecast (samples from predictive distribution)
+forecast = pipeline.predict(
+    context=context,
+    prediction_length=64,
+    num_samples=20,           # number of Monte Carlo samples
+)
+# forecast.shape: (1, 20, 64)
+
+# Point forecast: median of samples
+point = np.median(forecast[0].numpy(), axis=0)
+# Prediction interval
+lower = np.quantile(forecast[0].numpy(), 0.1, axis=0)
+upper = np.quantile(forecast[0].numpy(), 0.9, axis=0)
+```
+
+### 3.3 Moirai: Multi-Variate
+
+```python
+import torch
+from uni2ts.model.moirai import MoiraiForecast, MoiraiModule
+
+model = MoiraiForecast(
+    module=MoiraiModule.from_pretrained("Salesforce/moirai-1.1-R-large"),
+    prediction_length=96,
+    context_length=512,
+    patch_size="auto",
+    num_samples=100,
+    target_dim=7,                # number of variates
+    feat_dynamic_real_dim=0,
+    past_feat_dynamic_real_dim=0,
+)
+
+# Use with GluonTS DataLoader for multi-variate forecasting
+predictor = model.create_predictor(batch_size=32)
+forecasts = list(predictor.predict(test_dataset))
+```
+
+### 3.4 Lag-Llama: Probabilistic
+
+```python
+from lag_llama.gluon.estimator import LagLlamaEstimator
+from gluonts.dataset.pandas import PandasDataset
+
+dataset = PandasDataset.from_long_dataframe(
+    df, target="value", item_id="series_id"
+)
+
+estimator = LagLlamaEstimator(
+    ckpt_path="lag-llama.ckpt",
+    prediction_length=24,
+    context_length=128,
+    nonnegative_pred_samples=True,
+    # Lag features are injected automatically based on frequency
+)
+
+predictor = estimator.create_predictor(batch_size=64)
+forecasts = list(predictor.predict(dataset))
+```
+
+### 3.5 Prophet: Classical Baseline
+
+Always benchmark foundation models against a strong classical baseline. Prophet is the most accessible:
+
+```python
+from prophet import Prophet
+import pandas as pd
+import numpy as np
+
+
+def prophet_baseline(
+    ts: pd.Series,
+    horizon: int,
+    yearly_seasonality: bool = True,
+    weekly_seasonality: bool = True,
+    daily_seasonality: bool = False,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Prophet baseline forecast. Returns (point, lower_80, upper_80)."""
+    df = pd.DataFrame({"ds": ts.index, "y": ts.values})
+
+    model = Prophet(
+        yearly_seasonality=yearly_seasonality,
+        weekly_seasonality=weekly_seasonality,
+        daily_seasonality=daily_seasonality,
+        interval_width=0.8,
+    )
+    model.fit(df)
+
+    future = model.make_future_dataframe(periods=horizon, freq=ts.index.freq)
+    forecast = model.predict(future)
+
+    point = forecast["yhat"].iloc[-horizon:].values
+    lower = forecast["yhat_lower"].iloc[-horizon:].values
+    upper = forecast["yhat_upper"].iloc[-horizon:].values
+    return point, lower, upper
+
+
+def compare_with_baseline(
+    series: np.ndarray,
+    ts_index: pd.DatetimeIndex,
+    foundation_forecast: np.ndarray,
+    horizon: int,
+) -> dict[str, float]:
+    """Compare foundation model against Prophet baseline."""
+    ts = pd.Series(series[:-horizon], index=ts_index[:-horizon])
+    actual = series[-horizon:]
+
+    prophet_point, _, _ = prophet_baseline(ts, horizon)
+
+    from scipy import stats as sp_stats
+    fm_errors = np.abs(actual - foundation_forecast)
+    prophet_errors = np.abs(actual - prophet_point)
+
+    return {
+        "foundation_mae": np.mean(fm_errors),
+        "prophet_mae": np.mean(prophet_errors),
+        "improvement_pct": (np.mean(prophet_errors) - np.mean(fm_errors)) / np.mean(prophet_errors) * 100,
+        "fm_wins": int(np.sum(fm_errors < prophet_errors)),
+        "prophet_wins": int(np.sum(prophet_errors < fm_errors)),
+    }
+```
+
+### 3.6 Fine-Tuning Decision Framework
+
+| Scenario | Recommendation | Rationale |
+|----------|---------------|-----------|
+| General benchmarking | Zero-shot | Fair comparison, no data leakage risk |
+| Domain-specific deployment | Light fine-tune (LoRA or last layers) | Adapts to domain without catastrophic forgetting |
+| Single high-value series | Full fine-tune on augmented data | Maximum accuracy when data is sufficient |
+| Resource-constrained | Zero-shot + post-hoc calibration | No GPU budget for fine-tuning |
+| Very short series (<50 points) | Zero-shot (foundation model shines here) | Classical methods need more history |
+| Thousands of related series | Fine-tune on all, infer per series | Shared patterns across series boost each other |
+
+### 3.7 Hyperparameter Search with Optuna
+
+Foundation models have key hyperparameters (context length, quantile config, etc.) that affect performance. Use Optuna for systematic search:
+
+```python
+import optuna
+import numpy as np
+
+
+def optimize_forecast_config(
+    model,
+    train_series: np.ndarray,
+    val_series: np.ndarray,
+    horizon: int,
+    n_trials: int = 50,
+) -> dict:
+    """Optimize forecast configuration using Optuna."""
+
+    def objective(trial: optuna.Trial) -> float:
+        max_context = trial.suggest_categorical("max_context", [256, 512, 1024, 2048])
+        normalize = trial.suggest_categorical("normalize_inputs", [True, False])
+        flip_invariance = trial.suggest_categorical("force_flip_invariance", [True, False])
+        use_quantile_head = trial.suggest_categorical("use_continuous_quantile_head", [True, False])
+
+        import timesfm
+        config = timesfm.ForecastConfig(
+            max_context=max_context,
+            max_horizon=horizon,
+            normalize_inputs=normalize,
+            force_flip_invariance=flip_invariance,
+            use_continuous_quantile_head=use_quantile_head,
+            infer_is_positive=True,
+            fix_quantile_crossing=True,
+        )
+        model.compile(config)
+
+        context = train_series[-max_context:]
+        point_fc, _ = model.forecast(horizon=horizon, inputs=[context])
+        actual = val_series[:horizon]
+        mae = np.mean(np.abs(actual - point_fc[0]))
+        return mae
+
+    study = optuna.create_study(direction="minimize", study_name="timesfm_config")
+    study.optimize(objective, n_trials=n_trials, show_progress_bar=True)
+
+    return {
+        "best_params": study.best_params,
+        "best_mae": study.best_value,
+        "study": study,
+    }
+
+
+# Visualize optimization results
+def plot_optuna_results(study: optuna.Study) -> None:
+    """Plot hyperparameter importance and optimization history."""
+    from optuna.visualization import (
+        plot_optimization_history,
+        plot_param_importances,
+        plot_slice,
+    )
+    plot_optimization_history(study).show()
+    plot_param_importances(study).show()
+    plot_slice(study).show()
+```
+
+### 3.8 Hybrid: Foundation Model + Gradient Boosting Residuals
+
+When covariates are important but the foundation model doesn't support them natively:
+
+```python
+import lightgbm as lgb
+
+def hybrid_forecast(
+    model,
+    series: np.ndarray,
+    covariate_df: pd.DataFrame,
+    horizon: int,
+) -> np.ndarray:
+    """Foundation model base forecast + LightGBM residual correction."""
+    # Step 1: Foundation model point forecast
+    point_fc, _ = model.forecast(horizon=horizon, inputs=[series])
+    base_forecast = point_fc[0]
+
+    # Step 2: Compute historical residuals
+    # Use rolling one-step-ahead forecasts on training set for residual targets
+    historical_forecasts = compute_rolling_forecasts(model, series, horizon=1)
+    residuals = series[-len(historical_forecasts):] - historical_forecasts
+
+    # Step 3: Train LightGBM on covariates → residuals
+    train_X = covariate_df.iloc[-len(residuals):]
+    gbm = lgb.LGBMRegressor(n_estimators=100, max_depth=4, learning_rate=0.05)
+    gbm.fit(train_X.values, residuals)
+
+    # Step 4: Predict residual correction for future
+    future_X = covariate_df.iloc[-horizon:]
+    residual_correction = gbm.predict(future_X.values)
+
+    return base_forecast + residual_correction
+```
+
+---
+
+## 4. Evaluation Methodology
+
+### 4.1 Point Forecast Metrics
+
+```python
+import numpy as np
+from typing import Optional
+
+
+def compute_point_metrics(
+    actual: np.ndarray,
+    predicted: np.ndarray,
+    seasonal_period: int = 1,
+    history: Optional[np.ndarray] = None,
+) -> dict[str, float]:
+    """Compute standard point forecast metrics."""
+    errors = actual - predicted
+    abs_errors = np.abs(errors)
+    n = len(actual)
+
+    metrics = {
+        "mae": np.mean(abs_errors),
+        "mse": np.mean(errors ** 2),
+        "rmse": np.sqrt(np.mean(errors ** 2)),
+    }
+
+    # MAPE — avoid division by zero
+    nonzero = actual != 0
+    if nonzero.any():
+        metrics["mape"] = np.mean(np.abs(errors[nonzero] / actual[nonzero])) * 100
+
+    # sMAPE — symmetric, handles near-zero values
+    denom = np.abs(actual) + np.abs(predicted)
+    nonzero_denom = denom > 0
+    if nonzero_denom.any():
+        metrics["smape"] = np.mean(
+            2 * abs_errors[nonzero_denom] / denom[nonzero_denom]
+        ) * 100
+
+    # MASE — scale-free, requires history for naive seasonal forecast
+    if history is not None and len(history) > seasonal_period:
+        naive_errors = np.abs(history[seasonal_period:] - history[:-seasonal_period])
+        naive_mae = np.mean(naive_errors)
+        if naive_mae > 0:
+            metrics["mase"] = metrics["mae"] / naive_mae
+
+    return metrics
+```
+
+**Metric Selection Guide:**
+
+| Metric | Scale-Free | Handles Zeros | Symmetric | Best For |
+|--------|-----------|---------------|-----------|----------|
+| MAE | No | Yes | Yes | Single-series interpretability |
+| RMSE | No | Yes | Yes | Penalizing large errors |
+| MAPE | Yes | **No** | No | Business reporting (avoid near-zero) |
+| sMAPE | Yes | Yes* | Yes | Cross-series comparison |
+| MASE | Yes | Yes | Yes | Academic benchmarking, seasonal data |
+
+**Recommended default**: MASE for cross-dataset comparison; MAE for single-series tracking.
+
+### 4.2 Probabilistic Forecast Metrics
+
+```python
+def weighted_quantile_loss(
+    actual: np.ndarray,
+    quantile_forecasts: np.ndarray,
+    quantile_levels: np.ndarray,
+) -> dict[str, float]:
+    """Compute weighted quantile loss (WQL) per quantile level."""
+    losses = {}
+    for i, q in enumerate(quantile_levels):
+        errors = actual - quantile_forecasts[:, i]
+        losses[f"wql_{q:.1f}"] = np.mean(
+            np.where(errors >= 0, q * errors, (q - 1) * errors)
+        ) * 2  # multiply by 2 for standard WQL
+
+    losses["wql_mean"] = np.mean(list(losses.values()))
+    return losses
+
+
+def crps_quantile(
+    actual: np.ndarray,
+    quantile_forecasts: np.ndarray,
+    quantile_levels: np.ndarray,
+) -> float:
+    """Approximate CRPS from quantile forecasts via numerical integration."""
+    n_quantiles = len(quantile_levels)
+    crps = 0.0
+    for i in range(n_quantiles - 1):
+        dq = quantile_levels[i + 1] - quantile_levels[i]
+        midpoint = (quantile_forecasts[:, i] + quantile_forecasts[:, i + 1]) / 2
+        indicator = (actual <= midpoint).astype(float)
+        q_mid = (quantile_levels[i] + quantile_levels[i + 1]) / 2
+        crps += np.mean((indicator - q_mid) ** 2) * dq
+    return crps
+
+
+def calibration_curve(
+    actual: np.ndarray,
+    quantile_forecasts: np.ndarray,
+    quantile_levels: np.ndarray,
+) -> dict[str, float]:
+    """Check if q-quantile actually covers q% of observations."""
+    coverage = {}
+    for i, q in enumerate(quantile_levels):
+        coverage[f"q{q:.1f}_coverage"] = np.mean(actual <= quantile_forecasts[:, i])
+    return coverage
+```
+
+### 4.3 Cross-Dataset Aggregation
+
+Use **geometric mean** (not arithmetic mean) to aggregate metrics across datasets. This prevents large-error datasets from dominating:
+
+```python
+from scipy.stats import gmean
+
+
+def aggregate_across_datasets(
+    per_dataset_metrics: dict[str, float],
+) -> float:
+    """Geometric mean aggregation — standard for Monash/M-competition benchmarks."""
+    values = np.array(list(per_dataset_metrics.values()))
+    return gmean(values[values > 0])
+```
+
+### 4.4 Rolling Window Backtesting
+
+```python
+def rolling_backtest(
+    series: np.ndarray,
+    forecast_fn,
+    horizon: int,
+    min_context: int,
+    stride: int = 1,
+) -> list[dict]:
+    """Proper backtesting with rolling origin — no lookahead bias."""
+    results = []
+    n = len(series)
+
+    for origin in range(min_context, n - horizon, stride):
+        context = series[:origin]
+        actual = series[origin:origin + horizon]
+
+        predicted = forecast_fn(context, horizon)
+
+        metrics = compute_point_metrics(
+            actual=actual,
+            predicted=predicted,
+            history=context,
+        )
+        metrics["origin"] = origin
+        results.append(metrics)
+
+    return results
+```
+
+### 4.5 Statistical Significance: Diebold-Mariano Test
+
+```python
+from scipy import stats
+
+
+def diebold_mariano_test(
+    errors_1: np.ndarray,
+    errors_2: np.ndarray,
+    horizon: int = 1,
+) -> dict[str, float]:
+    """Test whether two forecasters have significantly different accuracy.
+
+    H0: E[d_t] = 0 (equal predictive accuracy)
+    """
+    d = errors_1 ** 2 - errors_2 ** 2
+    n = len(d)
+    mean_d = np.mean(d)
+    var_d = np.var(d, ddof=1)
+
+    # Newey-West adjustment for serial correlation
+    for k in range(1, horizon):
+        gamma_k = np.cov(d[k:], d[:-k])[0, 1]
+        var_d += 2 * (1 - k / horizon) * gamma_k / n
+
+    dm_stat = mean_d / np.sqrt(var_d / n)
+    p_value = 2 * stats.t.sf(np.abs(dm_stat), df=n - 1)
+
+    return {
+        "dm_statistic": dm_stat,
+        "p_value": p_value,
+        "significant_at_0.05": p_value < 0.05,
+        "better_model": 1 if mean_d > 0 else 2,
+    }
+```
+
+### 4.6 Forecast Visualization
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import numpy as np
+from typing import Optional
+
+
+def plot_forecast(
+    history: np.ndarray,
+    forecast: np.ndarray,
+    quantile_forecast: Optional[np.ndarray] = None,
+    actual: Optional[np.ndarray] = None,
+    title: str = "Time Series Forecast",
+    dates: Optional[np.ndarray] = None,
+    figsize: tuple = (14, 5),
+) -> plt.Figure:
+    """Plot forecast with prediction intervals and optional actuals."""
+    fig, ax = plt.subplots(figsize=figsize)
+
+    n_hist = len(history)
+    n_fc = len(forecast)
+    x_hist = np.arange(n_hist) if dates is None else dates[:n_hist]
+    x_fc = np.arange(n_hist, n_hist + n_fc) if dates is None else dates[n_hist:n_hist + n_fc]
+
+    # History
+    ax.plot(x_hist, history, color="#2196F3", linewidth=1.5, label="History")
+
+    # Forecast
+    ax.plot(x_fc, forecast, color="#FF5722", linewidth=2, label="Forecast")
+
+    # Prediction intervals (from quantile forecasts)
+    if quantile_forecast is not None:
+        # 80% interval (q0.1 - q0.9)
+        ax.fill_between(x_fc, quantile_forecast[:, 0], quantile_forecast[:, 8],
+                        alpha=0.15, color="#FF5722", label="80% PI")
+        # 50% interval (q0.2 - q0.8)
+        ax.fill_between(x_fc, quantile_forecast[:, 1], quantile_forecast[:, 7],
+                        alpha=0.25, color="#FF5722", label="50% PI")
+
+    # Actual (if available, for backtesting)
+    if actual is not None:
+        ax.plot(x_fc[:len(actual)], actual, color="#4CAF50", linewidth=1.5,
+                linestyle="--", label="Actual")
+
+    ax.axvline(x=x_fc[0], color="gray", linestyle=":", alpha=0.5)
+    ax.set_title(title)
+    ax.legend(loc="upper left")
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    return fig
+
+
+def plot_backtest_results(
+    backtest_results: list[dict],
+    metric: str = "mae",
+    figsize: tuple = (12, 4),
+) -> plt.Figure:
+    """Plot metric over rolling backtest origins to detect drift."""
+    fig, ax = plt.subplots(figsize=figsize)
+    origins = [r["origin"] for r in backtest_results]
+    values = [r[metric] for r in backtest_results]
+
+    ax.plot(origins, values, color="#2196F3", alpha=0.5, linewidth=0.8)
+    # Rolling average
+    window = max(1, len(values) // 10)
+    rolling = np.convolve(values, np.ones(window) / window, mode="valid")
+    ax.plot(origins[window - 1:], rolling, color="#FF5722", linewidth=2, label=f"Rolling {metric.upper()}")
+
+    ax.set_xlabel("Forecast Origin")
+    ax.set_ylabel(metric.upper())
+    ax.set_title(f"Backtest {metric.upper()} Over Time")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    return fig
+```
+
+**Interactive visualization with Plotly** (for notebooks / dashboards):
+
+```python
+import plotly.graph_objects as go
+
+
+def plot_forecast_interactive(
+    history: np.ndarray,
+    forecast: np.ndarray,
+    quantile_forecast: Optional[np.ndarray] = None,
+    actual: Optional[np.ndarray] = None,
+    title: str = "Forecast",
+) -> go.Figure:
+    """Interactive forecast plot with hover details."""
+    fig = go.Figure()
+    n_hist = len(history)
+
+    fig.add_trace(go.Scatter(y=history, mode="lines", name="History",
+                             line=dict(color="#2196F3")))
+    fig.add_trace(go.Scatter(
+        x=list(range(n_hist, n_hist + len(forecast))),
+        y=forecast, mode="lines", name="Forecast",
+        line=dict(color="#FF5722", width=2),
+    ))
+
+    if quantile_forecast is not None:
+        x_fc = list(range(n_hist, n_hist + len(forecast)))
+        fig.add_trace(go.Scatter(
+            x=x_fc + x_fc[::-1],
+            y=list(quantile_forecast[:, 8]) + list(quantile_forecast[:, 0][::-1]),
+            fill="toself", fillcolor="rgba(255,87,34,0.1)",
+            line=dict(color="rgba(255,87,34,0)"), name="80% PI",
+        ))
+
+    if actual is not None:
+        fig.add_trace(go.Scatter(
+            x=list(range(n_hist, n_hist + len(actual))),
+            y=actual, mode="lines", name="Actual",
+            line=dict(color="#4CAF50", dash="dash"),
+        ))
+
+    fig.update_layout(title=title, xaxis_title="Time", yaxis_title="Value",
+                      hovermode="x unified")
+    return fig
+```
+
+---
+
+## 5. Common Pitfalls and Anti-Patterns
+
+### 5.1 Lookahead Bias (Data Leakage)
+
+```python
+# BAD: Normalizing with full dataset statistics before splitting
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+all_data_normalized = scaler.fit_transform(full_dataset)  # leaks test info!
+train, test = all_data_normalized[:split], all_data_normalized[split:]
+
+# GOOD: Normalize with training set statistics only
+scaler = StandardScaler()
+train_normalized = scaler.fit_transform(train_set)
+test_normalized = scaler.transform(test_set)              # transform only, no fit
+```
+
+### 5.2 Wrong Temporal Split
+
+```python
+# BAD: Random shuffle destroys temporal ordering
+from sklearn.model_selection import train_test_split
+train, test = train_test_split(data, test_size=0.2, random_state=42)
+
+# GOOD: Chronological split preserving order
+split_idx = int(len(data) * 0.8)
+train, test = data[:split_idx], data[split_idx:]
+```
+
+### 5.3 Scale-Dependent Metric Comparison
+
+```python
+# BAD: Comparing raw MSE across datasets with different scales
+# Dataset A (temperature, range 0-40): MSE = 2.5
+# Dataset B (stock price, range 100-5000): MSE = 1500
+# Conclusion: "Model is worse on B" — WRONG, just different scale
+
+# GOOD: Use scale-free metrics for cross-dataset comparison
+for name, (actual, predicted, history) in datasets.items():
+    mase = compute_point_metrics(actual, predicted, history=history)["mase"]
+    print(f"{name}: MASE = {mase:.3f}")
+```
+
+### 5.4 Ignoring Distribution Shift
+
+```python
+# BAD: Train once, deploy forever
+model.fit(historical_data)
+# ... months pass, no retraining ...
+
+# GOOD: Monitor and re-evaluate on recent windows
+def should_retrain(recent_errors: list[float], baseline_mase: float, threshold: float = 0.3) -> bool:
+    """Alert when recent forecast quality degrades significantly."""
+    recent_mase = np.mean(recent_errors)
+    degradation = (recent_mase - baseline_mase) / baseline_mase
+    return degradation > threshold
+```
+
+### 5.5 Misusing Probabilistic Outputs
+
+```python
+# BAD: Using only the median, ignoring uncertainty
+prediction = quantile_forecasts[:, 4]  # 0.5 quantile only
+decision = "order 100 units" if prediction > threshold else "order 50 units"
+
+# GOOD: Use the full quantile range for decision-making under uncertainty
+median = quantile_forecasts[:, 4]      # 0.5 quantile
+lower = quantile_forecasts[:, 0]       # 0.1 quantile — worst case
+upper = quantile_forecasts[:, 8]       # 0.9 quantile — best case
+
+# Risk-aware decision: use higher quantile for safety stock
+safety_stock = np.maximum(upper - median, 0)
+order_quantity = median + safety_stock * risk_factor
+```
+
+### 5.6 Context Length Mismatches
+
+```python
+# BAD: Using very short context for hourly data with weekly seasonality
+config = timesfm.ForecastConfig(max_context=48)   # only 2 days — misses weekly pattern
+
+# BAD: Using excessively long context that includes regime changes
+config = timesfm.ForecastConfig(max_context=16384) # 2 years of hourly — old regime hurts
+
+# GOOD: Match context to the longest seasonality you want to capture
+# Hourly with weekly seasonality: 168 * 2 = 336 minimum (2 full weeks)
+# Daily with annual seasonality: 365 * 2 = 730 minimum (2 full years)
+config = timesfm.ForecastConfig(max_context=512)   # 3 weeks — captures weekly pattern
+```
+
+### 5.7 Frequency Mismatch in Evaluation
+
+```python
+# BAD: Evaluating a monthly model on daily targets (or vice versa)
+# This gives misleading accuracy numbers
+
+# GOOD: Ensure forecast and actual have the same frequency and alignment
+assert len(actual) == len(predicted), "Forecast/actual length mismatch"
+assert actual.index.freq == predicted.index.freq, "Frequency mismatch"
+```
+
+---
+
+## 6. Production Deployment Patterns
+
+### 6.1 Batch Inference Pipeline
+
+```python
+import numpy as np
+from typing import Any
+
+
+def batch_forecast(
+    model: Any,
+    series_list: list[np.ndarray],
+    horizon: int,
+    batch_size: int = 64,
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    """Process thousands of series efficiently in batches."""
+    all_point = []
+    all_quantile = []
+
+    for i in range(0, len(series_list), batch_size):
+        batch = series_list[i:i + batch_size]
+        point_fc, quantile_fc = model.forecast(horizon=horizon, inputs=batch)
+        all_point.extend([point_fc[j] for j in range(len(batch))])
+        all_quantile.extend([quantile_fc[j] for j in range(len(batch))])
+
+    return all_point, all_quantile
+```
+
+### 6.2 Serving Architecture Decision
+
+| Approach | Latency | Throughput | Complexity | Best For |
+|----------|---------|------------|------------|----------|
+| Direct PyTorch | Medium | Medium | Low | Development, prototyping |
+| TorchServe / Triton | Low | High | Medium | Production REST APIs |
+| ONNX Runtime | Lowest | High | Medium | Edge/CPU deployment |
+| Batch job (Airflow) | N/A | Highest | Low | Scheduled daily/weekly forecasting |
+| Ray Serve | Low | Very High | High | Multi-model, auto-scaling |
+
+### 6.3 ONNX Export and Quantized Deployment
+
+```python
+import torch
+import numpy as np
+
+
+def export_to_onnx(
+    model: torch.nn.Module,
+    dummy_input: torch.Tensor,
+    output_path: str = "forecast_model.onnx",
+    opset_version: int = 17,
+) -> str:
+    """Export a PyTorch forecast model to ONNX format."""
+    model.eval()
+    torch.onnx.export(
+        model,
+        dummy_input,
+        output_path,
+        opset_version=opset_version,
+        input_names=["input_series"],
+        output_names=["forecast"],
+        dynamic_axes={
+            "input_series": {0: "batch_size", 1: "context_length"},
+            "forecast": {0: "batch_size", 1: "horizon"},
+        },
+    )
+    return output_path
+
+
+def quantize_onnx_model(
+    model_path: str,
+    output_path: str = "forecast_model_int8.onnx",
+) -> str:
+    """INT8 dynamic quantization for CPU deployment."""
+    from onnxruntime.quantization import quantize_dynamic, QuantType
+
+    quantize_dynamic(
+        model_input=model_path,
+        model_output=output_path,
+        weight_type=QuantType.QInt8,
+    )
+    return output_path
+
+
+def onnx_inference(
+    model_path: str,
+    input_series: np.ndarray,
+    use_gpu: bool = False,
+) -> np.ndarray:
+    """Run inference with ONNX Runtime — CPU or GPU."""
+    import onnxruntime as ort
+
+    providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if use_gpu else ["CPUExecutionProvider"]
+    session = ort.InferenceSession(model_path, providers=providers)
+
+    input_name = session.get_inputs()[0].name
+    result = session.run(None, {input_name: input_series.astype(np.float32)})
+    return result[0]
+
+
+# Full deployment pipeline:
+# 1. Export:   export_to_onnx(model, dummy) → forecast_model.onnx
+# 2. Quantize: quantize_onnx_model("forecast_model.onnx") → forecast_model_int8.onnx
+# 3. Serve:    onnx_inference("forecast_model_int8.onnx", series) → predictions
+# Typical speedup: 2-4x on CPU, ~40% model size reduction
+```
+
+**torch.compile for PyTorch-native acceleration** (alternative to ONNX):
+
+```python
+import torch
+
+# TimesFM: compile at config time (built-in)
+model.compile(config)  # uses torch.compile internally
+
+# General PyTorch models: explicit compilation
+model_compiled = torch.compile(model, mode="reduce-overhead")
+
+# For repeated same-shape inference, use CUDA graphs
+with torch.cuda.graph():
+    output = model_compiled(dummy_input)
+```
+
+### 6.4 Monitoring and Drift Detection
+
+```python
+from collections import deque
+
+
+class ForecastMonitor:
+    """Lightweight production monitor for forecast quality."""
+
+    def __init__(self, baseline_mase: float, window_size: int = 100, alert_threshold: float = 0.3):
+        self.baseline_mase = baseline_mase
+        self.window_size = window_size
+        self.alert_threshold = alert_threshold
+        self.recent_errors = deque(maxlen=window_size)
+
+    def record(self, actual: float, predicted: float, naive_error: float) -> dict:
+        """Record a single observation and check for drift."""
+        abs_error = abs(actual - predicted)
+        scaled_error = abs_error / naive_error if naive_error > 0 else abs_error
+        self.recent_errors.append(scaled_error)
+
+        current_mase = np.mean(self.recent_errors) if len(self.recent_errors) >= 10 else None
+        degradation = (
+            (current_mase - self.baseline_mase) / self.baseline_mase
+            if current_mase is not None
+            else None
+        )
+
+        return {
+            "current_mase": current_mase,
+            "degradation_pct": degradation * 100 if degradation else None,
+            "alert": degradation is not None and degradation > self.alert_threshold,
+            "window_fill": len(self.recent_errors) / self.window_size,
+        }
+```
+
+### 6.5 Experiment Tracking with MLflow / W&B
+
+Track model comparisons, hyperparameter sweeps, and evaluation results systematically:
+
+**MLflow pattern:**
+
+```python
+import mlflow
+import numpy as np
+
+
+def track_forecast_experiment(
+    model_name: str,
+    config: dict,
+    train_series: np.ndarray,
+    test_series: np.ndarray,
+    forecast: np.ndarray,
+    metrics: dict,
+    artifacts: dict | None = None,
+) -> str:
+    """Log a forecasting experiment to MLflow."""
+    mlflow.set_experiment("time_series_forecasting")
+
+    with mlflow.start_run(run_name=f"{model_name}_{config.get('horizon', 'N')}h") as run:
+        # Log parameters
+        mlflow.log_params({
+            "model": model_name,
+            "context_length": config.get("max_context", "N/A"),
+            "horizon": config.get("horizon", "N/A"),
+            "normalize": config.get("normalize_inputs", "N/A"),
+            "train_length": len(train_series),
+            "test_length": len(test_series),
+        })
+
+        # Log metrics
+        mlflow.log_metrics(metrics)  # {"mae": 0.5, "mase": 0.8, ...}
+
+        # Log forecast as artifact
+        np.save("/tmp/forecast.npy", forecast)
+        mlflow.log_artifact("/tmp/forecast.npy")
+
+        # Log visualization
+        if artifacts:
+            for name, path in artifacts.items():
+                mlflow.log_artifact(path, artifact_path=name)
+
+        return run.info.run_id
+
+
+# Usage:
+# run_id = track_forecast_experiment(
+#     model_name="timesfm-2.5",
+#     config={"max_context": 512, "horizon": 96},
+#     train_series=train, test_series=test,
+#     forecast=point_fc,
+#     metrics=compute_point_metrics(test, point_fc, history=train),
+# )
+```
+
+**Weights & Biases pattern:**
+
+```python
+import wandb
+import numpy as np
+
+
+def track_with_wandb(
+    model_name: str,
+    config: dict,
+    metrics: dict,
+    forecast: np.ndarray,
+    actual: np.ndarray,
+) -> None:
+    """Log a forecasting experiment to Weights & Biases."""
+    wandb.init(
+        project="time-series-forecasting",
+        name=f"{model_name}-h{config.get('horizon', '?')}",
+        config=config,
+    )
+
+    # Log summary metrics
+    wandb.log(metrics)
+
+    # Log forecast vs actual as a table
+    table = wandb.Table(
+        columns=["step", "actual", "predicted", "abs_error"],
+        data=[
+            [i, float(actual[i]), float(forecast[i]), float(abs(actual[i] - forecast[i]))]
+            for i in range(len(actual))
+        ],
+    )
+    wandb.log({"forecast_table": table})
+
+    # Log error distribution
+    wandb.log({
+        "error_histogram": wandb.Histogram(np.abs(actual - forecast)),
+    })
+
+    wandb.finish()
+
+
+# Compare models in W&B dashboard:
+# for model_name, model_fn in models.items():
+#     forecast = model_fn(train, horizon=96)
+#     metrics = compute_point_metrics(test, forecast, history=train)
+#     track_with_wandb(model_name, config, metrics, forecast, test)
+```
+
+**Choosing between MLflow and W&B:**
+
+| Aspect | MLflow | W&B |
+|--------|--------|-----|
+| Hosting | Self-hosted or Databricks | Cloud (free tier) or self-hosted |
+| Visualization | Basic UI | Rich dashboards, sweeps UI |
+| Model registry | Built-in | Via Artifacts |
+| Team collaboration | Requires setup | Built-in |
+| Best for | On-prem, reproducibility | Fast iteration, team sharing |
+
+---
+
+## 7. Benchmark Datasets Reference
+
+| Dataset | Domain | Frequency | Series | Length | Source |
+|---------|--------|-----------|--------|--------|--------|
+| ETTh1, ETTh2 | Energy (transformer temp) | Hourly | 7 | 17,420 | Zhou et al. 2021 |
+| ETTm1, ETTm2 | Energy (transformer temp) | 15-min | 7 | 69,680 | Zhou et al. 2021 |
+| Weather | Climate (21 indicators) | 10-min | 21 | 52,696 | Wetterstation |
+| Electricity | Utility (321 clients) | Hourly | 321 | 26,304 | UCI ML Repo |
+| Traffic | Transport (862 sensors) | Hourly | 862 | 17,544 | Caltrans PEMS |
+| Exchange Rate | Finance (8 countries) | Daily | 8 | 7,588 | Lai et al. 2018 |
+| ILI (Illness) | Healthcare | Weekly | 7 | 966 | CDC |
+| M4 Competition | Mixed domains | Mixed | 100,000 | Varies | Makridakis 2020 |
+| M5 Competition | Retail (Walmart) | Daily | 30,490 | 1,941 | Makridakis 2022 |
+| Monash Archive | 30+ datasets | Mixed | Mixed | Mixed | Godahewa et al. 2021 |
+
+```python
+# Loading Monash datasets (via datasetsforecast)
+from datasetsforecast.long_horizon import LongHorizon
+
+Y_df, *_ = LongHorizon.load(directory="./data", group="ETTh1")
+
+# Loading M4 datasets
+from datasetsforecast.m4 import M4
+
+Y_df, *_ = M4.load(directory="./data", group="Monthly")
+```
+
+---
+
+## 8. Decision Frameworks
+
+### 8.1 Model Selection Flowchart
+
+```
+Need probabilistic forecasts?
+├── YES
+│   ├── Multi-variate data? → YES → Moirai (native multi-variate)
+│   └── NO
+│       ├── Heavy tails expected? → YES → Lag-Llama (Student's t)
+│       └── NO → TimesFM (quantile head) or Chronos (sample-based)
+└── NO (point forecast)
+    ├── Have domain-specific training data?
+    │   ├── YES → PatchTST or iTransformer (fine-tune)
+    │   └── NO → TimesFM (best zero-shot point forecast)
+    └── Need cross-variable modeling?
+        ├── YES → iTransformer or Moirai
+        └── NO → TimesFM or Chronos
+```
+
+### 8.2 Context Length Selection Guide
+
+| Data Frequency | Dominant Seasonality | Recommended Context | Rationale |
+|----------------|---------------------|---------------------|-----------|
+| Minutely | Daily (1440) | 2,880-4,320 (2-3 days) | Capture 2+ daily cycles |
+| Hourly | Weekly (168) | 336-720 (2-4 weeks) | Capture 2+ weekly cycles |
+| Daily | Annual (365) | 365-730 (1-2 years) | Capture annual pattern |
+| Weekly | Annual (52) | 104-156 (2-3 years) | Capture annual + trend |
+| Monthly | Annual (12) | 36-120 (3-10 years) | Multi-year cycles |
+| Quarterly | Multi-year | 20-40 (5-10 years) | Long-term trends |
+
+**Rule of thumb**: context >= 2x longest seasonal period you want to capture.
+
+### 8.3 Foundation Model vs. Classical Methods
+
+| Scenario | Recommendation | Why |
+|----------|---------------|-----|
+| Single well-understood series, years of history | Classical (ETS, ARIMA, Prophet) | Interpretable, proven, no GPU needed |
+| Hundreds of heterogeneous series, limited per-series history | Foundation model (zero-shot) | Transfer learning fills data gaps |
+| Cold-start / new product with zero history | Foundation model | No history needed, pattern transfer |
+| Requirement for full explainability | Classical or hybrid | Foundation models are black boxes |
+| Highest accuracy needed, GPU available | Foundation model (fine-tuned) | Best of both worlds |
+| Extremely high-frequency (tick-level) data | Specialized (not foundation) | Foundation models not trained on this regime |
+| Need to forecast 100K+ series daily | Foundation model (batch inference) | Amortized cost per series is lower |
+
+---
+
+## 9. Synthetic Data Augmentation
+
+TimesFM training uses 20% synthetic data to improve generalization on underrepresented frequencies. This pattern is useful for fine-tuning:
+
+```python
+import numpy as np
+from typing import Optional
+
+
+def generate_arma_series(
+    n: int,
+    ar_coeffs: Optional[list[float]] = None,
+    ma_coeffs: Optional[list[float]] = None,
+    noise_std: float = 1.0,
+) -> np.ndarray:
+    """Generate an ARMA(p,q) process."""
+    ar_coeffs = ar_coeffs or [0.7, -0.2]
+    ma_coeffs = ma_coeffs or [0.3]
+    p, q = len(ar_coeffs), len(ma_coeffs)
+    series = np.zeros(n)
+    noise = np.random.randn(n) * noise_std
+
+    for t in range(max(p, q), n):
+        ar_term = sum(ar_coeffs[i] * series[t - i - 1] for i in range(p))
+        ma_term = sum(ma_coeffs[i] * noise[t - i - 1] for i in range(q))
+        series[t] = ar_term + ma_term + noise[t]
+
+    return series
+
+
+def generate_seasonal_series(
+    n: int,
+    periods: list[int],
+    amplitudes: Optional[list[float]] = None,
+    noise_std: float = 0.1,
+) -> np.ndarray:
+    """Generate multi-seasonal series (sum of sines + noise)."""
+    amplitudes = amplitudes or [1.0] * len(periods)
+    t = np.arange(n, dtype=float)
+    series = sum(
+        amp * np.sin(2 * np.pi * t / period + np.random.uniform(0, 2 * np.pi))
+        for period, amp in zip(periods, amplitudes)
+    )
+    series += np.random.randn(n) * noise_std
+    return series
+
+
+def generate_trend_series(
+    n: int,
+    trend_type: str = "linear",
+    num_changepoints: int = 2,
+) -> np.ndarray:
+    """Generate trend with changepoints."""
+    t = np.arange(n, dtype=float) / n
+    series = np.zeros(n)
+    changepoints = sorted(np.random.uniform(0.1, 0.9, num_changepoints))
+    changepoints = [0.0] + changepoints + [1.0]
+
+    for i in range(len(changepoints) - 1):
+        start_idx = int(changepoints[i] * n)
+        end_idx = int(changepoints[i + 1] * n)
+        segment_len = end_idx - start_idx
+        slope = np.random.uniform(-2, 2)
+        intercept = series[start_idx - 1] if start_idx > 0 else np.random.uniform(-1, 1)
+
+        if trend_type == "linear":
+            series[start_idx:end_idx] = intercept + slope * np.arange(segment_len) / segment_len
+        elif trend_type == "exponential":
+            series[start_idx:end_idx] = intercept * np.exp(slope * np.arange(segment_len) / segment_len)
+
+    return series
+
+
+def augment_training_data(
+    real_series: list[np.ndarray],
+    synthetic_ratio: float = 0.2,
+    series_length: int = 2048,
+) -> list[np.ndarray]:
+    """Augment real data with synthetic series (TimesFM-style 80/20 mix)."""
+    num_synthetic = int(len(real_series) * synthetic_ratio / (1 - synthetic_ratio))
+    synthetic = []
+
+    generators = [
+        lambda: generate_arma_series(series_length),
+        lambda: generate_seasonal_series(series_length, periods=[24, 168]),
+        lambda: generate_seasonal_series(series_length, periods=[12, 52]),
+        lambda: generate_trend_series(series_length, trend_type="linear"),
+        lambda: (
+            generate_arma_series(series_length, noise_std=0.3)
+            + generate_seasonal_series(series_length, periods=[24])
+            + generate_trend_series(series_length)
+        ),
+    ]
+
+    for _ in range(num_synthetic):
+        gen = np.random.choice(generators)
+        synthetic.append(gen())
+
+    return real_series + synthetic
+```
+
+---
+
+## 10. Quick Reference
+
+### 10.1 Python Packages
+
+| Package | Install | Primary Use |
+|---------|---------|-------------|
+| `timesfm` | `pip install timesfm[torch]` | Google TimesFM inference |
+| `chronos-forecasting` | `pip install chronos-forecasting` | Amazon Chronos inference |
+| `uni2ts` | `pip install uni2ts` | Salesforce Moirai inference |
+| `lag-llama` | `pip install lag-llama` | Lag-Llama inference |
+| `gluonts` | `pip install gluonts` | Dataset handling, metrics, baselines |
+| `neuralforecast` | `pip install neuralforecast` | PatchTST, iTransformer, N-BEATS |
+| `statsforecast` | `pip install statsforecast` | Fast classical baselines (ETS, ARIMA, Theta) |
+| `datasetsforecast` | `pip install datasetsforecast` | Benchmark dataset loaders (Monash, M4, ETT) |
+| `utilsforecast` | `pip install utilsforecast` | Evaluation metrics, cross-validation |
+| `prophet` | `pip install prophet` | Classical baseline (Facebook/Meta) |
+| `matplotlib` | `pip install matplotlib` | Static forecast visualization |
+| `plotly` | `pip install plotly` | Interactive forecast visualization |
+| `optuna` | `pip install optuna` | Hyperparameter search |
+| `mlflow` | `pip install mlflow` | Experiment tracking (self-hosted) |
+| `wandb` | `pip install wandb` | Experiment tracking (cloud) |
+| `onnxruntime` | `pip install onnxruntime` | ONNX inference (CPU) |
+| `onnxruntime-gpu` | `pip install onnxruntime-gpu` | ONNX inference (GPU) |
+
+### 10.2 Key Hyperparameters
+
+| Parameter | TimesFM 2.5 | Chronos (Large) | Moirai (Large) | Notes |
+|-----------|-------------|-----------------|----------------|-------|
+| Parameters | 200M | 710M | 311M | Smaller != worse |
+| Context | 16,384 | 512 | 5,000 | Longer captures more history |
+| Horizon | Unlimited (AR) | 64 per call | Configurable | Chain calls for longer |
+| Quantiles | 9 + mean | ~20 bins (sample) | Mixture dist | More = finer uncertainty |
+| Patch size | 32 (input) / 128 (output) | 1 (token-level) | Auto | Larger = faster, coarser |
+| Positional encoding | RoPE | Sinusoidal (T5) | RoPE | RoPE extrapolates better |
+
+### 10.3 TimesFM Architecture Summary
+
+```
+Input series: [x1, x2, ..., xN]
+    ↓
+Strip leading NaNs + linear interpolation
+    ↓
+Pad/truncate to max_context
+    ↓
+Patch into chunks of 32: [(x1..x32), (x33..x64), ...]
+    ↓
+Per-patch RevIN normalization (Welford online stats)
+    ↓
+ResidualBlock tokenizer: patch → 1280-dim embedding
+    ↓
+20× Transformer layers:
+  ├── RMSNorm → Multi-Head Attention (16 heads, RoPE, causal mask)
+  ├── RMSNorm → Post-attention residual
+  ├── RMSNorm → FFN (SwiGLU, 1280-dim)
+  └── RMSNorm → Post-FFN residual
+    ↓
+Output head: 1280-dim → 128 values × 10 quantiles
+    ↓
+RevIN denormalization
+    ↓
+Post-processing: flip invariance, non-negativity, quantile sort
+    ↓
+Output: point_forecast (B, H), quantile_forecast (B, H, 10)
+```
+
+### 10.4 Evaluation Metrics Cheat Sheet
+
+| Metric | Formula | Scale-Free | Probabilistic | When to Use |
+|--------|---------|-----------|---------------|-------------|
+| MAE | `mean(\|y - y_hat\|)` | No | No | Single-series tracking |
+| MASE | `MAE / naive_MAE` | Yes | No | Cross-dataset benchmark |
+| sMAPE | `mean(2\|y-y_hat\| / (\|y\|+\|y_hat\|))` | Yes | No | Business reporting |
+| CRPS | `integral (CDF - 1)^2` | No | Yes | Probabilistic quality |
+| WQL | `sum(q * max(y-q_hat, 0) + (1-q) * max(q_hat-y, 0))` | No | Yes | Quantile accuracy |
+| Calibration | `P(y <= q_hat) vs q` | N/A | Yes | Reliability check |
+
+---
+
+## Remember
+
+Foundation models for time series are powerful zero-shot tools, but they do not eliminate the need for:
+1. **Proper data preparation** — garbage in, garbage out still applies
+2. **Temporal evaluation discipline** — always use chronological splits, never shuffle
+3. **Metric selection** — use scale-free metrics (MASE) for cross-series comparison
+4. **Production monitoring** — forecast quality degrades over time without intervention
+5. **Classical baselines** — always benchmark against ETS/ARIMA/seasonal naive before claiming foundation model wins
+
+The decoder-only patched transformer architecture (as pioneered by TimesFM) represents a paradigm shift: pre-train once on diverse temporal data, then forecast any domain zero-shot. But the craft of forecasting — understanding seasonality, handling missing data, selecting the right evaluation window — remains as important as ever.

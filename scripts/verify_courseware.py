@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLISHABLE_CHAPTERS = tuple(
     chapter
     for chapter in sorted((ROOT / "docs/v2").glob("*.md"))
-    if re.match(r"^(?:00|0[1-9]|1[0-9]|20)-", chapter.name)
+    if re.match(r"^(?:00|0[1-9]|[12][0-9]|3[0-3])-", chapter.name)
     and "修订对照" not in chapter.name
 )
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
@@ -37,9 +37,11 @@ def main() -> int:
             continue
 
         text = chapter.read_text(encoding="utf-8")
+        if "写作状态**：大纲" in text or "写作状态**: 大纲" in text:
+            continue
         chapter_match = re.match(r"^(\d+)-", chapter.name)
         chapter_number = int(chapter_match.group(1)) if chapter_match else None
-        if re.match(r"^(?:0[5-9]|1[0-9]|20)-", chapter.name):
+        if re.match(r"^(?:0[1-9]|[12][0-9]|3[0-3])-", chapter.name):
             for heading in REQUIRED_ENDINGS:
                 if not re.search(
                     rf"^## (?:\d+\.\d+\s+)?{re.escape(heading)}\s*$",
@@ -49,6 +51,16 @@ def main() -> int:
                     errors.append(
                         f"{chapter.relative_to(ROOT)} is missing required heading {heading}"
                     )
+            non_whitespace_chars = len(re.sub(r"\s+", "", text))
+            if non_whitespace_chars < 5000:
+                errors.append(
+                    f"{chapter.relative_to(ROOT)} needs at least 5000 non-whitespace characters "
+                    f"(found {non_whitespace_chars})"
+                )
+            if not re.search(r"^### .+$", text, re.MULTILINE):
+                errors.append(
+                    f"{chapter.relative_to(ROOT)} needs at least one third-level heading"
+                )
 
         if chapter_number is not None:
             image_count = len(MARKDOWN_IMAGE.findall(text))
@@ -126,7 +138,7 @@ def main() -> int:
                     f"from 表 {chapter_number}-1"
                 )
 
-            if 4 <= chapter_number <= 20:
+            if 4 <= chapter_number <= 33:
                 if image_count < 2:
                     errors.append(
                         f"{chapter.relative_to(ROOT)} needs at least two teaching figures"
@@ -139,7 +151,7 @@ def main() -> int:
                     errors.append(
                         f"{chapter.relative_to(ROOT)} needs a worked example or case"
                     )
-            if 4 <= chapter_number <= 19:
+            if 4 <= chapter_number <= 32:
                 opening = "\n".join(lines[:40])
                 closing = "\n".join(lines[-100:])
                 if not re.search(r"上一讲|第[一二三四五六七八九十]+讲|前几讲|前 \d+ 讲", opening):

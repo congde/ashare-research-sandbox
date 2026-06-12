@@ -1,0 +1,217 @@
+# ValueScan skill — Open API reference: https://api.valuescan.io (see product docs for full endpoint list).
+name: valueScan
+dag_eligible: true
+
+summary: >-
+  Professional blockchain data analysis via the ValueScan Open API. Provides
+  real-time exchange fund flows (spot + futures), AI smart picks (opportunity/risk/fund anomaly),
+  on-chain whale monitoring, large transaction tracking, holder analysis, address P&L trends,
+  social sentiment, BTC/ETH price indicators, AI support/resistance levels, sector fund rotation,
+  and K-line data. Return the result in JSON format.
+
+description: >-
+  Perform professional blockchain data analysis via the ValueScan Open API.
+  All operations are accessed through the unified sub-tool ``valueScan_api``
+  with an ``operation`` parameter. For user questions about whether to buy/sell,
+  spot price, or "上车", prefer ``token_detail`` (with ``price_indicators`` /
+  ``realtime_fund`` as needed) — do not rely on generic MCP price alone.
+  Return the result in JSON format.
+
+  HARD CONSTRAINT (MANDATORY):
+  If this skill is selected, you MUST create at least ONE task for
+  valueScan_api. Choose the appropriate operation based on user intent.
+
+  ## Operation Quick Reference
+
+  | Operation | API Endpoint | Description | Required Params |
+  |-----------|-------------|-------------|-----------------|
+  | search_token | /open/v1/vs-token/list | Search token list, get vsTokenId | symbol |
+  | token_detail | /open/v1/vs-token/detail | Token details (price, mcap, coinKey) | symbol |
+  | realtime_fund | /open/v1/trade/getCoinTrade | Real-time fund accumulation (spot+futures) | symbol |
+  | fund_snapshot | /open/v1/trade/getCoinTradeSnapshot | Fund snapshot at a past timestamp | symbol, extras.date_ms |
+  | fund_market_cap_ratio | /open/v1/trade/getCoinTradeInflowMarketCapRatio | Fund-to-market-cap ratio | symbol |
+  | sector_fund_list | /open/v1/trade/categories/getTradeList | Sector fund rotation data | extras.trade_type |
+  | sector_coin_trade | /open/v1/trade/categories/CoinTradeList | Tokens fund data within a sector | extras.tag, extras.trade_type |
+  | token_flow | /open/v1/trade/getCoinTradeFlow | Token flow (CEX deposit/withdrawal) | symbol |
+  | whale_cost | /open/v1/trade/getCoinTradeCost | Whale avg. position cost | symbol |
+  | kline | /open/v1/trade/kline/getTradeKLineList | K-line candlestick data | symbol |
+  | large_transactions | /open/v1/chain/trade/large | Large on-chain transactions | symbol |
+  | holder_list | /open/v1/chain/trade/token/holdPage | Holder address list | symbol |
+  | address_trends | (balanceTrend + profitLossTrend + holdTrend + tradeCountTrend) | Address-level trends (balance/PnL/cost/trades) | symbol, extras.address |
+  | chance_coin_list | /open/v1/ai/getChanceCoinList | AI opportunity (bullish) token list | (none) |
+  | risk_coin_list | /open/v1/ai/getRiskCoinList | AI risk (bearish) token list | (none) |
+  | funds_coin_list | /open/v1/ai/getFundsCoinList | Fund anomaly token list | (none) |
+  | ai_messages | /open/v1/ai/get{Chance|Risk|Funds}CoinMessageList | AI signal messages for a token | symbol, extras.msg_type |
+  | support_resistance | /open/v1/indicator/getDenseAreaList | AI support & resistance levels | symbol |
+  | price_indicators | /open/v1/indicator/getPriceMarketList | BTC/ETH price trend indicators | symbol |
+  | social_sentiment | /open/v1/social-sentiment/getCoinSocialSentiment | Social media sentiment | symbol |
+  | market_analyse_history | /open/v1/ai/getAiTokenAnalyseResultList | BTC/ETH market AI analysis history | extras.page, extras.page_size |
+  | fetch_full | (all REST + optional SSE for symbol) | Full ValueScan bundle for one token | symbol |
+  | custom_post | (any allowed path) | Advanced: direct POST to allowed API paths | extras.path, extras.body |
+
+  ## Tool Parameter Mapping (IMPORTANT)
+
+  - **search_token**:
+    * REQUIRED: symbol (token symbol or name for fuzzy search, e.g. "BTC")
+    * Returns: vsTokenId needed by most other operations
+    * Use FIRST when vsTokenId is unknown
+
+  - **token_detail**:
+    * REQUIRED: symbol (e.g. BTC, ETH)
+    * Returns: price, market cap, chainAddresses (contains coinKey for on-chain ops)
+    * Use for: spot price queries, "能否上车", token fundamentals
+
+  - **realtime_fund**:
+    * REQUIRED: symbol
+    * Optional: extras.trade_type (1=Spot, 2=Futures)
+    * Returns: real-time net inflow, main force fund accumulation
+    * Use for: fund flow analysis, "资金流入/流出"
+
+  - **fund_snapshot**:
+    * REQUIRED: symbol, extras.date_ms (millisecond timestamp within past 100 days)
+    * Returns: fund accumulation data at the specified timestamp
+
+  - **fund_market_cap_ratio**:
+    * REQUIRED: symbol
+    * Optional: extras.trade_type (1=Spot, 2=Futures)
+    * Returns: main force fund vs. market cap ratio
+
+  - **sector_fund_list**:
+    * REQUIRED: extras.trade_type (1=Spot, 2=Futures)
+    * No symbol needed
+    * Returns: all sectors' real-time fund accumulation
+
+  - **sector_coin_trade**:
+    * REQUIRED: extras.tag (sector string from sector_fund_list), extras.trade_type
+    * Returns: tokens fund data within the specified sector
+
+  - **token_flow**:
+    * REQUIRED: symbol
+    * Returns: on-chain deposit/withdrawal flow between wallets and CEX
+    * Use for: "代币流向", exchange inflow/outflow
+
+  - **whale_cost**:
+    * REQUIRED: symbol
+    * Optional: extras.days (default: 30)
+    * Returns: whale average position cost across chains
+    * Use for: "主力成本", whale cost basis
+
+  - **kline**:
+    * REQUIRED: symbol
+    * Optional: extras.bucket (default: "1h"; values: 1m/5m/15m/30m/1h/4h/1d/1w/1M)
+    * Optional: extras.days (default: 7)
+    * Returns: K-line candlestick data (max 1000 bars)
+
+  - **large_transactions**:
+    * REQUIRED: symbol
+    * Optional: extras.page (default: 1), extras.page_size (default: 20)
+    * Returns: large on-chain transactions across 20+ chains
+
+  - **holder_list**:
+    * REQUIRED: symbol
+    * Optional: extras.page (default: 1), extras.page_size (default: 20)
+    * Returns: holder address list with basic info
+
+  - **address_trends**:
+    * REQUIRED: symbol, extras.address (on-chain wallet address)
+    * Returns: combined balanceTrend + profitLossTrend + holdTrend + tradeCountTrend
+    * Use for: address-level P&L analysis, "持仓盈亏"
+
+  - **chance_coin_list**:
+    * No required params
+    * Returns: AI-tracked tokens with bullish potential
+    * Use for: "机会代币", "看涨", "抄底"
+
+  - **risk_coin_list**:
+    * No required params
+    * Returns: AI-tracked tokens with bearish risk
+    * Use for: "风险代币", "看跌", "避险"
+
+  - **funds_coin_list**:
+    * No required params
+    * Returns: tokens with fund anomalies detected on CEX
+    * Use for: "资金异动", unusual fund movements
+
+  - **ai_messages**:
+    * REQUIRED: symbol
+    * Optional: extras.msg_type (default: "chance"; values: chance|risk|funds)
+    * Returns: AI tracking messages for the specified signal type
+    * Use for: detailed AI signal explanation for a specific token
+
+  - **support_resistance**:
+    * REQUIRED: symbol
+    * Optional: extras.days (default: 7)
+    * Returns: AI-generated support & resistance price levels
+    * Use for: "压力位/支撑位", price level analysis
+
+  - **price_indicators**:
+    * REQUIRED: symbol (typically BTC or ETH)
+    * Optional: extras.days (default: 30)
+    * Returns: BTC/ETH price trend indicators from main force behavior
+    * Use for: "大盘指标", macro price trend
+
+  - **social_sentiment**:
+    * REQUIRED: symbol
+    * Returns: social media sentiment (bullish/bearish/neutral ratio + content)
+    * Use for: "社媒情绪", market sentiment
+
+  - **custom_post**:
+    * REQUIRED: extras.path (API path starting with /vs-token/, /trade/, /ai/, /chain/, /indicator/, or /social-sentiment/)
+    * Optional: extras.body (JSON object for POST body)
+    * Advanced use only: direct API access for endpoints not covered above
+
+  ## Typical Call Chain
+
+  1. search_token (symbol="BTC") → get vsTokenId
+  2. token_detail (symbol="BTC") → get price, mcap, coinKey
+  3. Then call specific operations (realtime_fund, kline, support_resistance, etc.) as needed
+
+  ## Common User Intent → Operation Mapping
+
+  - "BTC 价格" / "现在能不能买" → token_detail + price_indicators + realtime_fund
+  - "资金流入/流出" → realtime_fund + token_flow
+  - "主力成本" → whale_cost
+  - "K线" / "走势" → kline
+  - "压力位/支撑位" → support_resistance
+  - "大盘分析" → price_indicators (BTC/ETH) + sector_fund_list
+  - "机会代币" / "看涨" → chance_coin_list
+  - "风险代币" / "看跌" → risk_coin_list
+  - "资金异动" → funds_coin_list
+  - "社媒情绪" → social_sentiment
+  - "大户持仓" / "鲸鱼" → large_transactions + holder_list
+  - "某地址盈亏" → address_trends (with extras.address)
+  - "板块轮动" → sector_fund_list + sector_coin_trade
+
+sub_tools:
+  - valueScan_api
+
+parameters:
+  - name: query
+    type: string
+    required: true
+    description: "Short restatement of user intent (for traceability)"
+  - name: operation
+    type: string
+    required: true
+    description: >-
+      Which ValueScan dataset to fetch. Valid values:
+      search_token, token_detail, chance_coin_list, risk_coin_list, funds_coin_list,
+      ai_messages, realtime_fund, fund_market_cap_ratio, fund_snapshot, whale_cost,
+      token_flow, sector_fund_list, sector_coin_trade, large_transactions,
+      holder_list, address_trends, kline, social_sentiment, support_resistance,
+      price_indicators, market_analyse_history, fetch_full, custom_post
+  - name: symbol
+    type: string
+    required: false
+    description: "Token symbol, e.g. BTC, ETH. Required for most per-token operations."
+  - name: extras
+    type: object
+    required: false
+    description: >-
+      Optional extra parameters. Keys: msg_type (chance|risk|funds),
+      trade_type (1=Spot, 2=Futures), tag (sector string),
+      bucket (K-line: 1m/5m/15m/30m/1h/4h/1d/1w/1M),
+      address (for address_trends), date_ms (for fund_snapshot),
+      days (int, for whale_cost/kline/support_resistance/price_indicators),
+      page (int), page_size (int),
+      path (string, for custom_post), body (object, for custom_post)

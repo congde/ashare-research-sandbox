@@ -1,0 +1,565 @@
+[
+  {
+    "rule_id": "C1",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": [
+          "KYC Verified",
+          "KYB Verified"
+        ],
+        "tradingPasswordEnabled": true,
+        "emailLinked": true
+      }
+    },
+    "question": "Not set payment method",
+    "issue_id": "3651"
+  },
+  {
+    "rule_id": "C2",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": "Unverified",
+        "emailLinked": true,
+        "tradingPasswordEnabled": true
+      }
+    },
+    "question": "Not set payment method + KYC unverified",
+    "issue_id": "3652"
+  },
+  {
+    "rule_id": "C3",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": [
+          "KYC Verified",
+          "KYB Verified"
+        ],
+        "emailLinked": false
+      }
+    },
+    "question": "Not set payment method + Not bind email address",
+    "issue_id": "3653"
+  },
+  {
+    "rule_id": "C4",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": [
+          "KYC Verified",
+          "KYB Verified"
+        ],
+        "tradingPasswordEnabled": false
+      }
+    },
+    "question": "Not set payment method + Not set trading password",
+    "issue_id": "3654"
+  },
+  {
+    "rule_id": "C5",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": "Unverified",
+        "tradingPasswordEnabled": false
+      }
+    },
+    "question": "Not set payment method + KYC unverified + Not set trading password",
+    "issue_id": "3655"
+  },
+  {
+    "rule_id": "C6",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": "Unverified",
+        "emailLinked": false
+      }
+    },
+    "question": "Not set payment method + KYC unverified + Not bind email address",
+    "issue_id": "3656"
+  },
+  {
+    "rule_id": "C7",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": [
+          "KYC Verified",
+          "KYB Verified"
+        ],
+        "tradingPasswordEnabled": false,
+        "emailLinked": false
+      }
+    },
+    "question": "Not set payment method + Not bind email address + Not set trading password",
+    "issue_id": "3657"
+  },
+  {
+    "rule_id": "C8",
+    "rules": {
+      "p2pUserInfo": {
+        "paymentMethods": 0,
+        "kycStatus": "Unverified",
+        "tradingPasswordEnabled": false,
+        "emailLinked": false
+      }
+    },
+    "question": "Not set payment method + KYC unverified + Not bind email address + Not set trading password",
+    "issue_id": "3658"
+  },
+  {
+    "rule_id": "C9",
+    "rules": {
+      "p2pUserInfo": {
+        "isP2PBlacklist": true
+      }
+    },
+    "question": "User is in OTC blacklist",
+    "issue_id": "3659"
+  },
+  {
+    "rule_id": "C10",
+    "rules": {
+      "p2pUserInfo": {
+        "withdrawStatus": "24h Frozen",
+        "isP2PBlacklist": false
+      }
+    },
+    "question": "User/merchant's withdrawal was frozen for 24h, causing cannot trade/post ads",
+    "issue_id": "3660"
+  },
+  {
+    "rule_id": "C11",
+    "rules": {
+      "p2pUserInfo": {
+        "withdrawStatus": "Admin Frozen",
+        "isP2PBlacklist": false
+      }
+    },
+    "question": "User/merchant's withdrawal was frozen for by admin, causing cannot trade/post ads",
+    "issue_id": "3661"
+  },
+  {
+    "rule_id": "C12",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Payment",
+        "identity": "TAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Taker contacts for a buying order. The order status is pending payment(2)",
+    "issue_id": "3663"
+  },
+  {
+    "rule_id": "C13",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Payment",
+        "identity": "TAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Taker contacts for a buying order. The order status is pending payment(1)",
+    "issue_id": "3662"
+  },
+  {
+    "rule_id": "C14",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Payment",
+        "identity": "MAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Maker contacts for a buying order. The order status is pending payment",
+    "issue_id": "3666"
+  },
+  {
+    "rule_id": "C15",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Payment",
+        "identity": "MAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Maker contacts for a selling order. The order status is pending payment(2)",
+    "issue_id": "3667"
+  },
+  {
+    "rule_id": "C16",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Payment",
+        "identity": "MAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Maker contacts for a selling order. The order status is pending payment(1)",
+    "issue_id": "3664"
+  },
+  {
+    "rule_id": "C17",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Payment",
+        "identity": "TAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Taker contacts for a selling order. The order status is pending payment",
+    "issue_id": "3665"
+  },
+  {
+    "rule_id": "C18",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": [
+          "-",
+          "Normal"
+        ],
+        "identity": "TAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Taker contacts for a buying order. The order status is pending release",
+    "issue_id": "3668"
+  },
+  {
+    "rule_id": "C19",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": [
+          "-",
+          "Normal"
+        ],
+        "identity": "TAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Taker contacts for a selling order. The order stauts is pending release",
+    "issue_id": "3669"
+  },
+  {
+    "rule_id": "C20",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": [
+          "-",
+          "Normal"
+        ],
+        "identity": "MAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Maker contacts for a selling order. The order status is pending release",
+    "issue_id": "3670"
+  },
+  {
+    "rule_id": "C21",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": [
+          "-",
+          "Normal"
+        ],
+        "identity": "MAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Maker contacts for a buying order. The order status is pending release",
+    "issue_id": "3671"
+  },
+  {
+    "rule_id": "C22",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": "Appealing",
+        "identity": "TAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Taker contacts for a buying order. The order status is in appeal",
+    "issue_id": "3672"
+  },
+  {
+    "rule_id": "C23",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": "Appealing",
+        "identity": "TAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Taker contacts for a selling order. The order status is in appeal",
+    "issue_id": "3673"
+  },
+  {
+    "rule_id": "C24",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": "Appealing",
+        "identity": "MAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Maker contacts for a selling order. The order status is in appeal",
+    "issue_id": "3674"
+  },
+  {
+    "rule_id": "C25",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Pending Release",
+        "appealStatus": "Appealing",
+        "identity": "MAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Maker contacts for a buying order. The order status is in appeal",
+    "issue_id": "3675"
+  },
+  {
+    "rule_id": "C26",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Completed",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "TAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Taker contacts for a buying order. The order status is completed",
+    "issue_id": "3676"
+  },
+  {
+    "rule_id": "C27",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Completed",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "TAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Taker contacts for a selling order. The order status is completed",
+    "issue_id": "3677"
+  },
+  {
+    "rule_id": "C28",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Completed",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "MAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Maker contacts for a selling order. The order status is completed",
+    "issue_id": "3678"
+  },
+  {
+    "rule_id": "C29",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Completed",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "MAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Maker contacts for a buying order. The order status is completed",
+    "issue_id": "3679"
+  },
+  {
+    "rule_id": "C30",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Cancelled",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "TAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Taker contacts for a buying order. The order status is canceled",
+    "issue_id": "3680"
+  },
+  {
+    "rule_id": "C31",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Cancelled",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "TAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Taker contacts for a selling order. The order status is canceled",
+    "issue_id": "3681"
+  },
+  {
+    "rule_id": "C32",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Cancelled",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "MAKER",
+        "orderType": "SELL"
+      }
+    },
+    "question": "Maker contacts for a selling order. The order status is canceled",
+    "issue_id": "3682"
+  },
+  {
+    "rule_id": "C33",
+    "rules": {
+      "p2pOrderInfo": {
+        "orderStatus": "Cancelled",
+        "appealStatus": {
+          "condition": "notIn",
+          "value": [
+            "Appealing",
+            "Appeal Done"
+          ]
+        },
+        "identity": "MAKER",
+        "orderType": "BUY"
+      }
+    },
+    "question": "Maker contacts for a buying order. The order status is canceled",
+    "issue_id": "3683"
+  },
+  {
+    "rule_id": "C34",
+    "rules": {
+      "p2pOrderInfo": {
+        "appealStatus": "Appeal Done"
+      }
+    },
+    "question": "The appeal has been Completed",
+    "issue_id": "3684"
+  },
+  {
+    "rule_id": "C35",
+    "rules": {
+      "p2pOrderInfo": {
+        "condition": "empty"
+      }
+    },
+    "question": "Unable to receive/send messages in IMchat",
+    "issue_id": "3685"
+  },
+  {
+    "rule_id": "C36",
+    "rules": {
+      "p2pOrderInfo": {
+        "condition": "empty"
+      },
+      "p2pUserInfo": {
+        "merchantStatus": "active"
+      }
+    },
+    "question": "The merchant is asking for the contacts of the counterparty",
+    "issue_id": "3686"
+  },
+  {
+    "rule_id": "C37",
+    "rules": {
+      "p2pOrderInfo": {
+        "condition": "empty"
+      },
+      "p2pUserInfo": {
+        "merchantStatus": {
+          "condition": "notEqual",
+          "value": "active"
+        }
+      }
+    },
+    "question": "The user is asking for the contacts of the counterparty",
+    "issue_id": "3687"
+  },
+  {
+    "rule_id": "C38",
+    "rules": {
+      "p2pOrderInfo": {
+        "condition": "empty"
+      }
+    },
+    "question": "The user feedback that the merchant asked for additional KYC progress/ID information/ID photos",
+    "issue_id": "3688"
+  },
+  {
+    "rule_id": "C39",
+    "rules": {
+      "p2pOrderInfo": {
+        "condition": "empty"
+      }
+    },
+    "question": "The user/merchant reports suspected fraud/scam by counterparty",
+    "issue_id": "3689"
+  },
+  {
+    "rule_id": "C40",
+    "rules": {
+      "p2pOrderInfo": {
+        "condition": "empty"
+      }
+    },
+    "question": "The user feedback a P2P order issue but did not provide OID(order id)",
+    "issue_id": "3690"
+  }
+]

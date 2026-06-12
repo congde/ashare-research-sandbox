@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "source": "fixture",
+  "tradeType": 1,
+  "sectors": [
+    {
+      "tag": "AI",
+      "tagsSimplified": "AI",
+      "categoriesTradeDataList": [
+        {"timeRange": "h1", "tradeInflow": 1250000},
+        {"timeRange": "h24", "tradeInflow": 8900000}
+      ]
+    },
+    {
+      "tag": "DeFi",
+      "tagsSimplified": "DeFi",
+      "categoriesTradeDataList": [
+        {"timeRange": "h1", "tradeInflow": 980000},
+        {"timeRange": "h24", "tradeInflow": 6200000}
+      ]
+    }
+  ]
+}

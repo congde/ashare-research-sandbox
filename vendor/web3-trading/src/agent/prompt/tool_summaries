@@ -1,0 +1,11 @@
+{
+    "web_search": "Real-time web search. Retrieves up-to-date information, news, and factual data from the internet.",
+    "recommend_financial_product": "Recommends suitable financial products by analyzing user risk profile, preferences, and market conditions.",
+    "KB_search": "Searches KuCoin knowledge base for platform features, policies, tutorials, founders, history,etc.Must be the first tool invoked for **ANY KuCoin-related query**,KB_search will automatically fall back to web_search if returns no results",
+    "customer_service_kb_search": "Specialized customer service knowledge base search with language mapping and customer-friendly formatting.",
+    "get_crypto_investment_outlook": "Assesses investment potential of a cryptocurrency with outlook analysis across short/mid/long-term timeframes.",
+    "recharge_and_withdraw": "Handles user requests to EXECUTE deposit,withdraw  or trading actions -not to learn about them; trade(buy/sell/open/close position) crypto for spot/futures or crypto conversion, and returns the recommended funding or trading channel for execution .**Crtitical rules :**Queries asking HOW, WHY, WHAT, or WHEN about deposit/withdraw/trade topics(i.e,non-action) are strictly informational  and must be handled by other tools like web search ,knowledge base search.Never invoke  for informational or consultative queries such as 'how to buy BTC' ,'how to change BTC to stablecoin or ETH‘,'How do I deposit 2000 USDT into my account?’, but Must INVOKE when the user expresses clear action intent, even without full parameters",
+    "get_crypto_market_data": "Calculates technical indicators and real-time market metrics (price, volume, MACD, RSI, etc.) for cryptocurrencies.",
+    "coin_screener": "Screens and recommends cryptocurrencies based on market conditions, categories, and user-specified filters.",
+    "direct_response": "Directly respond without any external tool. ONLY for trivial chitchat (greetings, identity questions). Do NOT use for any query involving assets, markets, prices, analysis, weather, or factual data."
+}

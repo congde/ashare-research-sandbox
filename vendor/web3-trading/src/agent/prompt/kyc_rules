@@ -1,0 +1,858 @@
+[
+    {
+        "rule_id": "D1",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 4,
+                "reviewStatus": 4
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Failed Due To Watch List Review Failed",
+        "issue_id": "3581"
+    },
+    {
+        "rule_id": "D2",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": {
+                    "condition": "notIn",
+                    "value": [
+                        "SUMSUB",
+                        "JUMIO",
+                        "KUCOIN_LEGO",
+                        null
+                    ]
+                }
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Failed Due To Manually Rejected",
+        "issue_id": "3582"
+    },
+    {
+        "rule_id": "D3",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "SUMSUB_RISK_FACE_BLACK_LIST",
+                    "SUMSUB_RISK_USERID_BLACK_LIST",
+                    "SUMSUB_RISK_SAME_FACE_DIFFERENT_ID",
+                    "SUMSUB_RISK_SAME_FACE_DIFFERENT_NAME",
+                    "risk_black_fake_photo_2",
+                    "risk_black_fake_photo_1",
+                    "risk_black_userid",
+                    "hit risk same face different name",
+                    "exceed_account_face_number"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Rejected And Needs Risk Control Team To Review",
+        "issue_id": "3583"
+    },
+    {
+        "rule_id": "D4",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "SUMSUB_ID_NUMBER_BIND_COUNT_EXCEED",
+                    "IDENTITY_EXISTS_ON_OTHER_ACCOUNT"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Failed Due To EKYC Rejected The ID For Being Previously Used In Verification",
+        "issue_id": "3584"
+    },
+    {
+        "rule_id": "D5",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "GRAPHIC_EDITOR",
+                    "SELFIE_MISMATCH",
+                    "PROBLEMATIC_APPLICANT_DATA",
+                    "INCONSISTENT_PROFILE",
+                    "FORGERY",
+                    "MANIPULATED_DOCUMENT"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To The Documents Need To Be Reuploaded(React Issue)",
+        "issue_id": "3585"
+    },
+    {
+        "rule_id": "D6",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "THIRD_PARTY_INVOLVED"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Need To Be Reuploaded(React Issue)",
+        "issue_id": "3586"
+    },
+    {
+        "rule_id": "D7",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "FRAUDULENT_PATTERNS"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Need Reupload A Different Type Of Document(React Issue)",
+        "issue_id": "3587"
+    },
+    {
+        "rule_id": "D8",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "FRONT_SIDE_MISSING"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Need Reupload The Front Side Of The Document(React Issue)",
+        "issue_id": "3588"
+    },
+    {
+        "rule_id": "D9",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "BACK_SIDE_MISSING"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Need Reupload The Back Side Of The Document(React Issue)",
+        "issue_id": "3589"
+    },
+    {
+        "rule_id": "D10",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "SUMSUB_REJECTED"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed And Needs To Be Recorded",
+        "issue_id": "3590"
+    },
+    {
+        "rule_id": "D11",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "Unsatisfactory age",
+                    "SUMSUB_DOCUMENT_18AGE",
+                    "AGE_REQUIREMENT_MISMATCH"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Being Under 18(React Issue)",
+        "issue_id": "3591"
+    },
+    {
+        "rule_id": "D12",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "SUMSUB_NOT_SUPPORT_COUNTRY",
+                    "Wrong region"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Restricted Country(React Issue)",
+        "issue_id": "3592"
+    },
+    {
+        "rule_id": "D13",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "SCREENSHOTS",
+                    "DIGITAL_DOCUMENT",
+                    "NOT_DOCUMENT"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Need Upload Original Document(React Issue)",
+        "issue_id": "3593"
+    },
+    {
+        "rule_id": "D14",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "BAD_SELFIE"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due to Face Is Unclear(React Issue)",
+        "issue_id": "3594"
+    },
+    {
+        "rule_id": "D15",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "BAD_FACE_MATCHING",
+                    "UNSATISFACTORY_PHOTOS",
+                    "BAD_PROOF_OF_IDENTITY",
+                    "INCOMPATIBLE_LANGUAGE",
+                    "DOCUMENT_DAMAGED",
+                    "BLACK_AND_WHITE",
+                    "EXPIRATION_DATE",
+                    "SUMSUB_ID_EXPIRE",
+                    "SUSPICIOUS_PATTERNS",
+                    "INCOMPLETE_DOCUMENT",
+                    "REPEATED_FACE"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To EKYC Rejection And Requires Manual Review",
+        "issue_id": "3595"
+    },
+    {
+        "rule_id": "D16",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "BLOCKLIST",
+                    "FRAUDULENT_LIVENESS"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Blacklist",
+        "issue_id": "3596"
+    },
+    {
+        "rule_id": "D17",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "LIVENESS_MISMATCH"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Need Update APP Version(React Issue)",
+        "issue_id": "3597"
+    },
+    {
+        "rule_id": "D18",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "INCORRECT_SOCIAL_NUMBER",
+                    "Incorrect BVN"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Need Enter NIN/BVN/NID/Aadhaar(React Issue)",
+        "issue_id": "3598"
+    },
+    {
+        "rule_id": "D19",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": [
+                    "liveness_detail:MANIPULATED",
+                    "LIVENESS_UNDETERMINED"
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Review Failed Due To Need Retry(React Issue)",
+        "issue_id": "3599"
+    },
+    {
+        "rule_id": "D20",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 2,
+                "reviewStatus": 2,
+                "operator": [
+                    "SUMSUB",
+                    "JUMIO",
+                    "KUCOIN_LEGO"
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "ekycReviewFailedReason": {
+                    "notContainsAny": [
+                        "SUMSUB_RISK_FACE_BLACK_LIST",
+                        "SUMSUB_RISK_USERID_BLACK_LIST",
+                        "SUMSUB_RISK_SAME_FACE_DIFFERENT_ID",
+                        "SUMSUB_RISK_SAME_FACE_DIFFERENT_NAME",
+                        "risk_black_fake_photo_2",
+                        "risk_black_fake_photo_1",
+                        "risk_black_userid",
+                        "hit risk same face different name",
+                        "exceed_account_face_number",
+                        "SUMSUB_ID_NUMBER_BIND_COUNT_EXCEED",
+                        "IDENTITY_EXISTS_ON_OTHER_ACCOUNT",
+                        "GRAPHIC_EDITOR",
+                        "SELFIE_MISMATCH",
+                        "PROBLEMATIC_APPLICANT_DATA",
+                        "INCONSISTENT_PROFILE",
+                        "FORGERY",
+                        "MANIPULATED_DOCUMENT",
+                        "THIRD_PARTY_INVOLVED",
+                        "FRAUDULENT_PATTERNS",
+                        "FRONT_SIDE_MISSING",
+                        "BACK_SIDE_MISSING",
+                        "SUMSUB_REJECTED",
+                        "Unsatisfactory age",
+                        "SUMSUB_DOCUMENT_18AGE",
+                        "AGE_REQUIREMENT_MISMATCH",
+                        "SUMSUB_NOT_SUPPORT_COUNTRY",
+                        "Wrong region",
+                        "SCREENSHOTS",
+                        "DIGITAL_DOCUMENT",
+                        "NOT_DOCUMENT",
+                        "BAD_SELFIE",
+                        "BAD_FACE_MATCHING",
+                        "UNSATISFACTORY_PHOTOS",
+                        "BAD_PROOF_OF_IDENTITY",
+                        "INCOMPATIBLE_LANGUAGE",
+                        "DOCUMENT_DAMAGED",
+                        "BLACK_AND_WHITE",
+                        "EXPIRATION_DATE",
+                        "SUMSUB_ID_EXPIRE",
+                        "SUSPICIOUS_PATTERNS",
+                        "INCOMPLETE_DOCUMENT",
+                        "REPEATED_FACE",
+                        "BLOCKLIST",
+                        "FRAUDULENT_LIVENESS",
+                        "LIVENESS_MISMATCH",
+                        "INCORRECT_SOCIAL_NUMBER",
+                        "Incorrect BVN",
+                        "liveness_detail:MANIPULATED",
+                        "LIVENESS_UNDETERMINED"
+                    ]
+                }
+            },
+            "IdentifyType": 1
+        },
+        "question": "EKYC Rejected For Other Reasons",
+        "issue_id": "3600"
+    },
+    {
+        "rule_id": "D21",
+        "rules": {
+            "accountVerifyInfo": {
+                "anyOf": [
+                    {
+                        "verificationType": -1
+                    },
+                    {
+                        "verificationStatus": {
+                            "condition": "notIn",
+                            "value": [
+                                1,
+                                5
+                            ]
+                        }
+                    }
+                ]
+            },
+            "accountVerifyFailInfo": {
+                "condition": "empty"
+            },
+            "IdentifyType": 2
+        },
+        "question": "KYC Application Submission Failed",
+        "issue_id": "3601"
+    },
+    {
+        "rule_id": "D22",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 1,
+                "verificationStatus": [
+                    2,
+                    4
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYB Application Manually Rejected",
+        "issue_id": "3602"
+    },
+    {
+        "rule_id": "D23",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": -1
+            },
+            "IdentifyType": 3
+        },
+        "question": "KYB Application Submission Failed",
+        "issue_id": "3603"
+    },
+    {
+        "rule_id": "D24",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 3,
+                "reviewStatus": [
+                    0,
+                    3
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Status Is Not Started Or Pending Watch List",
+        "issue_id": "3604"
+    },
+    {
+        "rule_id": "D25",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ],
+                "reviewStatus": [
+                    6,
+                    7
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Status Is Either Level 1 Or Level 2 restriction",
+        "issue_id": "3605"
+    },
+    {
+        "rule_id": "D26",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 5,
+                "reviewStatus": 5
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Status Is Verification Failed",
+        "issue_id": "3606"
+    },
+    {
+        "rule_id": "D27",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": 1,
+                "reviewStatus": 1
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYC Review Status Is Verification Approved",
+        "issue_id": "3607"
+    },
+    {
+        "rule_id": "D28",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 1,
+                "verificationStatus": 3,
+                "reviewStatus": [
+                    0,
+                    3
+                ]
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYB Review Status Is Not Started Or Pending Watch List",
+        "issue_id": "3608"
+    },
+    {
+        "rule_id": "D29",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 1,
+                "verificationStatus": 1
+            },
+            "IdentifyType": 1
+        },
+        "question": "KYB Review Status Is Approved",
+        "issue_id": "3609"
+    },
+    {
+        "rule_id": "D30",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ]
+            },
+            "IdentifyType": 4
+        },
+        "question": "Update KYC Information",
+        "issue_id": "3610"
+    },
+    {
+        "rule_id": "D31",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ],
+                "restrictedCountry": false
+            },
+            "IdentifyType": 5
+        },
+        "question": "Non-Restricted Countries Change KYC To KYB",
+        "issue_id": "3611"
+    },
+    {
+        "rule_id": "D32",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ],
+                "restrictedCountry": true,
+                "verificationCountry": {
+                    "condition": "notIn",
+                    "value": [
+                        "CN",
+                        "US",
+                        "NL",
+                        "FR",
+                        "UZ"
+                    ]
+                }
+            },
+            "IdentifyType": 5
+        },
+        "question": "Restricted Countries Change KYC To KYB",
+        "issue_id": "3612"
+    },
+    {
+        "rule_id": "D33",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 1,
+                "verificationStatus": 1
+            },
+            "IdentifyType": 6
+        },
+        "question": "KYB Account Information Update Request",
+        "issue_id": "3613"
+    },
+    {
+        "rule_id": "D34",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 1,
+                "verificationStatus": 1
+            },
+            "IdentifyType": 7
+        },
+        "question": "Request To Revoke Approved KYB And Switch To KYC",
+        "issue_id": "3614"
+    },
+    {
+        "rule_id": "D35",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ]
+            },
+            "IdentifyType": 8
+        },
+        "question": "KYC User Info Disclosure Request",
+        "issue_id": "3615"
+    },
+    {
+        "rule_id": "D36",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 1,
+                "verificationStatus": 1
+            },
+            "IdentifyType": 9
+        },
+        "question": "KYB User Info Disclosure Request",
+        "issue_id": "3616"
+    },
+    {
+        "rule_id": "D37",
+        "rules": {
+            "panInfo": {
+                "panStatus": [
+                    0,
+                    3,
+                    4
+                ]
+            },
+            "IdentifyType": 10
+        },
+        "question": "Expedite PAN Review And Status Is Processing",
+        "issue_id": "3617"
+    },
+    {
+        "rule_id": "D38",
+        "rules": {
+            "panInfo": {
+                "panStatus": 1
+            },
+            "IdentifyType": 10
+        },
+        "question": "Expedite PAN Review And Status Is Approve",
+        "issue_id": "3618"
+    },
+    {
+        "rule_id": "D39",
+        "rules": {
+            "panInfo": {
+                "panStatus": 2
+            },
+            "IdentifyType": 11
+        },
+        "question": "PAN Status Is Rejected",
+        "issue_id": "3619"
+    },
+    {
+        "rule_id": "D40",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ]
+            },
+            "userKycUpdateInfo": {
+                "status": 1,
+                "auditedType": 2
+            },
+            "IdentifyType": 4
+        },
+        "question": "KYC Self-Update Pending Machine Review",
+        "issue_id": "3705"
+    },
+    {
+        "rule_id": "D41",
+        "rules": {
+            "accountVerifyInfo": {
+                "verificationType": 0,
+                "verificationStatus": [
+                    1,
+                    5
+                ]
+            },
+            "userKycUpdateInfo": {
+                "status": 1,
+                "auditedType": 1
+            },
+            "IdentifyType": 4
+        },
+        "question": "KYC Self-Update Pending Manual Review",
+        "issue_id": "3706"
+    }
+]

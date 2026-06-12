@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "symbol": "BTC",
+  "marketSentiment": {
+    "fearGreed": {
+      "value": 12,
+      "label": "Extreme Fear",
+      "yesterday": 12,
+      "change": 0,
+      "timestamp": "1781222400"
+    }
+  },
+  "valuescanChain": {},
+  "snapshot": {
+    "name": "onchain",
+    "saved_at": "2026-06-12T15:47:11+00:00",
+    "origin": "live"
+  }
+}

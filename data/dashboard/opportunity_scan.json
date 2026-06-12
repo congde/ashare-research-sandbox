@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "source": "fixture",
+  "topK": 5,
+  "totalScanned": 30,
+  "scanTime": "2026-06-12T10:00:00Z",
+  "marketOverview": "离线样本：未连接 web3-trading 上游或未配置密钥。",
+  "opportunities": [
+    {
+      "symbol": "BTC",
+      "score": 82,
+      "summary": "示例机会 · 双均线 + 量能共振",
+      "signals": ["trend", "volume"]
+    },
+    {
+      "symbol": "ETH",
+      "score": 74,
+      "summary": "示例机会 · 板块资金回流",
+      "signals": ["sector", "funds"]
+    }
+  ]
+}

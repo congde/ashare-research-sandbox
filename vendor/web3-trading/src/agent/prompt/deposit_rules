@@ -1,0 +1,252 @@
+[
+    {
+        "rule_id": "D1",
+        "rules": {
+            "walletDepositList": {
+                "$expr": {
+                    "$lt": [
+                        "$walletDepositList.amount",
+                        "$walletDepositList.minAmount"
+                    ]
+                }
+            },
+            "tokenChainInfo": {
+                "$or": [
+                    {
+                        "isAirCurrency": false
+                    },
+                    {
+                        "isAirCurrency": "-"
+                    }
+                ]
+            }
+        },
+        "question": "The deposit amount doesn't meet the minimum crediting requirement",
+        "issue_id": "3526"
+    },
+    {
+        "rule_id": "D2",
+        "rules": {
+            "walletDepositList": {
+                "state": {
+                    "$regex": "SIGNDEPOSIT - Pending"
+                },
+                "failmsg": {
+                    "$not": {
+                        "$regex": "WL_Black_BL_002_H|wlt-review-命中from地址黑名单"
+                    }
+                }
+            }
+        },
+        "question": "The deposit status is SIGNDEPOSIT-Pending in Bigadmin",
+        "issue_id": "3527"
+    },
+    {
+        "rule_id": "D3",
+        "rules": {
+            "walletDepositList": {
+                "state": "REVIEW",
+                "failmsg": {
+                    "$regex": "wlt-review-命中from地址黑名单"
+                },
+                "createdAt": {
+                    "$lt": "2025-11-08T00:00:00Z"
+                },
+                "fromAddressInBlackList": "Greylisted"
+            }
+        },
+        "question": "Deposit's from Address triggered blacklist before 2025-11-08",
+        "issue_id": "3528"
+    },
+    {
+        "rule_id": "D4",
+        "rules": {
+            "userInfo": {
+                "cancellation": true
+            },
+            "tokenChainInfo": {
+                "usdtValue": {
+                    "$lt": 80
+                }
+            }
+        },
+        "question": "User deposited to a deleted account<80U",
+        "issue_id": "3531"
+    },
+    {
+        "rule_id": "D6",
+        "rules": {
+            "walletDepositList": {
+                "currency": "xrp",
+                "memoStatus": {
+                    "$regex": "Wrong memo|Without memo"
+                }
+            },
+            "tokenChainInfo": {
+                "usdtValue": {
+                    "$lt": 40
+                }
+            }
+        },
+        "question": "XRP Token With Wrong/Without Tag<40U",
+        "issue_id": "3532"
+    },
+    {
+        "rule_id": "D7",
+        "rules": {
+            "walletDepositList": {
+                "currency": {
+                    "$ne": "xrp"
+                },
+                "memoStatus": {
+                    "$regex": "Wrong memo|Without memo"
+                }
+            },
+            "tokenChainInfo": {
+                "usdtValue": {
+                    "$lt": 40
+                }
+            }
+        },
+        "question": "User deposited non-xrp token to the correct address with incorrect memo/message<40U",
+        "issue_id": "3533"
+    },
+    {
+        "rule_id": "D8",
+        "rules": {
+            "walletDepositList": {
+                "currency": {
+                    "$ne": "xrp"
+                },
+                "memoStatus": {
+                    "$regex": "Wrong memo|Without memo"
+                }
+            },
+            "tokenChainInfo": {
+                "usdtValue": {
+                    "$gte": 40
+                }
+            },
+            "selfRefund": {
+                "memoAbnormalRefundResult": 1
+            }
+        },
+        "question": "User deposited non-xrp token to the correct address with incorrect memo/message≥40U (Self-Refundable)",
+        "issue_id": "3534"
+    },
+    {
+        "rule_id": "D10",
+        "rules": {
+            "tokenChainInfo": {
+                "isAirCurrency": true,
+                "usdtValue": {
+                    "$lt": 80
+                }
+            },
+            "userInfo": {
+                "blockChainAddressToUserId": {
+                    "$exists": true
+                }
+            }
+        },
+        "question": "User deposited an Aircoin<80U",
+        "issue_id": "3535"
+    },
+    {
+        "rule_id": "D11",
+        "rules": {
+            "tokenChainInfo": {
+                "isAirCurrency": true,
+                "usdtValue": {
+                    "$gte": 80
+                }
+            },
+            "userInfo": {
+                "blockChainAddressToUserId": {
+                    "$exists": true
+                }
+            },
+            "selfRefund": {
+                "airCoinRefundResult": 1
+            }
+        },
+        "question": "User deposited an Aircoin≥80U (Self-Refundable)",
+        "issue_id": "3536"
+    },
+    {
+        "rule_id": "D12",
+        "rules": {
+            "$and": [
+                {
+                    "$or": [
+                        {
+                            "tokenChainInfo.isAirCurrency": false
+                        },
+                        {
+                            "tokenChainInfo.isAirCurrency": {
+                                "$exists": false
+                            }
+                        }
+                    ]
+                },
+                {
+                    "$expr": {
+                        "$lt": [
+                            "$walletDepositList.confirms",
+                            "$walletDepositList.minConfirms"
+                        ]
+                    }
+                }
+            ]
+        },
+        "question": "The deposit blockchain confirmation is insufficient",
+        "issue_id": "3537"
+    },
+    {
+        "rule_id": "D13",
+        "rules": {
+            "$and": [
+                {
+                    "$or": [
+                        {
+                            "walletDepositList": {
+                                "$exists": false
+                            }
+                        },
+                        {
+                            "walletDepositList": {
+                                "$size": 0
+                            }
+                        }
+                    ]
+                },
+                {
+                    "blockScanResult": {
+                        "$exists": true
+                    }
+                },
+                {
+                    "isDepositToContract": true
+                }
+            ]
+        },
+        "question": "The deposit address is smart contract address",
+        "issue_id": "3538"
+    },
+    {
+        "rule_id": "D14",
+        "rules": {
+            "walletDepositList": {
+                "state": "Done"
+            },
+            "userInfo": {
+                "cancellation": false
+            },
+            "assetDepositList": {
+                "status": "SUCCESS"
+            }
+        },
+        "question": "User's deposit is successful",
+        "issue_id": "3525"
+    }
+]

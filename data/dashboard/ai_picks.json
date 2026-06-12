@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "source": "fixture",
+  "chance": [
+    {"symbol": "BTC", "score": 82, "title": "示例 · 趋势延续", "summary": "固定离线样本：教学用 AI 机会条目。"},
+    {"symbol": "ETH", "score": 76, "title": "示例 · 资金回流", "summary": "无真实 ValueScan 凭证时使用。"}
+  ],
+  "risk": [
+    {"symbol": "DOGE", "score": 68, "title": "示例 · 波动放大", "summary": "教学演示风险回避列表。"}
+  ],
+  "funds": [
+    {"symbol": "SOL", "score": 74, "title": "示例 · 资金异动", "summary": "配置 VS_OPEN_API_KEY 后可切换为实时数据。"}
+  ]
+}

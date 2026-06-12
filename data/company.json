@@ -1,0 +1,34 @@
+{
+  "symbol": "WEB3-DEMO/USDT",
+  "name": "示例协议",
+  "fictional": true,
+  "category": "Web3 基础设施协议",
+  "summary": "用于课程演示的虚构 Web3 教学资产，所有数据均为固定离线样本。",
+  "market_snapshot": {
+    "period": "2026-05 fixed sample",
+    "reference_price": 10.0,
+    "sample_days": 35,
+    "volume_index": 112.4,
+    "active_address_index": 108.1
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "date": "2026-05-31",
+      "title": "示例协议固定市场快照",
+      "evidence": "课程数据包包含 35 个日线收盘价；参考起始价格为 10.0 USDT。"
+    },
+    {
+      "id": "S2",
+      "date": "2026-05-31",
+      "title": "示例协议活动快照",
+      "evidence": "固定样本中的成交量指数为 112.4，活跃地址指数为 108.1。"
+    },
+    {
+      "id": "S3",
+      "date": "2026-05-31",
+      "title": "教学数据假设与风险说明",
+      "evidence": "样本为虚构离线数据，不代表真实代币、协议、交易所流动性或未来收益。"
+    }
+  ]
+}

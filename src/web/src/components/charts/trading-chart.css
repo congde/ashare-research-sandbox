@@ -1,0 +1,59 @@
+.trading-chart {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+[data-theme="light"] .trading-chart {
+  border-color: rgba(23, 33, 24, 0.08);
+}
+
+.trading-chart-canvas {
+  height: 100%;
+  width: 100%;
+}
+
+.trading-chart-empty {
+  align-items: center;
+  color: var(--qa-text-3, var(--text-3));
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.trading-chart-mini {
+  border: none;
+  border-radius: 8px;
+}
+
+.trading-chart-compact {
+  margin-bottom: 12px;
+}
+
+.trading-chart-standard {
+  margin-bottom: 4px;
+}
+
+.trading-chart-legend {
+  color: var(--qa-text-2, var(--text-2));
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 11px;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.trading-chart-legend span {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.trading-chart-legend i {
+  border-radius: 999px;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度分析 - Web3 交易</title>
+    {% include 'partials/theme_head.html' %}
+    <link rel="stylesheet" href="/static/dashboard.css?v=20260606theme">
+    <link rel="stylesheet" href="/static/strategy.css?v=20260605v2">
+</head>
+<body>
+    {% set active_page = 'analysis' %}
+    {% include 'partials/side_nav.html' %}
+
+    <div class="dashboard-page strategy-page">
+        <header class="dashboard-header strategy-header">
+            <div>
+                <h1>深度分析</h1>
+                <p>聚合币种基础信息、K线结构、LLM信号分析与 ValueScan 筹码/资金数据</p>
+            </div>
+            <div class="dashboard-actions strategy-header-actions">
+                <label class="auto-refresh-toggle" title="开启后每10秒自动刷新币种信息和K线（不触发LLM信号分析）">
+                    <input type="checkbox" id="autoRefreshToggle">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">定时刷新</span>
+                </label>
+            </div>
+        </header>
+
+        <section class="filter-panel strategy-filter-panel">
+            <div class="filter-item">
+                <label for="analysisSymbolInput">币种</label>
+                <input id="analysisSymbolInput" type="text" placeholder="输入 BTC / SOL / BTC-USDT">
+            </div>
+            <div class="filter-item">
+                <label for="analysisKlineTypeSelect">K线周期</label>
+                <select id="analysisKlineTypeSelect">
+                    <option value="15min">15m</option>
+                    <option value="1hour" selected>1h</option>
+                    <option value="4hour">4h</option>
+                    <option value="1day">1d</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label for="analysisModelSelect">LLM 模型</label>
+                <select id="analysisModelSelect">
+                    <option value="deepseek/deepseek-v4-flash">DeepSeek V4 Flash</option>
+                    <option value="deepseek/deepseek-v4-pro" selected>DeepSeek V4 Pro</option>
+                    <option value="qwen/Qwen3.5-27B">Qwen 3.5 27B</option>
+                    <option value="deepseek/deepseek-reasoner">DeepSeek Reasoner</option>
+                </select>
+            </div>
+            <div class="filter-item strategy-filter-apply">
+                <label>&nbsp;</label>
+                <button id="applySymbolBtn" class="btn btn-secondary">更新币种</button>
+            </div>
+        </section>
+
+        <!-- 基础信息 -->
+        <section class="stats-grid" id="analysisBaseInfo">
+            <article class="stats-card"><h3>当前币种</h3><p>-</p></article>
+            <article class="stats-card"><h3>最新价格</h3><p>-</p></article>
+            <article class="stats-card"><h3>24h 涨跌</h3><p>-</p></article>
+            <article class="stats-card"><h3>24h 高低</h3><p>-</p></article>
+            <article class="stats-card"><h3>24h 成交额</h3><p>-</p></article>
+            <article class="stats-card"><h3>交易对</h3><p>-</p></article>
+        </section>
+
+        <!-- K线图 -->
+        <section class="strategy-kline-section">
+            <div class="table-toolbar">
+                <div class="signal-title-row">
+                    <h2>币种 K 线</h2>
+                    <span id="analysisPairLabel" class="signal-symbol-label">BTC-USDT</span>
+                </div>
+            </div>
+            {% include 'partials/kline_indicator_toolbar.html' %}
+            <article class="kline-section strategy-kline-main">
+                <div id="analysisKlineChart" class="kline-chart"></div>
+                <div id="analysisKlineChartHint" class="kline-chart-hint">加载 K 线数据中...</div>
+            </article>
+            <div id="analysisKlineLegend" class="strategy-kline-legend"></div>
+            <div class="strategy-kline-bottom">
+                <div id="analysisKlineMetrics" class="signal-grid signal-grid-3 strategy-kline-metrics"></div>
+                <div id="analysisKlineVerdict" class="analysis-output strategy-kline-verdict">等待 K 线分析...</div>
+            </div>
+        </section>
+
+        <!-- LLM 信号分析 -->
+        <section class="signal-analysis-section strategy-signal-section">
+            <div class="table-toolbar">
+                <div class="signal-title-row">
+                    <h2>LLM 信号分析</h2>
+                    <span id="analysisSignalSymbolLabel" class="signal-symbol-label">BTC</span>
+                    <span id="analysisSignalBadge" class="signal-badge signal-neutral">分析中</span>
+                </div>
+                <div class="table-actions strategy-model-tag-wrap">
+                    <span id="analysisModelTag" class="strategy-model-tag">DeepSeek Chat (V3)</span>
+                    <button id="generateSignalBtn" class="btn btn-primary btn-sm">生产信号</button>
+                    <label class="signal-refresh-toggle" title="每隔 5 分钟自动触发一次信号分析">
+                        <input type="checkbox" id="signalRefreshToggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">定时刷新</span>
+                        <span id="signalRefreshCountdown" class="signal-refresh-countdown"></span>
+                    </label>
+                </div>
+            </div>
+            <div id="analysisSignalContent" class="signal-content strategy-signal-content">
+                <div class="signal-loading">正在分析 LLM 信号...</div>
+            </div>
+        </section>
+
+        <!-- ValueScan 巨鲸链上追踪 (moved from dashboard) -->
+        <section class="vs-whale-onchain-section">
+            <div class="table-toolbar">
+                <div class="signal-title-row">
+                    <h2>ValueScan 巨鲸链上追踪</h2>
+                    <span id="vsWhaleSymbolLabel" class="signal-symbol-label">BTC</span>
+                    <span class="vs-powered-badge">On-chain Whale</span>
+                </div>
+                <button id="refreshVsWhaleBtn" class="btn btn-secondary">刷新</button>
+            </div>
+            <div id="vsWhaleOnchainContent" class="vs-whale-onchain-content">加载中...</div>
+        </section>
+
+        <!-- ValueScan 价格行情指标 (moved from dashboard) -->
+        <section class="vs-indicators-section">
+            <div class="table-toolbar">
+                <div class="signal-title-row">
+                    <h2>ValueScan 价格行情指标</h2>
+                    <span id="vsIndicatorSymbolLabel" class="signal-symbol-label">BTC</span>
+                </div>
+                <button id="refreshVsIndicatorsBtn" class="btn btn-secondary">刷新</button>
+            </div>
+            <div id="vsIndicatorsContent" class="vs-indicators-content">加载中...</div>
+        </section>
+
+        <!-- DexScan DEX 数据 -->
+        <section class="dex-overview-section">
+            <div class="table-toolbar">
+                <div class="signal-title-row">
+                    <h2>DexScan DEX 数据</h2>
+                    <span id="dexSymbolLabel" class="signal-symbol-label">BTC</span>
+                    <span class="vs-powered-badge">Powered by DexScan</span>
+                </div>
+                <div class="table-actions">
+                    <select id="dexChainSelect" class="btn btn-secondary" style="padding:6px 12px">
+                        <option value="solana">Solana</option>
+                        <option value="ethereum">Ethereum</option>
+                        <option value="bsc">BSC</option>
+                    </select>
+                    <button id="refreshDexBtn" class="btn btn-secondary">刷新</button>
+                </div>
+            </div>
+            <div id="dexOverviewContent" class="dex-overview-content">加载中...</div>
+        </section>
+
+        <!-- 链上数据 (moved from dashboard) -->
+        <section class="dashboard-data-row dashboard-data-row-onchain">
+            <article class="onchain-section onchain-section-wide">
+                <div class="table-toolbar">
+                    <h2>筹码/资金（ValueScan）</h2>
+                    <button id="refreshOnchainBtn" class="btn btn-secondary">刷新</button>
+                </div>
+                <div id="onchainContent" class="onchain-content">加载中...</div>
+            </article>
+        </section>
+
+        <!-- 消息面 (moved from dashboard) -->
+        <section class="dashboard-data-row dashboard-data-row-onchain">
+            <article class="news-section" style="width:100%">
+                <div class="table-toolbar">
+                    <h2>消息面</h2>
+                    <button id="refreshNewsBtn" class="btn btn-secondary">刷新</button>
+                </div>
+                <div id="newsList" class="news-list">加载中...</div>
+            </article>
+        </section>
+    </div>
+
+    <!-- VS Detail Modal -->
+    <div class="modal" id="vsDetailModal">
+        <div class="modal-content vs-detail-modal-content">
+            <div class="modal-header">
+                <h2 id="vsDetailModalTitle">详情</h2>
+                <button class="close-btn" id="closeVsDetailModal">&times;</button>
+            </div>
+            <div class="modal-body" id="vsDetailModalBody">加载中...</div>
+        </div>
+    </div>
+
+    <!-- Chat Drawer -->
+    <button id="chatToggleBtn" class="chat-toggle-btn" title="Kia 助手">
+        <span class="chat-toggle-icon">💬</span>
+        <span class="chat-toggle-badge" id="chatBadge" style="display:none">1</span>
+    </button>
+    <div id="chatDrawer" class="chat-drawer">
+        <div class="chat-drawer-header">
+            <div class="chat-drawer-title"><span class="chat-drawer-robot">🤖</span><span>Kia 投顾助手</span></div>
+            <button id="chatDrawerClose" class="chat-drawer-close">&times;</button>
+        </div>
+        <div class="chat-drawer-messages" id="chatMessages"></div>
+        <div class="chat-drawer-input-area">
+            <div class="chat-drawer-modes">
+                <button id="chatModeQuick" class="chat-mode-btn active" data-mode="QUICK_REASONING">快问快答</button>
+                <button id="chatModeThink" class="chat-mode-btn" data-mode="DEEP_THINK">深度思考</button>
+            </div>
+            <div class="chat-drawer-input-row">
+                <input id="chatInput" type="text" placeholder="问问 Kia 关于行情、币种、策略..." autocomplete="off">
+                <button id="chatSendBtn" class="chat-send-btn">发送</button>
+            </div>
+        </div>
+    </div>
+    <div id="chatOverlay" class="chat-overlay"></div>
+
+    {% include 'partials/chart_assets.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/theme.js?v=20260606theme"></script>
+    <script src="/static/dashboard-utils.js?v=20260605v2"></script>
+    <script src="/static/dashboard-dex.js?v=20260514a"></script>
+    <script src="/static/analysis.js?v=20260605v5"></script>
+    <script src="/static/dashboard-chat.js?v=20260402j"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "source": "fixture",
+  "symbol": "BTC",
+  "vsTokenId": 0,
+  "fund": {
+    "tradeInflow24h": 125000000,
+    "tradeOutflow24h": 98000000,
+    "netInflow24h": 27000000
+  },
+  "fundMarketCapRatio": {"ratio": 0.012},
+  "sentiment": {"score": 58, "label": "Neutral"},
+  "supportResistance": [
+    {"price": 95000, "type": "support"},
+    {"price": 102000, "type": "resistance"}
+  ]
+}

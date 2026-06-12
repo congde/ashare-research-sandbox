@@ -1,0 +1,65 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="robotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00D4AA"/>
+      <stop offset="100%" style="stop-color:#00B894"/>
+    </linearGradient>
+    <linearGradient id="eyeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#f0f9ff"/>
+    </linearGradient>
+    <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700" stop-opacity="0.8"/>
+      <stop offset="100%" style="stop-color:#FFA500" stop-opacity="0.4"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer glow ring -->
+  <circle cx="16" cy="16" r="15.5" fill="none" stroke="url(#glowGradient)" stroke-width="1" opacity="0.6" filter="url(#glow)"/>
+  
+  <!-- Robot head background -->
+  <circle cx="16" cy="16" r="14" fill="url(#robotGradient)" stroke="white" stroke-width="2.5"/>
+  
+  <!-- Robot head highlight -->
+  <ellipse cx="12" cy="11" rx="4" ry="3" fill="rgba(255, 255, 255, 0.2)"/>
+  
+  <!-- Robot eyes background -->
+  <circle cx="12" cy="13" r="2.5" fill="url(#eyeGradient)" stroke="#00B894" stroke-width="0.5"/>
+  <circle cx="20" cy="13" r="2.5" fill="url(#eyeGradient)" stroke="#00B894" stroke-width="0.5"/>
+  
+  <!-- Robot pupils -->
+  <circle cx="12" cy="13" r="1.2" fill="#064E3B"/>
+  <circle cx="20" cy="13" r="1.2" fill="#064E3B"/>
+  
+  <!-- Eye highlights -->
+  <circle cx="12.5" cy="12.5" r="0.4" fill="white"/>
+  <circle cx="20.5" cy="12.5" r="0.4" fill="white"/>
+  
+  <!-- Robot mouth -->
+  <rect x="13" y="19" width="6" height="2.5" rx="1.25" fill="white" stroke="#00B894" stroke-width="0.5"/>
+  <rect x="14" y="19.5" width="4" height="1.5" rx="0.75" fill="#064E3B"/>
+  
+  <!-- Robot face panel lines -->
+  <path d="M8 18 Q16 17 24 18" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" fill="none"/>
+  <path d="M9 22 Q16 21.5 23 22" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" fill="none"/>
+  
+  <!-- Robot antennas with enhanced design -->
+  <line x1="10" y1="8" x2="10" y2="5" stroke="white" stroke-width="1.5"/>
+  <circle cx="10" cy="4" r="1.8" fill="url(#glowGradient)" stroke="white" stroke-width="1" filter="url(#glow)"/>
+  <circle cx="10" cy="4" r="0.8" fill="#FFD700"/>
+  
+  <line x1="22" y1="8" x2="22" y2="5" stroke="white" stroke-width="1.5"/>
+  <circle cx="22" cy="4" r="1.8" fill="url(#glowGradient)" stroke="white" stroke-width="1" filter="url(#glow)"/>
+  <circle cx="22" cy="4" r="0.8" fill="#FFD700"/>
+  
+  <!-- Power indicator -->
+  <circle cx="16" cy="8" r="1.5" fill="rgba(0, 255, 0, 0.3)" stroke="#00FF00" stroke-width="0.5"/>
+  <circle cx="16" cy="8" r="0.5" fill="#00FF00"/>
+</svg> 

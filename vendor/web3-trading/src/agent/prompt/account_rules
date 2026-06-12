@@ -1,0 +1,303 @@
+[
+    {
+        "rule_id": "A1",
+        "rules": {
+            "accountStatus": {
+                "accountFrozenStatus": "Frozen",
+                "isAccountDeleted": false,
+                "accountFrozenChannel": "User",
+                "withdrawalFrozenStatus": "Normal",
+                "tradingFrozenStatus": "Normal"
+            }
+        },
+        "question": "Account frozen by user via self-service and requested unfreezing",
+        "issue_id": "3566"
+    },
+    {
+        "rule_id": "A2",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Frozen",
+                "accountFrozenChannel": "Admin"
+            }
+        },
+        "question": "The account is frozen by workbench due to other reasons",
+        "issue_id": "3567"
+    },
+    {
+        "rule_id": "A3",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenFor24H": true
+            }
+        },
+        "question": "User's withdrawal function is frozen for 24 hours because of changing security settings(2)",
+        "issue_id": "3568"
+    },
+    {
+        "rule_id": "A4",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-AML None-Verify",
+                    "Compliance-NoVerify"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-AML None-Verify or Compliance-NoVerify(2)",
+        "issue_id": "3569"
+    },
+    {
+        "rule_id": "A5",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-SuspiciousFakeKYC",
+                    "Compliance-SuspiciousKYCTrading"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-SuspiciousFakeKYC or Compliance-SuspiciousKYCTrading(2)",
+        "issue_id": "3570"
+    },
+    {
+        "rule_id": "A6",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-Reoprted"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-Reported(2)",
+        "issue_id": "3571"
+    },
+    {
+        "rule_id": "A7",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-Terrorist"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-Terrorist(2)",
+        "issue_id": "3572"
+    },
+    {
+        "rule_id": "A8",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-Regulatory"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-Regulatory(2)",
+        "issue_id": "3573"
+    },
+    {
+        "rule_id": "A9",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-Largeamount"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-Largeamount(2)",
+        "issue_id": "3574"
+    },
+    {
+        "rule_id": "A10",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-NeedcheckSOF"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-NeedcheckSOF(2)",
+        "issue_id": "3575"
+    },
+    {
+        "rule_id": "A11",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-KYCSanctionScreening"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "TUser's withdrawal function is frozen due to Compliance-KYCSanctionScreening(2)",
+        "issue_id": "3576"
+    },
+    {
+        "rule_id": "A12",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "India AML Case"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "The deposit address is smart contract address",
+        "issue_id": "3577"
+    },
+    {
+        "rule_id": "A13",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "Compliance-AML Fiat",
+                    "Compliance-AML Crypto",
+                    "Compliance-AML"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to Compliance-AML Fiat or Compliance-AML Crypto or Compliance-AML(2)",
+        "issue_id": "3578"
+    },
+    {
+        "rule_id": "A14",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "withdrawalFrozenStatus": "Frozen",
+                "withdrawalFrozenChannel": "Admin",
+                "withdrawalFrozenReason": [
+                    "CRR High Risk"
+                ],
+                "withdrawalFrozenTime": {
+                    "value": 1765257488000,
+                    "condition": "lessThan"
+                }
+            }
+        },
+        "question": "User's withdrawal function is frozen due to CRR High Risk",
+        "issue_id": "3579"
+    },
+    {
+        "rule_id": "A15",
+        "rules": {
+            "accountStatus": {
+                "isAccountDeleted": false,
+                "accountFrozenStatus": "Normal",
+                "anyOf": [
+                    {
+                        "withdrawalFrozenStatus": "Frozen",
+                        "withdrawalFrozenChannel": "Admin"
+                    },
+                    {
+                        "tradingFrozenStatus": "Frozen",
+                        "tradingFrozenChannel": "Admin"
+                    }
+                ],
+                "withdrawalFrozenReason": {
+                    "notContainsAny": [
+                        "CRR High Risk",
+                        "Compliance-AML Fiat",
+                        "Compliance-AML Crypto",
+                        "Compliance-AML",
+                        "India AML Case",
+                        "Compliance-KYCSanctionScreening",
+                        "Compliance-NeedcheckSOF",
+                        "Compliance-Largeamount",
+                        "Compliance-Regulatory",
+                        "Compliance-Terrorist",
+                        "Compliance-Reoprted",
+                        "Compliance-SuspiciousFakeKYC",
+                        "Compliance-SuspiciousKYCTradingCompliance-AML None-Verify",
+                        "Compliance-NoVerify"
+                    ]
+                }
+            }
+        },
+        "question": "The withdrawal or trading function is frozen by workbench due to other reasons",
+        "issue_id": "3580"
+    }
+]

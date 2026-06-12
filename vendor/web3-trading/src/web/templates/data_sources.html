@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据源 - Web3 交易</title>
+    {% include 'partials/theme_head.html' %}
+    <link rel="stylesheet" href="/static/dashboard.css?v=20260606theme">
+</head>
+<body>
+    {% set active_page = 'data-sources' %}
+    {% include 'partials/side_nav.html' %}
+
+    <div class="dashboard-page data-sources-page">
+        <header class="dashboard-header">
+            <div>
+                <div class="section-eyebrow">DATA INTEGRATION</div>
+                <h1>数据源</h1>
+                <p>查看已接入的行情、链上、DEX 与技能模块状态；机会雷达仅消费摘要，详情在此浏览。</p>
+            </div>
+            <div class="dashboard-actions">
+                <button id="refreshAllSourcesBtn" class="btn btn-primary btn-glow">全部刷新</button>
+                <a class="btn btn-ghost" href="/dashboard">返回机会雷达</a>
+            </div>
+        </header>
+
+        <section class="ds-status-section">
+            <h2 class="ds-section-title">接入状态</h2>
+            <div id="dataSourceGrid" class="ds-source-grid">
+                <div class="ds-source-card ds-loading">检测数据源...</div>
+            </div>
+        </section>
+
+        <section class="ds-context-section">
+            <h2 class="ds-section-title">市场背景</h2>
+            <div class="ds-context-row">
+                <div class="ds-context-chip" id="dsFearGreed"><span class="ds-context-label">恐贪指数</span><span class="ds-context-value tabnum">-</span></div>
+                <div class="ds-context-chip" id="dsSectorLead"><span class="ds-context-label">领涨板块</span><span class="ds-context-value">-</span></div>
+                <div class="ds-context-chip"><span class="ds-context-label">行情对数</span><span class="ds-context-value tabnum" id="dsTickerCount">-</span></div>
+                <div class="ds-context-chip"><span class="ds-context-label">最近扫描</span><span class="ds-context-value tabnum" id="dsLastScan">-</span></div>
+            </div>
+        </section>
+
+        <section class="vs-ai-picks-section radar-vs-picks ds-panel">
+            <div class="table-toolbar section-toolbar">
+                <div class="signal-title-row">
+                    <h2>ValueScan AI 智选</h2>
+                    <span class="vs-powered-badge">ValueScan</span>
+                </div>
+                <button id="refreshVsPicksBtn" class="btn btn-ghost">刷新</button>
+            </div>
+            <div class="vs-picks-grid" id="vsPicksGrid">
+                <div class="vs-pick-card">
+                    <h3 class="vs-pick-title vs-pick-chance">AI 机会</h3>
+                    <div id="vsChanceList" class="vs-pick-list">加载中...</div>
+                </div>
+                <div class="vs-pick-card">
+                    <h3 class="vs-pick-title vs-pick-funds">资金异动</h3>
+                    <div id="vsFundsList" class="vs-pick-list">加载中...</div>
+                </div>
+                <div class="vs-pick-card">
+                    <h3 class="vs-pick-title vs-pick-risk">风险回避</h3>
+                    <div id="vsRiskList" class="vs-pick-list">加载中...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ds-panel">
+            <div class="table-toolbar section-toolbar">
+                <h2>ValueScan 资金 &amp; 情绪 <span id="vsFundSymbolLabel" class="signal-symbol-label">BTC</span></h2>
+                <div class="table-actions">
+                    <input id="dsSymbolInput" type="text" class="ds-symbol-input" placeholder="BTC / SOL" value="BTC">
+                    <button id="refreshVsFundBtn" class="btn btn-ghost">刷新</button>
+                </div>
+            </div>
+            <div id="vsFundContent" class="vs-fund-content">加载中...</div>
+        </section>
+
+        <section class="ds-panel">
+            <div class="table-toolbar section-toolbar">
+                <h2>ValueScan 板块资金轮动</h2>
+                <div class="table-actions">
+                    <select id="vsSectorTypeSelect" class="btn btn-secondary" style="padding:6px 12px">
+                        <option value="1">现货</option>
+                        <option value="2">合约</option>
+                    </select>
+                    <button id="refreshVsSectorBtn" class="btn btn-ghost">刷新</button>
+                </div>
+            </div>
+            <div id="vsSectorContent" class="vs-sector-content">加载中...</div>
+        </section>
+
+        <section class="ds-panel">
+            <div class="table-toolbar section-toolbar">
+                <h2>DexScan DEX 数据 <span id="dexSymbolLabel" class="signal-symbol-label">SOL</span></h2>
+                <div class="table-actions">
+                    <select id="dexChainSelect" class="btn btn-secondary" style="padding:6px 12px">
+                        <option value="solana">Solana</option>
+                        <option value="ethereum">Ethereum</option>
+                        <option value="bsc">BSC</option>
+                    </select>
+                    <button id="refreshDexBtn" class="btn btn-ghost">刷新</button>
+                </div>
+            </div>
+            <div id="dexOverviewContent" class="dex-overview-content">加载中...</div>
+        </section>
+
+        <section class="ds-panel">
+            <div class="table-toolbar section-toolbar">
+                <h2>DexScan 热门代币</h2>
+                <div class="table-actions">
+                    <select id="dexTrendingChainSelect" class="btn btn-secondary" style="padding:6px 12px">
+                        <option value="solana">Solana</option>
+                        <option value="ethereum">Ethereum</option>
+                        <option value="bsc">BSC</option>
+                    </select>
+                    <select id="dexTrendingSortSelect" class="btn btn-secondary" style="padding:6px 12px">
+                        <option value="volume">成交量</option>
+                        <option value="priceChange">涨跌幅</option>
+                    </select>
+                    <button id="refreshDexTrendingBtn" class="btn btn-ghost">刷新</button>
+                </div>
+            </div>
+            <div id="dexTrendingContent" class="dex-trending-content">加载中...</div>
+        </section>
+
+        <section class="ds-panel">
+            <div class="table-toolbar section-toolbar">
+                <h2>Skills 技能模块</h2>
+                <button id="refreshModulesBtn" class="btn btn-ghost">刷新</button>
+            </div>
+            <div id="modulesGrid" class="modules-grid"></div>
+        </section>
+
+        <section class="ds-footnote">
+            <details>
+                <summary>TradingAgents 多智能体（可选）</summary>
+                <p>在 <code>conf/default.yaml</code> 开启 <code>use_trading_agents: true</code> 后，深度分析等流程可接入
+                    <a href="https://github.com/TauricResearch/TradingAgents" target="_blank" rel="noopener">TradingAgents</a>
+                    辩论管线，作为 LLM 信号的数据增强层。</p>
+                <a class="btn btn-ghost btn-sm" href="/analysis">前往深度分析</a>
+            </details>
+        </section>
+    </div>
+
+    <div class="modal" id="vsDetailModal">
+        <div class="modal-content vs-detail-modal-content">
+            <div class="modal-header">
+                <h2 id="vsDetailModalTitle">详情</h2>
+                <button class="close-btn" id="closeVsDetailModal">&times;</button>
+            </div>
+            <div class="modal-body" id="vsDetailModalBody">加载中...</div>
+        </div>
+    </div>
+
+    <script src="/static/theme.js?v=20260606theme"></script>
+    <script src="/static/dashboard-utils.js?v=20260402j"></script>
+    <script src="/static/dashboard-vs.js?v=20260605a"></script>
+    <script src="/static/dashboard-dex.js?v=20260514a"></script>
+    <script src="/static/dashboard-data-sources.js?v=20260605c"></script>
+</body>
+</html>

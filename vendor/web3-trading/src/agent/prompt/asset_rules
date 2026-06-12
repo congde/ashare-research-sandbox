@@ -1,0 +1,76 @@
+[
+  {
+    "rule_id": "E7",
+    "rules": {
+      "userAsset": {
+        "assetInfoList": {
+          "find": {
+            "type": "TOTAL_ACCOUNT"
+          },
+          "match": {
+            "totalAmount": "0"
+          }
+        }
+      },
+      "delistedCurrencyInfo": {
+        "isDelisted": true
+      }
+    },
+    "question": "Account Has No Tokens, But The Token Be Delistied",
+    "issue_id": "3627"
+  },
+  {
+    "rule_id": "E11",
+    "rules": {
+      "userAsset": {
+        "assetInfoList": {
+          "find": {
+            "type": "TOTAL_ACCOUNT"
+          },
+          "match": {
+            "totalAmount": {
+              "condition": "notEqual",
+              "value": "0"
+            },
+            "usdtTotalAmount": "0"
+          }
+        }
+      },
+      "delistedCurrencyInfo": {
+        "isDelisted": true
+      },
+      "spotAssetStatusInfo": {
+        "isWithdrawEnabled": true
+      }
+    },
+    "question": "Account Holds The Tokens, Have Been Delisted, Withdrawals Are Enabled(1)",
+    "issue_id": "3631"
+  },
+  {
+    "rule_id": "E13",
+    "rules": {
+      "userAsset": {
+        "assetInfoList": {
+          "find": {
+            "type": "TOTAL_ACCOUNT"
+          },
+          "match": {
+            "totalAmount": {
+              "condition": "notEqual",
+              "value": "0"
+            },
+            "usdtTotalAmount": "0"
+          }
+        }
+      },
+      "delistedCurrencyInfo": {
+        "isDelisted": true
+      },
+      "spotAssetStatusInfo": {
+        "isWithdrawEnabled": true
+      }
+    },
+    "question": "Account Holds The Tokens, Have Been Delisted, Withdrawals Are Enabled(2)",
+    "issue_id": "3643"
+  }
+]

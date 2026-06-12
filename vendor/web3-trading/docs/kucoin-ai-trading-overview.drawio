@@ -1,0 +1,84 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram name="KuCoin AI+ 交易概览" id="kucoin-ai-overview">
+    <mxGraphModel dx="814" dy="625" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="KuCoin AI+ Trading 体系概览（以 AI 带单竞技为核心 IP）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="340" y="20" width="920" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="market" value="输入 · 市场与数据&#xa;━━━━━━━━━━━━&#xa;• 行情与安全态势（恒安等）&#xa;• Web 爬虫资讯&#xa;• 账户与资产画像&#xa;• 站内用户行为序列" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=12;spacingTop=8;fontSize=12" parent="1" vertex="1">
+          <mxGeometry x="480" y="80" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="core" value="中枢 · AI+ 交易引擎" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=14;verticalAlign=top;spacingTop=8" parent="1" vertex="1">
+          <mxGeometry x="400" y="260" width="520" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="core1" value="核心 IP&#xa;AI 带单员 / 竞技&#xa;（信号 · 回测 · 跟单路由）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;align=center" parent="1" vertex="1">
+          <mxGeometry x="420" y="300" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="core2" value="智能理财 / 赚币&#xa;（策略与收益展示）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;align=center" parent="1" vertex="1">
+          <mxGeometry x="585" y="300" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="core3" value="推荐系统 × 交易机器人&#xa;（配置推荐 · 转化）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;align=center" parent="1" vertex="1">
+          <mxGeometry x="750" y="300" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="corecap" value="能力层：多源特征融合 · 个性化风险偏好 · 可审计信号链 · 与撮合/跟单/风控联动" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#82b366;dashed=1;align=left;spacingLeft=8;fontSize=10;fontColor=#333333" parent="1" vertex="1">
+          <mxGeometry x="420" y="410" width="480" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="corenote" value="CTO 关注点：新技术须可计量地提升「决策—执行—风控」闭环，而非仅内容 CTR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;align=left;spacingLeft=8;fontSize=10" parent="1" vertex="1">
+          <mxGeometry x="420" y="470" width="480" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="biz" value="输出 · 业务赋能（产品内）&#xa;━━━━━━━━━━━━&#xa;• 交易机器人&#xa;• 跟单 / Copy&#xa;• 合约 Futures&#xa;• 现货 Spot&#xa;• 理财 Earn&#xa;• 钱包 Wallet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=12;spacingTop=8;fontSize=12" parent="1" vertex="1">
+          <mxGeometry x="80" y="280" width="240" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="用户需求（意图）&#xa;━━━━━━━━━━━━&#xa;• 选币&#xa;• 诊币 / 风险&#xa;• 交易执行&#xa;• 账户管理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=12;spacingTop=8;fontSize=12" parent="1" vertex="1">
+          <mxGeometry x="1050" y="280" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="reach" value="输出 · 触达与带流量&#xa;━━━━━━━━━━━━&#xa;SEO · PUSH · Feed 内容广场 · 广告投放 → 回流交易主站" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=12;spacingTop=8;fontSize=12" parent="1" vertex="1">
+          <mxGeometry x="400" y="560" width="520" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="kpi" value="经营目标与验证指标（示例）&#xa;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━&#xa;整体：高质量信息 → 交易转化；价值：帮助用户盈利与平台量价&#xa;• 内容/Feed：CTR、详情停留、现货+合约下单率&#xa;• 机器人推荐：CTR、转化率、日均活跃资金&#xa;• 技术门禁：灰度 A/B、成交量/手续费归因、跟单渗透率、风控熔断率&#xa;• 行业参考：竞品跟单增长约 +10%（仅作方向，以自有实验为准）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;align=left;spacingLeft=14;spacingTop=10;fontSize=11" parent="1" vertex="1">
+          <mxGeometry x="80" y="690" width="1140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=2" parent="1" source="market" target="core" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2;entryX=1;entryY=0.5;exitX=0;exitY=0.5" parent="1" source="core" target="biz" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl2" value="赋能交易与留存" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" parent="e2" vertex="1" connectable="0">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry">
+            <mxPoint x="2" y="-21" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;startArrow=classic;strokeWidth=2;exitX=1;exitY=0.35;entryX=0;entryY=0.5" parent="1" source="core" target="user" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl3" value="对话 / 推荐 / 跟单引导" style="edgeLabel;html=1;align=center;fontSize=10" parent="e3" vertex="1" connectable="0">
+          <mxGeometry x="0.1" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="core" target="reach" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl4" value="信息与增长" style="edgeLabel;html=1;fontSize=10" parent="e4" vertex="1" connectable="0">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;dashed=1;strokeColor=#999999" parent="1" source="reach" target="biz" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="640" />
+              <mxPoint x="200" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#666666" parent="1" source="reach" target="kpi" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

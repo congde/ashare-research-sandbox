@@ -1,0 +1,289 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram name="AI带单员-技术架构-proposal" id="kucoin-ai-technical-architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1960" pageHeight="1540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="p0" value="AI带单员架构 - 数据源 / Agent / 量化策略 / 组合优化(参考QSDoc) / 回测算法 - 撮合在所内&#xa;https://qsdoc.readthedocs.io/zh-cn/latest/%E7%BB%84%E5%90%88%E4%BC%98%E5%8C%96.html" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=13;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="16" width="1880" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="biz1" value="业务层-输入" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="40" y="72" width="480" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="biz2" value="业务层-中枢 AI+ (带单员/竞技)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="540" y="72" width="760" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="biz3" value="业务层-输出与触达" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="1320" y="72" width="600" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="以下为仓库展开 | 中层含 QSDoc 第8章 组合优化: 约束(权重/预算/因子/波动/换手) + MeanVar+TC / BL / BS / MaxSharpe / RiskBudget风控平价 / 最大分散度" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;fontSize=10;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="138" width="1880" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="dsLab" value="数据源" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=10;fontColor=#9673a6" parent="1" vertex="1">
+          <mxGeometry x="40" y="174" width="120" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="d1" value="KuCoin 行情 API&#xa;kucoin_openapi_public" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="200" width="360" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" value="ValueScan 链上资金&#xa;libs/valuescan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="420" y="200" width="360" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" value="MCP / HTTP / 三方" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="800" y="200" width="360" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" value="会话 Mem0 Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="1180" y="200" width="360" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="d5" value="config / 实验桶 / 元数据规划" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="1560" y="200" width="360" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="aglabel" value="Agent 编排与推理" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11" parent="1" vertex="1">
+          <mxGeometry x="440" y="286" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="n1" value="HTTP/SSE / Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;align=center" parent="1" vertex="1">
+          <mxGeometry x="520" y="282" width="920" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" value="FastAPI api/* backtest_routes ta_signal dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="440" y="332" width="1000" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="n3" value="Gateway FastFilter Router ToolPolicy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="440" y="398" width="1000" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="n4" value="BaseAgent + Mixins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="440" y="456" width="1000" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="n5" value="DAG" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center" parent="1" vertex="1">
+          <mxGeometry x="200" y="512" width="150" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="n6" value="Quick" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center" parent="1" vertex="1">
+          <mxGeometry x="382" y="512" width="150" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="n7" value="TradingAgents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center" parent="1" vertex="1">
+          <mxGeometry x="564" y="512" width="150" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="n8" value="skills/plan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;align=center" parent="1" vertex="1">
+          <mxGeometry x="746" y="512" width="150" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="n8b" value="LLM 解读 | 下单信号硬约束校验" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="928" y="512" width="512" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="stLab" value="交易策略清单 (可被注册进下方「量化策略模块」)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=10;fontColor=#6c8ebf" parent="1" vertex="1">
+          <mxGeometry x="40" y="592" width="560" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="st2" value="strategies/* 技术面与规则&#xa;ma_crossover macd rsi_mean_reversion&#xa;vwap funding_rate bollinger_squeeze&#xa;technical_signal buy_and_hold" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="618" width="600" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="st3" value="signal_analysis/*&#xa;tracker conflict_detector rug_detector&#xa;weight_optimizer - 与展示榜单同源" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="660" y="618" width="580" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="n9" value="ToolRegistry agent/tools crypto_ta&#xa;运行态取数 - 回测K线等也可经 API/缓存复用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;align=left;spacingLeft=10" parent="1" vertex="1">
+          <mxGeometry x="1260" y="618" width="660" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="qmLab" value="量化策略模块 (契约与注册)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#2d7600" parent="1" vertex="1">
+          <mxGeometry x="40" y="716" width="360" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="qm1" value="registry.py + strategies/base.py&#xa;get_strategy 注册表&#xa;BacktestConfig / Signal / Trade (models.py)&#xa;策略统一入口与元数据" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="742" width="420" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="qm2" value="技术面与规则策略族&#xa;继承 Strategy 产出 Signal&#xa;指标由 engine 侧预计算后 O(1) 查表" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="480" y="742" width="480" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="qm3" value="融合与高阶量化&#xa;ensemble.py 多策略合成&#xa;foundation_model.py 深度学习/大模型范式信号&#xa;可插拔扩展新 alpha" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="980" y="742" width="460" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="qm4" value="参数网格与超参搜索&#xa;联动 walk_forward metrics&#xa;稳健性门禁" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ffc4;strokeColor=#82b366;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="1460" y="742" width="460" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="cobLab" value="组合构建与优化 QSDoc Ch.8 文献/路线图" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#993300" parent="1" vertex="1">
+          <mxGeometry x="40" y="858" width="480" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="cob1" value="约束集: 权重wb上下限 预算1Tw=a 因子暴露 波动TE 换手TC nnz稀疏&#xa;(详见 qsdoc 组合优化 8.1.1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcd99;strokeColor=#b85100;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="884" width="900" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="cob2" value="目标: MeanVar+TC / BlackLitterman / BayesStein / MaxSharpe&#xa;RiskBudget 风险平价 / 最大分散度 (8.1.2~)&#xa;规划输出 w* -> registry ensemble 对所内仓位上限" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcd99;strokeColor=#b85100;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="960" y="884" width="960" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="bkLab" value="回测算法模块" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#204e8f" parent="1" vertex="1">
+          <mxGeometry x="40" y="986" width="620" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="bk1" value="engine.py 核心算法&#xa;async generator 事件流 EngineEvent&#xa;不可变快照 + 每bar 迭代&#xa;对接 registry 载入 Strategy&#xa;(类 Agent Loop/queryLoop 设计)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="1012" width="440" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bk2" value="indicators.py + metrics.py&#xa;compute_all_indicators&#xa;compute_metrics 夏普回撤等&#xa;(为组合估计 mu/Sigma 口径)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="500" y="1012" width="440" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bk3" value="hooks risk/position dynamic_slippage cache&#xa;仿真成交价与生命周期" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="960" y="1012" width="460" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bk4" value="walk_forward.py&#xa;样本外稳健 防过拟合&#xa;组合权重漂移检验" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="1440" y="1012" width="480" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="n10" value="llm/shield 内容风控" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="40" y="1156" width="280" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="n11" value="memory Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#6c8ebf;fontSize=10;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="340" y="1156" width="280" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="n12" value="信号-回测-发布 同源门禁" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#6c8ebf;fontSize=10;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="640" y="1156" width="480" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="n13" value="circuit_breaker TraceId deeplink..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="1140" y="1156" width="360" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="n13b" value="LLM llm/*" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;fontSize=9;align=left;spacingLeft=8" parent="1" vertex="1">
+          <mxGeometry x="1520" y="1156" width="400" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="n14" value="所内 撮合实盘跟单风控 | 本服务 traderId 策略风险档位" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#333333;dashed=1;fontSize=10;align=left;spacingLeft=12" parent="1" vertex="1">
+          <mxGeometry x="40" y="1232" width="1880" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="foot1" value="Qm3 ensemble -> Cob 组合约束| cob2->qm1 w* | bk2 mu/Sigma->cob | cob+bk4 walk_forward | QSDoc均值方差注意估计误差与高换手&#xa;n9 Agent Gateway 见上文箭头" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=9;fontColor=#666666;align=left" parent="1" vertex="1">
+          <mxGeometry x="40" y="1330" width="1880" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n1" target="n2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n2" target="n3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n3" target="n4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n4" target="n5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n4" target="n6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n4" target="n7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n4" target="n8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="n4" target="n8b" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n5" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n6" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n7" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n8" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="n8b" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ed1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#b85450" parent="1" source="d1" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ed2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#b85450" parent="1" source="d2" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ed3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#b85450" parent="1" source="d3" target="n9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ed4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#b85450" parent="1" source="d4" target="n3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ed5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#b85450" parent="1" source="d5" target="n2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="es0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="st2" target="qm2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="es0b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="st2" target="qm1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="esqm1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="qm2" target="qm1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="esqm2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="qm3" target="qm1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="esqm4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1" parent="1" source="qm4" target="bk4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="esqm5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1" parent="1" source="qm4" target="qm1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ecob0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1;strokeColor=#b85100" parent="1" source="qm3" target="cob1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ecob1r" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;strokeColor=#b85100" parent="1" source="cob1" target="cob2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ecobqm" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2;strokeColor=#b85100" parent="1" source="cob2" target="qm1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebkmu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#6c8ebf" parent="1" source="bk2" target="cob2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ecobwf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1;strokeColor=#204e8f" parent="1" source="cob2" target="bk4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qm4cob" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1;strokeColor=#82b366" parent="1" source="qm4" target="cob2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebk01" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="qm1" target="bk1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebk12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="bk2" target="bk1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebk13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2" parent="1" source="bk3" target="bk1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebk14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1" parent="1" source="bk4" target="bk1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="es30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1" parent="1" source="st3" target="bk1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="es31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="st3" target="n12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="es32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1" parent="1" source="bk1" target="n12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="etnb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1;strokeColor=#9673a6" parent="1" source="n9" target="bk2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="etna" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1;strokeColor=#9673a6" parent="1" source="n9" target="qm2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="en2bk" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=2;dashed=1;strokeColor=#6c8ebf" parent="1" source="n2" target="bk1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="n9" target="n10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="n9" target="n11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14n" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1;dashed=1" parent="1" source="n9" target="n12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="n9" target="n13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeWidth=1" parent="1" source="n4" target="n13b" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#666666" parent="1" source="n9" target="n14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebiz" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#82b366;strokeWidth=2" parent="1" source="biz2" target="n3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ebizIn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#9673a6" parent="1" source="biz1" target="d2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

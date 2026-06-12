@@ -1,4 +1,4 @@
-"""Cross-platform task runner for the course labs."""
+"""Cross-platform task runner for the course repository."""
 
 from __future__ import annotations
 
@@ -35,10 +35,14 @@ def require_venv(name: str) -> Path:
 
 
 def setup() -> None:
-    run([sys.executable, "-m", "venv", str(VENV)])
+    venv_python = venv_executable("python")
+    if not venv_python.is_file():
+        run([sys.executable, "-m", "venv", str(VENV)])
+    else:
+        print("virtual environment already exists; updating dependencies", flush=True)
     run(
         [
-            str(venv_executable("python")),
+            str(venv_python),
             "-m",
             "pip",
             "install",
@@ -47,67 +51,35 @@ def setup() -> None:
             "requirements.txt",
         ]
     )
+    web_dir = ROOT / "src" / "web"
+    if (web_dir / "package.json").is_file():
+        npm = "npm.cmd" if os.name == "nt" else "npm"
+        if (web_dir / "package-lock.json").is_file():
+            run([npm, "ci"], cwd=str(web_dir))
+        else:
+            run([npm, "install"], cwd=str(web_dir))
+        run([npm, "run", "build"], cwd=str(web_dir))
     print("setup complete")
 
 
-def python_lab(script: str, *args: str) -> None:
+def python_task(script: str, *args: str) -> None:
     run([str(require_venv("python")), script, *args])
-
-
-def lab_01() -> None:
-    pytest = require_venv("pytest")
-    starter = ROOT / "labs/01-first-ticket/starter"
-    solution = ROOT / "labs/01-first-ticket/solution"
-
-    print("==> Confirm the starter fails for the intended reason", flush=True)
-    starter_env = os.environ.copy()
-    starter_env["PYTHONPATH"] = str(starter)
-    result = subprocess.run(
-        [str(pytest), str(starter / "test_todo.py"), "-q"],
-        cwd=ROOT,
-        env=starter_env,
-        capture_output=True,
-        text=True,
-    )
-    output = result.stdout + result.stderr
-    if result.returncode == 0:
-        raise SystemExit("Starter unexpectedly passed.")
-    if "restore checkout" not in output:
-        print(output)
-        raise SystemExit("Starter failed for an unexpected reason.")
-
-    print("==> Confirm the minimal solution passes", flush=True)
-    solution_env = os.environ.copy()
-    solution_env["PYTHONPATH"] = str(solution)
-    run([str(pytest), str(solution / "test_todo.py"), "-q"], env=solution_env)
-    print("Lab 01 fixture is valid.")
 
 
 TASKS = {
     "setup": setup,
-    "lab-00": lambda: python_lab("labs/00-assistant-brief/verify.py"),
-    "lab-03": lambda: python_lab("labs/03-entry-workspace/verify.py"),
-    "lab-04": lambda: python_lab("labs/04-research/verify.py"),
-    "lab-06": lambda: python_lab("labs/06-planning-handoff/verify.py"),
-    "lab-09": lambda: python_lab(
-        "skills/weekly-brief/scripts/verify_report.py",
-        "labs/09-weekly-brief-skill/sample-report.md",
-    ),
-    "lab-10": lambda: python_lab("labs/10-a-share-research/verify.py"),
-    "lab-01": lab_01,
-    "lab-16": lambda: python_lab(
-        "skills/repo-readiness/scripts/verify_report.py",
-        "labs/16-repo-readiness-skill/sample-report.md",
-    ),
-    "courseware-check": lambda: python_lab("scripts/verify_courseware.py"),
+    "verify": lambda: python_task("verify.py"),
+    "snapshot": lambda: python_task("dashboard_snapshot.py"),
+    "courseware-check": lambda: python_task("scripts/verify_courseware.py"),
+    "lab-10": lambda: python_task("verify.py"),
 }
 
 
 def check() -> None:
-    for task in ("lab-00", "lab-03", "lab-04", "lab-06", "lab-09", "lab-10", "lab-01", "lab-16", "courseware-check"):
+    for task in ("verify", "courseware-check"):
         print(f"==> {task}", flush=True)
         TASKS[task]()
-    print("All courseware checks passed.")
+    print("All repository checks passed.")
 
 
 TASKS["check"] = check
