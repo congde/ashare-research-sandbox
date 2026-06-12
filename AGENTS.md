@@ -29,6 +29,7 @@ Run the narrow lab check while editing:
 make lab-00
 make lab-03
 make lab-04
+make lab-06
 make lab-09
 make lab-01
 make lab-16
@@ -40,6 +41,7 @@ On Windows PowerShell, use the cross-platform runner instead:
 py scripts/course.py lab-00
 py scripts/course.py lab-03
 py scripts/course.py lab-04
+py scripts/course.py lab-06
 py scripts/course.py lab-09
 py scripts/course.py lab-01
 py scripts/course.py lab-16
