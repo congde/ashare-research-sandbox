@@ -1,0 +1,3605 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "tradeType": 1,
+  "sectors": [
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "bStocks",
+      "tagsSimplified": "bStocks",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-10633.872054"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "23418.19401299999"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "46757.405032"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "29057.30568199998"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "125585.76520400024"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "117192.65874199993"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-10631.19217500004"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-1577497.1858190002"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-1630070.3621690003"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "1220546.3031820008"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Payments",
+      "tagsSimplified": "Payments",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "146957.44381860082"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "145526.97999060102"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-1633541.9054988006"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-6888986.0269205"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-2813705.161490495"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-4562677.6291859"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "5744159.449875434"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-7110944.801919949"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-7367774.908391724"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "36793027.44457965"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "49118491.20223968"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-82101814.68711264"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "6022063.883839828"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-720358174.9432391"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-821485530.7357786"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-1392148216.6732705"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-1529498416.9471688"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-1540504913.897011"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-1435069873.5865588"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-1509786402.4887497"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-28009918670.42869"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-49418741766.44154"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-55827453560.10465"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-3149553748.207721"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-7209737465.439752"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-7024841979.902754"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "newListing",
+      "tagsSimplified": "newListing",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-42176.33219000002"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-19145.413420000026"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-26094.633731"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-31282.116314000024"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "174452.35615500013"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "181435.0503619999"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "12822.090832999933"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-1561877.5214580004"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-1748315.3246910006"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "1141843.3089520007"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-19184280.78931599"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-22712664.07388399"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-25082448.415180992"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-29454144.058616992"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-46650648.500876"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "1424030.9307"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-189479581.739449"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-269931495.49685997"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "BSC",
+      "tagsSimplified": "BSC",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "127592.48487999992"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "152094.56351200005"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "77328.58431200004"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-3914718.613112999"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-3684568.831732999"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-3183609.6286649983"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-3880314.369985"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-3634971.000305999"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-1290393.0616189993"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "4004639.7429520013"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "6276469.893053003"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-2206175.468746996"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "35417102.77525802"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "23542410.740987968"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-7961316.550559025"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-41892329.99730202"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-6369754.606522028"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-29906376.42820205"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-2866540.4009790067"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-51732473.08245306"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-755851899.1968137"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-1839829801.1252227"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-2479564324.8274493"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-804993.7430129694"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-206574657.50890407"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-161388923.79762107"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "bnbchain",
+      "tagsSimplified": "BNB Chain",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "121990.60619215993"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-272463.7805198899"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-404633.3493200099"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-4400697.148220539"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-4109326.240517149"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-3583877.5898443186"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-4226234.93901486"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-4333787.73693853"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-3004491.360489749"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-557423.5156533472"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "1893017.013087933"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-8392665.165341264"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "40946777.448582545"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "30177769.01843835"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-3195769.639920259"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-78963630.86126673"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-67954916.14962718"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-85740023.45689666"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-57433820.06078116"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-124245785.97337526"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-1016441964.3209935"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-2031194850.4365435"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-3004559076.38106"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-97396614.02961414"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-353276990.7292202"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-414716902.8094242"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Solana",
+      "tagsSimplified": "Solana",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-46868.187190939985"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "125924.23032731006"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-31114.448856089934"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-106085.24746697008"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-761486.6819315399"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "464431.4926654601"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "566242.5150643198"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "7595530.495676963"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-3777744.456234588"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "18395207.9430323"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "33634433.26402574"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "31869305.760447957"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "42994746.38547109"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-15035684.580902187"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-30686139.520874526"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-30893439.51345142"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "33853173.612532735"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "59064834.08132289"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "148816721.22558776"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "296816158.54757494"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-2338587593.2544923"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-4730132024.308828"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-2422728497.3983035"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "260903022.189977"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-105678895.64365214"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-36154535.4696363"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Launchpad",
+      "tagsSimplified": "Launchpad",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-24861.341851460005"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-34841.12523748001"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-89045.31958748"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-72930.74392729002"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-82441.50426116"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-134796.86611247"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-317495.1876154901"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-263191.9079618702"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-957875.7658228303"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "537233.4603866606"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-311898.90712942055"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-2780788.1907763607"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-2124381.2478504004"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-6693829.278615449"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-10049405.4017662"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-15615657.13434434"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-15307607.193248922"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-17882847.266286258"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-22075766.703239176"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-24195444.633704007"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-507799279.860658"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-1588260504.928535"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-2286857603.0162635"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-28791243.230927967"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-54741109.27319481"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-74540475.34689353"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "pos",
+      "tagsSimplified": "pos",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "324722.6614008851"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "1145189.518369996"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "977563.4553869782"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-3481099.21038237"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-6006833.274377649"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "941567.7244159167"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-202018.11127976942"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "4396235.355509323"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "4162931.323991212"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "74435303.44330062"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "100599919.91732727"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "40810444.191995785"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "83632230.93823172"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-107454224.0045775"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-244080155.27968952"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-591199111.9321543"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-1351091585.5970805"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-1371398195.2872467"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-1671350047.17355"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-1486926436.2828987"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-16793830540.628359"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-26243296477.299335"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-29917244690.219032"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-2209649605.4440017"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-3974237872.142949"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-3720433387.9676294"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Infrastructure",
+      "tagsSimplified": "基础架构",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-31615.91755665994"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-92093.70933456994"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-184032.0307598199"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-392363.32161348994"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-704602.7580551599"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "515700.5533466101"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "498482.0570049699"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "708483.6742053895"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-752991.2693641708"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "704405.4148326878"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "2598911.47769645"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-8587531.010531237"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-5787246.837758388"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-21761193.57167754"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-54667610.60633919"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-80434385.06301285"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-88600457.76979622"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-115602010.82322197"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-127352134.26738656"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-274875063.76957977"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-1705484653.228304"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-4613486359.416876"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-3770201043.7322426"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-384733299.2094882"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-550571309.5649012"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-378054249.3076028"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Megadrop",
+      "tagsSimplified": "Megadrop",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "3335.51236"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-13136.75267999998"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-16854.83332999998"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-14605.23160999998"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-31426.14887999998"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-32592.74763999998"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "6121.512920000025"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "14234.321910000033"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "7052.625130000019"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-5405.456669999974"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-60863.65076999999"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-57343.61285999989"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-100105.30125999989"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-348031.89915999974"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-368379.2554999998"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-777877.9859699996"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "1012466.0966700009"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "1558995.2314000016"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "1420318.8850900016"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-569829.764269996"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-120568283.09635001"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-121335391.86077988"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-620623.306089996"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-1775763.1302199962"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-3824038.887889998"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "tCommodities",
+      "tagsSimplified": "tCommodities",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-6405.681407999998"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-9770.026356"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "14340.066126999996"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-24979.17379200001"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-99662.87367800005"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-60760.95195999997"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-113847.906094"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-1441231.923167"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-8827001.624981998"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-19075888.564187"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-23836765.444412995"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-25308150.157058004"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-25935422.265014004"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-34234292.279153995"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-37333814.05522399"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-54546632.821541"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-58453968.69328903"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-75139364.613267"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-160650190.50249496"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-86991862.33837102"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-766912636.360856"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-816681903.7084868"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-850520763.376153"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-160919285.86534488"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-382223891.90616417"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-476320075.92345804"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "NFT",
+      "tagsSimplified": "NFT",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "11119.220429000003"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "23372.552835000006"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "538.577486000026"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-65121.47328999994"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-275415.478524"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-264227.7703239999"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-239569.149946"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-363121.16280399985"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-1085622.6640859996"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-1930716.8919269992"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-3175332.9127359996"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-5385048.812128001"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-7168563.815042"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-11650641.892566001"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-16752491.643481996"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-26361546.482212998"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-36344694.72510099"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-43165267.367967986"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-35961372.896306984"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-23118068.571297992"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-218254505.780487"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-920386714.0642787"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-1852290707.7257953"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-21487921.49667099"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-37201922.604058996"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-40516533.62746899"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "RWA",
+      "tagsSimplified": "RWA",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-41089.29996789999"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-13241.090384199983"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "41901.87639680005"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-88594.33657780006"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-238484.17989070003"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "46586.35291049992"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-81045.86908380032"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "95226.76406999967"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-2097609.0264660004"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "1458407.2361415"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-1828327.4458928003"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-5454915.292851299"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-3148119.698044599"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-23138423.2776038"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-46663050.1347129"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-71161845.7698519"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-55982429.887050904"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-80065640.18680802"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-91025232.82174778"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-103719018.93769492"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-1699971858.0819252"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-3273774770.2626276"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-4333105636.029832"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-83490613.45538312"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-254892724.4608725"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-329024736.9058911"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Monitoring",
+      "tagsSimplified": "观察",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-16447.0677393"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-25580.688596499996"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-60298.084796999996"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-128823.27848419998"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-244995.02426270003"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-263556.91535850003"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-257253.3882725"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-364584.04613499995"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-682630.9269870998"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-1168292.5179950995"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-1603796.1800434997"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-2545651.9394396"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-2564688.5964859007"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-3546994.630216301"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-7868576.204657402"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-12641348.238016501"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-9955444.591615705"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-14528779.841669604"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-18828984.8102027"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-27271925.913563896"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-294097214.9475941"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-1040489056.6347125"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-933359761.3771515"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-29682498.504109595"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-40835295.798611"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-50477649.92044741"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Launchpool",
+      "tagsSimplified": "Launchpool",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "93288.95033270001"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "125839.6614352"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-12160.581365100026"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-421575.9994347999"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-998633.1732701998"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-484384.6837503999"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-484580.3378494999"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-1764775.2740436003"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-5685975.692481501"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-24572921.905617893"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-34101509.246273294"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-49156256.855514295"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-48402000.45016449"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-70377469.96502101"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-96331237.2769839"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-214902616.45040426"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-258771372.591696"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-325973532.612918"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-330555887.07354295"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-419436132.42228985"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-2649142312.318213"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-4311318336.468679"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-1605979092.9187577"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-357402108.6066947"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-454835933.8854667"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-528808470.27191573"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "innovation-zone",
+      "tagsSimplified": "innovation-zone",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-7053.95898449003"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "69071.40757450006"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "44591.684146110056"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "126012.36191606006"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "132508.4224478"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "13416.85399672002"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-319378.83229700965"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "518739.3659102405"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-553746.6320483589"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "303223.36353248975"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "1709929.7180348807"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "2201967.523634491"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "4905124.045145622"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "1335486.5482113399"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-3250478.1758292606"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-13632978.690165741"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-20554589.671274755"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-24563043.407077923"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-28912142.551383402"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-40477162.124102876"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-754280889.0363076"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-2038764334.4436538"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-2259378413.7444654"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-66157637.11889494"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-74785631.98236921"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-109919015.9398018"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "AI",
+      "tagsSimplified": "AI",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-212899.98079899995"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-278403.38856299996"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-457922.869313"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-426500.14835199993"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-301007.65528299985"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "948225.9506930002"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "49015.32806499984"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "956644.5902399998"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-574794.8008470016"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "1171473.113473997"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "2553751.247925989"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-14937249.564953009"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-9238718.127680013"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-32271171.279563017"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-74260425.55142301"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-146274368.398588"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-357425261.07806206"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-435893827.843868"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-193195584.48485002"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-486944800.117775"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-2318088409.8795652"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-5217744297.747228"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-4438451825.973837"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-358384170.693052"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-452164780.26093394"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-565012810.95538"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "defi",
+      "tagsSimplified": "DeFi",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-53697.73185675484"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-47354.64228232411"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-196819.68304134236"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-50893.378694481195"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-653322.9691935913"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-149038.21244501785"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-855945.8614873816"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-106167.04421500886"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-3983530.7342489595"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-22862578.835447837"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-49180473.29968279"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-58666898.34658242"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-61449111.77493472"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-53943136.58535456"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-110197859.2283481"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-156237615.3963855"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-355549698.19088525"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-404943503.8831249"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-349722779.83414614"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-422942805.08131474"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-2532349327.312649"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-5257580715.053424"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-6783859320.001585"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-372940527.75626814"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-456401636.0757766"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-648027892.9096581"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "HODLer",
+      "tagsSimplified": "HODLer",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "97218.35526600003"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "69845.144459"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-1678.1808020000103"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "34271.11407599996"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "117722.70745300004"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-36161.94916400004"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-231314.00571800026"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-937957.3563979995"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-2737191.6554330033"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-21232186.95527999"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-19232603.471235998"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-23493849.934350993"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-24586994.396727998"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-29263084.116525013"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-40336991.870928004"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-104246146.86365703"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-105942263.24405"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-107587116.85447401"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-218836928.79687595"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-254245258.324194"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-62133711.46528402"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-312080677.570093"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-483600306.3172929"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-378777965.969725"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Layer1_Layer2",
+      "tagsSimplified": "一层/二层网络",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "307214.4870726451"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "1163422.272675076"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "672165.8374061581"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-4334296.95556498"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-6954621.859582089"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-387128.7595627141"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-3986846.067614081"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "642507.5413093936"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-1043445.2329350578"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "69145812.56008047"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "81969251.3777444"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "11680151.053627765"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "53255068.58885563"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-213489184.7360004"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-401178509.3116702"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-868046521.036846"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-1645640448.5461683"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-1761188144.7124183"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-2106094251.237504"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-2112820672.1002133"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-20855115468.856773"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-33839877204.795383"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-38167292875.003204"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-2843165403.406936"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-5071368935.107548"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-4995736422.989541"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "mining-zone",
+      "tagsSimplified": "mining-zone",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "328308.9362661008"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "1063261.471613401"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-853925.6636871002"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-6365957.1457792"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-4965399.4508367935"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "501185.7549097041"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "12069687.003227437"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "3897761.601988552"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "4322546.675392976"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "111894501.55495986"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "156351100.57227716"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-10354271.093578199"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "48968076.813514344"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-801221335.3804485"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-976689473.4226581"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-1661501167.5464976"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-2578173344.744044"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-2476618654.4576745"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-2642784282.066279"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-2553941320.683364"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-41857793699.80767"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-69423022434.83382"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-77943392282.27467"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-4821430528.426495"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-10091195574.335054"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-9579151771.043154"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "stablecoin",
+      "tagsSimplified": "stablecoin",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-588.7971799998609"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "505669.2258499996"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "1323441.4336800002"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "831865.291840001"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-7972881.830139999"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-23076650.973879986"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-31310194.072019976"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-72277397.69527999"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-296053944.33546996"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-497574472.7030299"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-691099981.9842"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-898576957.9367499"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-1093196849.2792299"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-1729839414.1890702"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-2376758606.4994802"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-3768248060.50552"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-4034282153.5291905"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-3941951925.8091984"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-3346440230.9880285"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-4089445153.93357"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-11464244477.517729"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-15060411921.238314"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-20257068242.48921"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-5704362354.63821"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-6277687035.066499"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-6310604608.08126"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Meme",
+      "tagsSimplified": "Meme",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "-5875.528146329987"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-377790.68678717996"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-351114.51039594"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-654481.1184697797"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-960711.4034170099"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "218007.58738864103"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-290646.7099104694"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-681088.7031143402"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-1862893.59951949"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "3407374.597143038"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "4928245.540380297"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-4911076.561040355"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "11964099.026961358"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-16126323.37429843"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-31092414.50931558"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-49175602.76490568"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-100370841.74077865"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-54019323.204240516"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-59627656.22150349"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-152501218.16415915"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-3421038546.928027"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-8187164479.05806"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-6625910610.289271"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-235060909.30694598"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-482972304.9207996"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-616034745.1484655"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Seed",
+      "tagsSimplified": "种子",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "32075.050036869998"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-342302.5744879799"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-547433.5725925799"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-566324.5606944297"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-486555.83025198977"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "872707.5918530109"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "1118239.2164195809"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-1121308.930880479"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-4443644.763927523"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-26329538.585647654"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-48965577.269831255"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-62418385.182852946"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-55289021.068111286"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-91125717.41417508"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-135470785.7516885"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-236488886.50985655"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-486850354.9301194"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-557518051.3871604"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-508548252.7543416"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-911500104.1683913"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-1651751708.8339067"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-3954084027.9792395"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-1260980049.752628"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-820416711.1306667"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-983009512.3783596"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-921449472.1610936"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "fan_token",
+      "tagsSimplified": "粉丝代币",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "3568.1623400000003"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "-8916.973670000001"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-6602.295550000001"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-38398.92666999999"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-76579.39475000004"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-69358.09494000001"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "21521.919369999974"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-37881.97087"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-256702.68086000002"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-317450.17498999985"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-1577695.4640799996"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-2287237.1652800003"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-3081972.1491800006"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-4950821.558970001"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-8713988.880929995"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-15593670.800619997"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-20186984.282129996"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-23304258.339469995"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-25055173.500219997"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-28743338.250189997"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-126460469.71625899"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-262140271.35633588"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-605857499.9973596"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-31333083.42366"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-39156185.000319995"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-61446349.688710004"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "Gaming",
+      "tagsSimplified": "游戏",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "16766.42870656"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "30410.283669210014"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-6992.785432409982"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-63890.52749783997"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-187784.41796914994"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "-235068.57736171992"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "-109289.20980995995"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "-1354611.3961870302"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "-257846.24343855018"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "-1937851.2173689501"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-1803082.0842950705"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "-2990870.784937471"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "-4554130.426903681"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-4568163.23781092"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-4776329.422202439"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-10686941.984451817"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-35590000.54329393"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-38406694.79587263"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-33307024.735607546"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-22023137.114037707"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-286046640.0619039"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-1317440646.3161314"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-1172582179.42067"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-12011305.162360862"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-22660693.543790545"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-31438140.66912728"
+        }
+      ]
+    },
+    {
+      "updateTime": 1781324400000,
+      "tradeType": 1,
+      "tag": "storage-zone",
+      "tagsSimplified": "存储",
+      "categoriesTradeDataList": [
+        {
+          "timeRange": "m5",
+          "timeParticleEnum": 5,
+          "tradeInflow": "3123.9375986399996"
+        },
+        {
+          "timeRange": "m15",
+          "timeParticleEnum": 15,
+          "tradeInflow": "27764.616038320004"
+        },
+        {
+          "timeRange": "m30",
+          "timeParticleEnum": 30,
+          "tradeInflow": "-4507.169853880002"
+        },
+        {
+          "timeRange": "H1",
+          "timeParticleEnum": 101,
+          "tradeInflow": "-21779.746838390005"
+        },
+        {
+          "timeRange": "H2",
+          "timeParticleEnum": 102,
+          "tradeInflow": "-154051.96702255998"
+        },
+        {
+          "timeRange": "H4",
+          "timeParticleEnum": 104,
+          "tradeInflow": "22079.467907530052"
+        },
+        {
+          "timeRange": "H8",
+          "timeParticleEnum": 108,
+          "tradeInflow": "39284.14445491005"
+        },
+        {
+          "timeRange": "H12",
+          "timeParticleEnum": 112,
+          "tradeInflow": "130841.77056342993"
+        },
+        {
+          "timeRange": "H24",
+          "timeParticleEnum": 124,
+          "tradeInflow": "17707.64186606999"
+        },
+        {
+          "timeRange": "D2",
+          "timeParticleEnum": 202,
+          "tradeInflow": "325968.36345316"
+        },
+        {
+          "timeRange": "D3",
+          "timeParticleEnum": 203,
+          "tradeInflow": "-12372.355397619775"
+        },
+        {
+          "timeRange": "D5",
+          "timeParticleEnum": 205,
+          "tradeInflow": "73418.52576144"
+        },
+        {
+          "timeRange": "D7",
+          "timeParticleEnum": 207,
+          "tradeInflow": "449735.99766209995"
+        },
+        {
+          "timeRange": "D10",
+          "timeParticleEnum": 210,
+          "tradeInflow": "-2559991.1919666487"
+        },
+        {
+          "timeRange": "D15",
+          "timeParticleEnum": 215,
+          "tradeInflow": "-8992732.746985503"
+        },
+        {
+          "timeRange": "D30",
+          "timeParticleEnum": 230,
+          "tradeInflow": "-13601801.776139041"
+        },
+        {
+          "timeRange": "D40",
+          "timeParticleEnum": 240,
+          "tradeInflow": "-12281098.98678852"
+        },
+        {
+          "timeRange": "D50",
+          "timeParticleEnum": 250,
+          "tradeInflow": "-14350123.567113364"
+        },
+        {
+          "timeRange": "D60",
+          "timeParticleEnum": 260,
+          "tradeInflow": "-16110100.609167878"
+        },
+        {
+          "timeRange": "D90",
+          "timeParticleEnum": 290,
+          "tradeInflow": "-14561449.038793903"
+        },
+        {
+          "timeRange": "Y1",
+          "timeParticleEnum": 401,
+          "tradeInflow": "-282456172.9083177"
+        },
+        {
+          "timeRange": "Y2",
+          "timeParticleEnum": 402,
+          "tradeInflow": "-881399788.3700969"
+        },
+        {
+          "timeRange": "Y3",
+          "timeParticleEnum": 403,
+          "tradeInflow": "-1582995856.7412121"
+        },
+        {
+          "timeRange": "D120",
+          "timeParticleEnum": 2120,
+          "tradeInflow": "-22290378.237717066"
+        },
+        {
+          "timeRange": "D150",
+          "timeParticleEnum": 2150,
+          "tradeInflow": "-40885085.40566191"
+        },
+        {
+          "timeRange": "D180",
+          "timeParticleEnum": 2180,
+          "tradeInflow": "-63767923.54199336"
+        }
+      ]
+    }
+  ],
+  "snapshot": {
+    "name": "sector_fund",
+    "saved_at": "2026-06-13T04:22:39.779326+00:00",
+    "origin": "live",
+    "history_id": "2026-06-13T04-22-39.779326+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\sector_fund\\2026-06-13T04-22-39.779326+00-00.json"
+  }
+}

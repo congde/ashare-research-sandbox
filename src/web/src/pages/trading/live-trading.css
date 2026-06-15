@@ -1,0 +1,55 @@
+.live-trading-warning {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 12px;
+}
+
+.live-trading-toolbar,
+.live-trading-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.live-trading-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.live-trading-field label {
+  color: var(--qa-text-3);
+  font-size: 12px;
+}
+
+.live-trading-field--wide {
+  grid-column: 1 / -1;
+}
+
+.live-trading-meta {
+  color: var(--qa-text-2);
+  font-size: 13px;
+  padding-top: 4px;
+}
+
+.live-trading-plan {
+  color: var(--qa-text-2);
+  font-size: 12px;
+  padding: 0 4px 8px;
+}
+
+.live-trading-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.live-trading-output {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: var(--qa-text-2);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 12px;
+  padding: 12px 14px;
+}

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import copy
 import textwrap
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -67,6 +68,46 @@ def load_fonts() -> tuple:
     return _load_font(34), _load_font(20), _load_font(22), _load_font(18)
 
 
+def compact_spec(source: dict) -> dict:
+    """Fit the shared diagram layout around its actual teaching content."""
+    spec = copy.deepcopy(source)
+    if spec.get("compact") is False or not spec.get("nodes"):
+        return spec
+
+    nodes = spec["nodes"]
+    shift_y = 175 - min(node["box"][1] for node in nodes)
+    for node in nodes:
+        x, y, w, h = node["box"]
+        node["box"] = (x, y + shift_y, w, h)
+
+    for edge in spec.get("edges", []):
+        if edge["kind"] == "h":
+            x1, y, x2 = edge["coords"]
+            edge["coords"] = (x1, y + shift_y, x2)
+        else:
+            x, y1, y2 = edge["coords"]
+            edge["coords"] = (x, y1 + shift_y, y2 + shift_y)
+
+    max_right = max(node["box"][0] + node["box"][2] for node in nodes)
+    max_bottom = max(node["box"][1] + node["box"][3] for node in nodes)
+    canvas_width = max(1080, min(WIDTH, max_right + 50))
+
+    if spec.get("footer"):
+        footer_width = min(840, canvas_width - 180)
+        footer_left = (canvas_width - footer_width) // 2
+        footer_top = max_bottom + 45
+        spec["footer_box"] = (footer_left, footer_top, footer_left + footer_width, footer_top + 75)
+        spec["footer_text_xy"] = (footer_left + 30, footer_top + 22)
+        canvas_height = footer_top + 115
+    else:
+        canvas_height = max_bottom + 60
+
+    spec["canvas"] = (canvas_width, canvas_height)
+    spec["title_xy"] = (60, 35)
+    spec["subtitle_xy"] = (60, 82)
+    return spec
+
+
 def wrap(text: str, width: int = 10) -> str:
     if any("\u4e00" <= ch <= "\u9fff" for ch in text):
         width = min(width, 8)
@@ -116,11 +157,15 @@ def arrow_v(draw, x, y1, y2, label: str | None = None, font=None) -> None:
 
 
 def render_diagram(spec: dict, output: Path) -> None:
+    spec = compact_spec(spec)
     title_font, sub_font, body_font, small_font = load_fonts()
-    img = Image.new("RGB", (WIDTH, HEIGHT), BG)
+    width, height = spec.get("canvas", (WIDTH, HEIGHT))
+    img = Image.new("RGB", (width, height), BG)
     draw = ImageDraw.Draw(img)
-    draw.text((80, 48), spec["title"], fill=TITLE_COLOR, font=title_font)
-    draw.text((80, 98), spec.get("subtitle", ""), fill=SUB_COLOR, font=sub_font)
+    title_xy = spec.get("title_xy", (80, 48))
+    subtitle_xy = spec.get("subtitle_xy", (80, 98))
+    draw.text(title_xy, spec["title"], fill=TITLE_COLOR, font=title_font)
+    draw.text(subtitle_xy, spec.get("subtitle", ""), fill=SUB_COLOR, font=sub_font)
 
     for node in spec["nodes"]:
         draw_box(draw, node["box"], node["text"], node["style"], body_font)
@@ -133,8 +178,10 @@ def render_diagram(spec: dict, output: Path) -> None:
             x, y1, y2 = edge["coords"]
             arrow_v(draw, x, y1, y2, label, small_font)
     if foot := spec.get("footer"):
-        draw.rounded_rectangle((300, 690, 1140, 770), radius=12, fill="#101A33")
-        draw.text((330, 712), foot, fill="#FFFFFF", font=body_font)
+        footer_box = spec.get("footer_box", (300, 690, 1140, 770))
+        footer_text_xy = spec.get("footer_text_xy", (330, 712))
+        draw.rounded_rectangle(footer_box, radius=12, fill="#101A33")
+        draw.text(footer_text_xy, foot, fill="#FFFFFF", font=body_font)
 
     output.parent.mkdir(parents=True, exist_ok=True)
     img.save(output)
@@ -172,6 +219,445 @@ def lane(
 
 
 DIAGRAMS: dict[str, dict] = {
+    "chapter-01-idea-layers.png": {
+        "title": "从愿望到可执行任务的层次",
+        "subtitle": "每一层往下收，都要有人确认——不能靠 Codex 猜",
+        "page": "图1-1 愿望到任务",
+        "canvas": (1080, 520),
+        "title_xy": (60, 35),
+        "subtitle_xy": (60, 82),
+        "nodes": [
+            {"box": (40, 180, 160, 110), "text": "愿望\n「做个研究工具」", "style": "step"},
+            {"box": (230, 180, 160, 110), "text": "用户问题\n为谁、什么场景？", "style": "step2"},
+            {"box": (420, 180, 160, 110), "text": "方案偏好\nWeb3 / 页面 / 回测", "style": "step3"},
+            {"box": (610, 180, 160, 110), "text": "功能清单\n来源卡、指标…", "style": "warn"},
+            {"box": (800, 180, 180, 110), "text": "可委托任务\n用户+边界+验收", "style": "ok"},
+        ],
+        "edges": h_edges((200, 235, 225), (390, 235, 415), (580, 235, 605), (770, 235, 795)),
+        "footer": "在愿望层就写代码，等于把最窄层的形状交给模型猜。",
+        "footer_box": (180, 365, 900, 440),
+        "footer_text_xy": (210, 387),
+    },
+    "chapter-01-assumption-chain.png": {
+        "title": "猜题链：未确认假设的级联影响",
+        "subtitle": "链条顶端改假设成本低，实现末端才发现错了代价高",
+        "page": "图1-2 猜题链",
+        "nodes": [
+            {"box": (40, 310, 170, 100), "text": "用户未确认", "style": "step"},
+            {"box": (240, 310, 170, 100), "text": "数据来源被猜", "style": "step2"},
+            {"box": (440, 310, 170, 100), "text": "功能范围膨胀", "style": "step3"},
+            {"box": (640, 310, 170, 100), "text": "权限越界", "style": "warn"},
+            {"box": (840, 310, 170, 100), "text": "验收无法通过", "style": "fail"},
+            {"box": (1040, 310, 170, 100), "text": "推倒重来", "style": "fail"},
+        ],
+        "edges": h_edges((210, 360, 235), (410, 360, 435), (610, 360, 635), (810, 360, 835), (1010, 360, 1035)),
+        "footer": "一条未确认的假设，会级联影响数据、功能、权限与验收。",
+    },
+    "chapter-02-brief-conversion.png": {
+        "title": "从自然请求到可委托 Brief",
+        "subtitle": "每一次填写都在减少一种猜测",
+        "page": "图2-1 Brief 转换",
+        "nodes": [
+            {"box": (30, 310, 150, 100), "text": "自然语言请求", "style": "step"},
+            {"box": (210, 310, 130, 100), "text": "决策目标", "style": "step2"},
+            {"box": (370, 310, 120, 100), "text": "用户", "style": "step3"},
+            {"box": (520, 310, 120, 100), "text": "边界", "style": "warn"},
+            {"box": (670, 310, 140, 100), "text": "Done when", "style": "step2"},
+            {"box": (840, 310, 140, 100), "text": "开放问题", "style": "step3"},
+            {"box": (1010, 310, 150, 100), "text": "可委托 Brief", "style": "ok"},
+        ],
+        "edges": h_edges((180, 360, 205), (340, 360, 365), (490, 360, 515), (640, 360, 665), (810, 360, 835), (980, 360, 1005)),
+        "footer": "Brief 不是更长提示词，而是可执行、可验收、可接手的任务合同。",
+    },
+    "chapter-02-brief-contract.png": {
+        "title": "Brief 五要素互相约束",
+        "subtitle": "缺一项，任务就会在对话中漂移",
+        "page": "图2-2 Brief 合同",
+        "nodes": [
+            {"box": (120, 280, 200, 100), "text": "目标\n服务什么决定？", "style": "step"},
+            {"box": (400, 280, 200, 100), "text": "用户\n为谁服务？", "style": "step2"},
+            {"box": (680, 280, 200, 100), "text": "边界\n做什么/不做什么", "style": "step3"},
+            {"box": (120, 480, 200, 100), "text": "完成标准\n怎样算 Done", "style": "warn"},
+            {"box": (680, 480, 200, 100), "text": "开放问题\n未知与停止", "style": "fail"},
+        ],
+        "edges": [
+            {"kind": "h", "coords": (320, 330, 395)},
+            {"kind": "h", "coords": (600, 330, 675)},
+            {"kind": "v", "coords": (220, 380, 475)},
+            {"kind": "v", "coords": (780, 380, 475)},
+        ],
+        "footer": "五要素共同限制范围膨胀、证据缺失与权限越界。",
+    },
+    "chapter-03-evidence-ladder.png": {
+        "title": "证明责任阶梯",
+        "subtitle": "每一层升级都需要承担新的证明义务",
+        "page": "图3-1 证明阶梯",
+        "nodes": [
+            {"box": (80, 310, 150, 100), "text": "来源", "style": "step"},
+            {"box": (260, 310, 150, 100), "text": "事实 Facts", "style": "step2"},
+            {"box": (440, 310, 150, 100), "text": "推断 Inferences", "style": "step3"},
+            {"box": (620, 310, 150, 100), "text": "建议 Recommendations", "style": "warn"},
+            {"box": (800, 310, 150, 100), "text": "产品决定", "style": "ok"},
+            {"box": (980, 310, 170, 100), "text": "人工签字", "style": "ok"},
+        ],
+        "edges": h_edges((230, 360, 255), (410, 360, 435), (590, 360, 615), (770, 360, 795), (950, 360, 975)),
+        "footer": "跳过中间层，就是把推断写成事实。",
+    },
+    "chapter-03-acceptance-gates.png": {
+        "title": "调研验收三道门",
+        "subtitle": "停止与通过同等重要",
+        "page": "图3-2 验收门",
+        "nodes": [
+            {"box": (80, 310, 180, 100), "text": "调研产出", "style": "step"},
+            {"box": (300, 310, 170, 100), "text": "证据足够？", "style": "decision"},
+            {"box": (520, 250, 180, 100), "text": "通过→下一阶段", "style": "ok"},
+            {"box": (520, 420, 180, 100), "text": "拒绝→修订", "style": "fail"},
+            {"box": (520, 560, 180, 100), "text": "停止→不再投入", "style": "fail"},
+            {"box": (760, 250, 200, 100), "text": "记录 Unknowns", "style": "warn"},
+        ],
+        "edges": h_edges((260, 360, 295), (700, 300, 755))
+        + [{"kind": "h", "coords": (470, 300, 515), "label": "是"}, {"kind": "v", "coords": (385, 410, 415), "label": "否"}, {"kind": "v", "coords": (385, 470, 555), "label": "触发停止线"}],
+        "footer": "及时停止错误方向，比产出长报告更有价值。",
+    },
+    "chapter-04-context-layers.png": {
+        "title": "上下文包六层分级",
+        "subtitle": "每项材料服务验收合同中的明确条款",
+        "page": "图4-1 资料分级",
+        "nodes": [
+            {"box": (40, 280, 200, 90), "text": "正式任务\nBrief/验收", "style": "step"},
+            {"box": (270, 280, 200, 90), "text": "事实样本\ndata/", "style": "step2"},
+            {"box": (500, 280, 200, 90), "text": "规则\nAGENTS.md", "style": "step3"},
+            {"box": (730, 280, 200, 90), "text": "只读上游\nvendor/", "style": "warn"},
+            {"box": (270, 430, 200, 90), "text": "背景参考\n文档链接", "style": "step2"},
+            {"box": (500, 430, 200, 90), "text": "禁止进入\n密钥/账户", "style": "fail"},
+        ],
+        "edges": h_edges((240, 325, 265), (470, 325, 495), (700, 325, 725)),
+        "footer": "无法映射到验收条件的材料，不应进入工作区。",
+    },
+    "chapter-04-context-mapping.png": {
+        "title": "从验收条件反推资料",
+        "subtitle": "无法映射的标准可能不可执行",
+        "page": "图4-2 资料映射",
+        "nodes": [
+            {"box": (80, 310, 200, 100), "text": "验收：Facts 有来源", "style": "step"},
+            {"box": (320, 310, 200, 100), "text": "→ research-report\n+ data/", "style": "ok"},
+            {"box": (560, 310, 200, 100), "text": "验收：策略可复现", "style": "step2"},
+            {"box": (800, 310, 200, 100), "text": "→ src/ + verify", "style": "ok"},
+            {"box": (1040, 310, 200, 100), "text": "无映射？", "style": "decision"},
+        ],
+        "edges": h_edges((280, 360, 315), (520, 360, 555), (760, 360, 795), (1000, 360, 1035)),
+        "footer": "先写验收条款，再决定读哪些文件——不是反过来。",
+    },
+    "chapter-05-entry-decision.png": {
+        "title": "任务能力到入口选择",
+        "subtitle": "入口 = 能力 + 风险，不是个人习惯",
+        "page": "图5-1 入口决策",
+        "nodes": [
+            {"box": (60, 310, 170, 100), "text": "列出能力需求", "style": "step"},
+            {"box": (260, 310, 170, 100), "text": "只需概念评审？", "style": "decision"},
+            {"box": (260, 480, 170, 100), "text": "对话入口", "style": "ok"},
+            {"box": (480, 310, 170, 100), "text": "需读写仓库？", "style": "decision"},
+            {"box": (480, 480, 170, 100), "text": "工作区入口", "style": "ok"},
+            {"box": (700, 310, 170, 100), "text": "需跑 verify？", "style": "decision"},
+            {"box": (700, 480, 170, 100), "text": "终端入口", "style": "ok"},
+            {"box": (920, 310, 170, 100), "text": "需验 UI？", "style": "decision"},
+            {"box": (920, 480, 170, 100), "text": "浏览器入口", "style": "ok"},
+        ],
+        "edges": [
+            {"kind": "h", "coords": (230, 360, 255)},
+            {"kind": "v", "coords": (345, 410, 475), "label": "是"},
+            {"kind": "h", "coords": (430, 360, 475), "label": "否"},
+            {"kind": "v", "coords": (565, 410, 475), "label": "是"},
+            {"kind": "h", "coords": (650, 360, 695), "label": "否"},
+            {"kind": "v", "coords": (785, 410, 475), "label": "是"},
+            {"kind": "h", "coords": (870, 360, 915), "label": "否"},
+        ],
+        "footer": "审查 Brief 与改代码并 verify，往往需要不同入口组合。",
+    },
+    "chapter-05-workspace-boundary.png": {
+        "title": "受控工作区边界",
+        "subtitle": "规则写在文件里，证据留在命令输出里",
+        "page": "图5-2 工作区",
+        "nodes": [
+            {"box": (60, 310, 160, 100), "text": "AGENTS.md\n规则", "style": "step"},
+            {"box": (250, 310, 160, 100), "text": "Brief\n任务", "style": "step2"},
+            {"box": (440, 310, 160, 100), "text": "src/\n可写", "style": "step3"},
+            {"box": (630, 310, 160, 100), "text": "vendor/\n只读", "style": "warn"},
+            {"box": (820, 310, 160, 100), "text": "verify\n证据", "style": "ok"},
+            {"box": (1010, 310, 160, 100), "text": "Handoff\n接手", "style": "ok"},
+        ],
+        "edges": h_edges((220, 360, 245), (410, 360, 435), (600, 360, 625), (790, 360, 815), (980, 360, 1005)),
+        "footer": "新会话、Automation 与人都应读到同一套边界。",
+    },
+    "chapter-06-claim-flow.png": {
+        "title": "主张流转：F/I/R/U",
+        "subtitle": "箭头只能向上游走，不能反向升级证据",
+        "page": "图6-1 主张流转",
+        "nodes": [
+            {"box": (80, 310, 180, 100), "text": "Facts\n可复查事实", "style": "step"},
+            {"box": (320, 310, 180, 100), "text": "Inferences\n标明 Supports", "style": "step2"},
+            {"box": (560, 310, 180, 100), "text": "Recommendations\n行动边界", "style": "step3"},
+            {"box": (800, 310, 180, 100), "text": "人工 Go/Revise", "style": "ok"},
+            {"box": (320, 480, 180, 100), "text": "Unknowns\n缺信息停止", "style": "fail"},
+        ],
+        "edges": h_edges((260, 360, 315), (500, 360, 555), (740, 360, 795))
+        + [{"kind": "v", "coords": (170, 410, 475)}],
+        "footer": "建议伪装成事实，是调研报告最常见的语义污染。",
+    },
+    "chapter-06-research-rounds.png": {
+        "title": "分轮调研阻止证据升级",
+        "subtitle": "一步生成最终报告，最容易一次性污染全文",
+        "page": "图6-2 分轮调研",
+        "nodes": [
+            {"box": (60, 310, 200, 100), "text": "第1轮：Facts\n只确认事实", "style": "step"},
+            {"box": (300, 310, 200, 100), "text": "第2轮：Inferences\n回连 F", "style": "step2"},
+            {"box": (540, 310, 220, 100), "text": "第3轮：R + Unknowns", "style": "step3"},
+            {"box": (800, 310, 180, 100), "text": "证据审查", "style": "warn"},
+            {"box": (1020, 310, 180, 100), "text": "决策包", "style": "ok"},
+        ],
+        "edges": h_edges((260, 360, 295), (500, 360, 535), (760, 360, 795), (980, 360, 1015)),
+        "footer": "第一轮就写建议，应拒绝并要求先完成 F 列表。",
+    },
+    "chapter-07-decision-path.png": {
+        "title": "从证据到方向决定",
+        "subtitle": "调研的终点是决定，不是报告",
+        "page": "图7-1 方向决定",
+        "nodes": [
+            {"box": (60, 310, 170, 100), "text": "主张台账", "style": "step"},
+            {"box": (260, 310, 170, 100), "text": "对照 Brief", "style": "step2"},
+            {"box": (460, 310, 170, 100), "text": "三种方向？", "style": "decision"},
+            {"box": (660, 250, 130, 100), "text": "Go", "style": "ok"},
+            {"box": (660, 380, 130, 100), "text": "Revise", "style": "warn"},
+            {"box": (660, 510, 130, 100), "text": "No-Go", "style": "fail"},
+            {"box": (830, 310, 200, 100), "text": "决策记录\n+ 停止线", "style": "ok"},
+        ],
+        "edges": h_edges((230, 360, 255), (430, 360, 455), (790, 360, 825))
+        + [{"kind": "h", "coords": (590, 300, 655), "label": "选向"}, {"kind": "v", "coords": (545, 410, 505), "label": "R"}, {"kind": "v", "coords": (545, 410, 375), "label": "G"}],
+        "footer": "默认 Go 等于把风险留到实现末端。",
+    },
+    "chapter-07-reversible-decision.png": {
+        "title": "可撤销的方向决定",
+        "subtitle": "附带复核日期与触发条件，而不是一次性盖章",
+        "page": "图7-2 可撤销决定",
+        "nodes": [
+            {"box": (80, 310, 180, 100), "text": "Go 决定", "style": "ok"},
+            {"box": (300, 310, 180, 100), "text": "写入停止线", "style": "warn"},
+            {"box": (520, 310, 180, 100), "text": "触发条件出现？", "style": "decision"},
+            {"box": (740, 250, 180, 100), "text": "继续执行", "style": "ok"},
+            {"box": (740, 420, 180, 100), "text": "Revise/No-Go", "style": "fail"},
+            {"box": (980, 310, 180, 100), "text": "更新决策记录", "style": "step3"},
+        ],
+        "edges": h_edges((260, 360, 295), (480, 360, 515), (920, 360, 975))
+        + [{"kind": "h", "coords": (700, 300, 735), "label": "否"}, {"kind": "v", "coords": (610, 410, 415), "label": "是"}],
+        "footer": "若必须 live 才能验收，应重新进入调研与审批。",
+    },
+    "chapter-08-stakeholders.png": {
+        "title": "四类相关角色",
+        "subtitle": "验收对齐使用者，边界由风险承担者批准",
+        "page": "图8-1 相关角色",
+        "nodes": [
+            {"box": (80, 280, 200, 110), "text": "提出需求者\n「做个工具」", "style": "step"},
+            {"box": (320, 280, 200, 110), "text": "实际使用者\n读来源/跑回测", "style": "step2"},
+            {"box": (560, 280, 200, 110), "text": "风险承担者\n合规/误导", "style": "warn"},
+            {"box": (800, 280, 200, 110), "text": "方向决策者\nGo/Revise", "style": "ok"},
+        ],
+        "edges": h_edges((280, 335, 315), (520, 335, 555), (760, 335, 795)),
+        "footer": "提出者的功能愿望不能自动等于使用者的问题。",
+    },
+    "chapter-08-user-convergence.png": {
+        "title": "从调研证据收敛核心用户",
+        "subtitle": "排除交易建议场景，锁定学习研究方法的学习者",
+        "page": "图8-2 用户收敛",
+        "nodes": [
+            {"box": (60, 310, 170, 100), "text": "F2 可复查流程", "style": "step"},
+            {"box": (260, 310, 190, 100), "text": "排除荐股场景", "style": "step2"},
+            {"box": (480, 310, 200, 100), "text": "锁定学习者", "style": "step3"},
+            {"box": (710, 310, 180, 100), "text": "写入 Brief/PRD", "style": "ok"},
+            {"box": (930, 310, 170, 100), "text": "验收对齐", "style": "ok"},
+        ],
+        "edges": h_edges((230, 360, 255), (450, 360, 475), (680, 360, 705), (890, 360, 925)),
+        "footer": "「所有人都能用」等于还没有用户。",
+    },
+    "chapter-09-problem-funnel.png": {
+        "title": "从功能请求到真实问题",
+        "subtitle": "先问为什么，再问做什么功能",
+        "page": "图9-1 问题漏斗",
+        "nodes": [
+            {"box": (80, 310, 180, 100), "text": "功能请求\n「要回测页」", "style": "step"},
+            {"box": (300, 310, 180, 100), "text": "用户想完成什么？", "style": "step2"},
+            {"box": (520, 310, 180, 100), "text": "什么在阻碍？", "style": "step3"},
+            {"box": (740, 310, 180, 100), "text": "真实用户问题", "style": "ok"},
+            {"box": (960, 310, 170, 100), "text": "PRD 问题陈述", "style": "ok"},
+        ],
+        "edges": h_edges((260, 360, 295), (480, 360, 515), (700, 360, 735), (920, 360, 955)),
+        "footer": "功能清单是方案，不是问题定义。",
+    },
+    "chapter-09-problem-structure.png": {
+        "title": "问题定义四要素",
+        "subtitle": "任务、阻碍、期望结果与失败风险",
+        "page": "图9-2 问题结构",
+        "nodes": [
+            {"box": (120, 280, 220, 110), "text": "任务\n用户要完成什么", "style": "step"},
+            {"box": (400, 280, 220, 110), "text": "阻碍\n现在卡在哪里", "style": "step2"},
+            {"box": (680, 280, 220, 110), "text": "结果\n怎样算更好", "style": "step3"},
+            {"box": (400, 480, 220, 110), "text": "风险\n误解后果", "style": "fail"},
+        ],
+        "edges": [
+            {"kind": "h", "coords": (340, 335, 395)},
+            {"kind": "h", "coords": (620, 335, 675)},
+            {"kind": "v", "coords": (510, 390, 475)},
+        ],
+        "footer": "没有风险描述的问题定义，容易滑向功能堆叠。",
+    },
+    "chapter-10-solution-space.png": {
+        "title": "从问题到候选方案",
+        "subtitle": "先展开再收敛，避免爱上第一个想法",
+        "page": "图10-1 方案空间",
+        "nodes": [
+            {"box": (60, 310, 160, 100), "text": "问题定义", "style": "step"},
+            {"box": (250, 250, 130, 100), "text": "方案 A", "style": "step2"},
+            {"box": (250, 370, 130, 100), "text": "方案 B", "style": "step2"},
+            {"box": (250, 490, 130, 100), "text": "方案 C", "style": "step3"},
+            {"box": (430, 310, 180, 100), "text": "统一维度比较", "style": "warn"},
+            {"box": (650, 310, 180, 100), "text": "选定方向", "style": "ok"},
+            {"box": (870, 310, 180, 100), "text": "写入 PRD", "style": "ok"},
+        ],
+        "edges": h_edges((410, 360, 425), (610, 360, 645), (830, 360, 865)),
+        "footer": "比较的是 tradeoff，不是口号。",
+    },
+    "chapter-10-tradeoff-triangle.png": {
+        "title": "方案选择三角",
+        "subtitle": "价值、风险与可验证性必须同时看",
+        "page": "图10-2 权衡三角",
+        "nodes": [
+            {"box": (320, 250, 200, 100), "text": "用户/教学价值", "style": "step"},
+            {"box": (120, 480, 200, 100), "text": "风险与合规", "style": "fail"},
+            {"box": (520, 480, 200, 100), "text": "可验证性\nverify/样本", "style": "ok"},
+            {"box": (320, 480, 200, 100), "text": "第一版选择", "style": "warn"},
+        ],
+        "edges": [
+            {"kind": "v", "coords": (420, 350, 475)},
+            {"kind": "h", "coords": (220, 530, 315)},
+            {"kind": "h", "coords": (520, 530, 615)},
+        ],
+        "footer": "live 交易往往价值高但风险与可验证性差。",
+    },
+    "chapter-11-mvp-loop.png": {
+        "title": "最小完整用户闭环",
+        "subtitle": "MVP 是闭环，不是功能残片",
+        "page": "图11-1 MVP 闭环",
+        "nodes": [
+            {"box": (40, 310, 150, 100), "text": "打开资产页", "style": "step"},
+            {"box": (220, 310, 150, 100), "text": "读来源卡", "style": "step2"},
+            {"box": (400, 310, 150, 100), "text": "设参数", "style": "step3"},
+            {"box": (580, 310, 150, 100), "text": "跑回测", "style": "warn"},
+            {"box": (760, 310, 150, 100), "text": "看指标", "style": "step2"},
+            {"box": (940, 310, 170, 100), "text": "解释限制", "style": "ok"},
+        ],
+        "edges": h_edges((190, 360, 215), (370, 360, 395), (550, 360, 575), (730, 360, 755), (910, 360, 935)),
+        "footer": "缺「解释限制」一环，就不是课程 MVP。",
+    },
+    "chapter-11-scope-boundary.png": {
+        "title": "第一版范围边界",
+        "subtitle": "非目标是护栏，不是「以后不做」",
+        "page": "图11-2 范围边界",
+        "nodes": [
+            {"box": (80, 280, 220, 110), "text": "In scope\n固定样本竖切", "style": "ok"},
+            {"box": (360, 280, 220, 110), "text": "Out of scope\nlive/交易", "style": "fail"},
+            {"box": (640, 280, 220, 110), "text": "需审批扩展\nDashboard live", "style": "warn"},
+            {"box": (920, 280, 200, 110), "text": "Prohibited\n荐股/密钥", "style": "fail"},
+        ],
+        "edges": h_edges((300, 335, 355), (580, 335, 635), (860, 335, 915)),
+        "footer": "实现与用户测试期间，非目标防止范围膨胀。",
+    },
+    "chapter-12-prd-review.png": {
+        "title": "PRD 审查闭环",
+        "subtitle": "Codex 提发现，人做产品决定",
+        "page": "图12-1 PRD 审查",
+        "nodes": [
+            {"box": (80, 310, 170, 100), "text": "prd.md", "style": "step"},
+            {"box": (290, 310, 170, 100), "text": "Codex 审查", "style": "step2"},
+            {"box": (500, 310, 170, 100), "text": "发现清单", "style": "step3"},
+            {"box": (710, 310, 170, 100), "text": "人批准/拒绝", "style": "warn"},
+            {"box": (920, 310, 170, 100), "text": "修订 PRD", "style": "ok"},
+        ],
+        "edges": h_edges((250, 360, 285), (460, 360, 495), (670, 360, 705), (880, 360, 915)),
+        "footer": "审查不是替你做 Go/No-Go。",
+    },
+    "chapter-12-stress-test.png": {
+        "title": "PRD 压力测试",
+        "subtitle": "正常路径 + 边界滥用 + 停止线",
+        "page": "图12-2 压力测试",
+        "nodes": [
+            {"box": (80, 310, 180, 100), "text": "核心用户路径", "style": "step"},
+            {"box": (300, 310, 180, 100), "text": "边界场景", "style": "warn"},
+            {"box": (520, 310, 180, 100), "text": "滥用/越界？", "style": "decision"},
+            {"box": (740, 250, 180, 100), "text": "PRD 仍成立", "style": "ok"},
+            {"box": (740, 420, 180, 100), "text": "补禁止项/停止", "style": "fail"},
+        ],
+        "edges": h_edges((260, 360, 295), (480, 360, 515))
+        + [{"kind": "h", "coords": (700, 300, 735), "label": "否"}, {"kind": "v", "coords": (610, 410, 415), "label": "是"}],
+        "footer": "「用户想要 live」是压力测试，不是默认需求。",
+    },
+    "chapter-13-slice-vs-module.png": {
+        "title": "模块切分 vs 用户竖切",
+        "subtitle": "忙碌不等于用户能完成任务",
+        "page": "图13-1 竖切对照",
+        "nodes": [
+            {"box": (60, 250, 200, 90), "text": "横向：API 层", "style": "step"},
+            {"box": (60, 360, 200, 90), "text": "横向：前端层", "style": "step2"},
+            {"box": (60, 470, 200, 90), "text": "横向：联调", "style": "step3"},
+            {"box": (320, 310, 220, 110), "text": "竖切：data→\nresearch→web", "style": "ok"},
+            {"box": (580, 310, 200, 110), "text": "用户可见结果", "style": "ok"},
+            {"box": (820, 310, 200, 110), "text": "verify 证据", "style": "ok"},
+        ],
+        "edges": h_edges((540, 360, 575), (780, 360, 815)),
+        "footer": "第一刀问：学习者离可验收证据更近了吗？",
+    },
+    "chapter-13-user-loop.png": {
+        "title": "主案例用户闭环",
+        "subtitle": "从虚构资产页到解释限制",
+        "page": "图13-2 用户闭环",
+        "nodes": [
+            {"box": (40, 310, 150, 100), "text": "起点\n/trading", "style": "step"},
+            {"box": (220, 310, 150, 100), "text": "读摘要", "style": "step2"},
+            {"box": (400, 310, 150, 100), "text": "调窗口", "style": "step3"},
+            {"box": (580, 310, 150, 100), "text": "触发回测", "style": "warn"},
+            {"box": (760, 310, 150, 100), "text": "看 warnings", "style": "step2"},
+            {"box": (940, 310, 170, 100), "text": "可验收完成", "style": "ok"},
+        ],
+        "edges": h_edges((190, 360, 215), (370, 360, 395), (550, 360, 575), (730, 360, 755), (910, 360, 935)),
+        "footer": "竖切写入 plan.md 第一条里程碑。",
+    },
+    "chapter-00-delivery-chain.png": {
+        "title": "从模糊想法到 Playbook 的交付链",
+        "subtitle": "进度写在仓库文件里，而不是聊天记录里",
+        "page": "图0-1 全课交付链",
+        "nodes": [
+            {"box": (40, 310, 150, 100), "text": "模糊想法", "style": "step"},
+            {"box": (220, 310, 150, 100), "text": "调研决策", "style": "step2"},
+            {"box": (400, 310, 150, 100), "text": "产品合同", "style": "step3"},
+            {"box": (580, 310, 150, 100), "text": "竖切实现", "style": "warn"},
+            {"box": (760, 310, 150, 100), "text": "验证固化", "style": "step2"},
+            {"box": (940, 310, 170, 100), "text": "Playbook", "style": "ok"},
+        ],
+        "edges": h_edges((190, 360, 215), (370, 360, 395), (550, 360, 575), (730, 360, 755), (910, 360, 935)),
+        "footer": "四篇三十三讲：调研 → 产品 → 实现 → 验证与复用。",
+    },
+    "chapter-32-delivery-bundle.png": {
+        "title": "毕业交付包证据分层",
+        "subtitle": "事实、产品、实现与验证分目录存放，避免互相污染",
+        "page": "图32-2 交付包证据",
+        "nodes": [
+            {"box": (60, 280, 200, 110), "text": "事实与来源\nresearch-report", "style": "step"},
+            {"box": (300, 280, 200, 110), "text": "产品边界\nprd / plan", "style": "step2"},
+            {"box": (540, 280, 200, 110), "text": "实现产物\ncode / deliverable", "style": "step3"},
+            {"box": (780, 280, 200, 110), "text": "验证记录\nverify / tests", "style": "warn"},
+            {"box": (1020, 280, 200, 110), "text": "Handoff\n下一位入口", "style": "ok"},
+        ],
+        "edges": h_edges((260, 335, 295), (500, 335, 535), (740, 335, 775), (980, 335, 1015)),
+        "footer": "每种证据对应独立文件，审查时不必混读代码与推断。",
+    },
     "chapter-02-design-loop.png": {
         "title": "验收设计闭环",
         "subtitle": "从用途与风险出发，落到可执行检查与失败动作",
@@ -517,6 +1003,40 @@ DIAGRAMS: dict[str, dict] = {
         + [{"kind": "v", "coords": (925, 410, 475), "label": "否"}, {"kind": "h", "coords": (1010, 360, 1045), "label": "是"}],
         "footer": "综合交付要求不同证据最终汇入同一个交付包。",
     },
+    "chapter-20-checkpoint-loop.png": {
+        "title": "委托、验收与检查点闭环",
+        "subtitle": "长任务切成可审查片段，每段结束留下证据再前进",
+        "page": "图20-1 检查点闭环",
+        "nodes": [
+            {"box": (30, 310, 140, 100), "text": "写清任务", "style": "step"},
+            {"box": (200, 310, 120, 100), "text": "选入口", "style": "step2"},
+            {"box": (350, 310, 140, 100), "text": "委托执行", "style": "step3"},
+            {"box": (520, 310, 130, 100), "text": "审查 Diff", "style": "warn"},
+            {"box": (680, 310, 140, 100), "text": "验收证据", "style": "step2"},
+            {"box": (850, 310, 150, 100), "text": "证据足够？", "style": "decision"},
+            {"box": (850, 480, 150, 100), "text": "暂停/纠偏", "style": "fail"},
+            {"box": (1040, 310, 170, 100), "text": "交接下一位", "style": "ok"},
+        ],
+        "edges": h_edges((170, 360, 195), (320, 360, 345), (490, 360, 515), (650, 360, 675), (820, 360, 845))
+        + [{"kind": "h", "coords": (1000, 360, 1035), "label": "是"}, {"kind": "v", "coords": (925, 410, 475), "label": "否"}],
+        "footer": "写清任务 → 选入口 → 委托 → 验收 → 交接；缺证据不进入下一步。",
+    },
+    "chapter-20-scope-drift.png": {
+        "title": "范围漂移路径",
+        "subtitle": "每一跳都有合理借口，累积结果却偏离产品边界",
+        "page": "图20-2 范围漂移",
+        "nodes": [
+            {"box": (80, 310, 170, 100), "text": "本段小优化", "style": "step"},
+            {"box": (290, 310, 190, 100), "text": "顺便接 live 数据", "style": "step2"},
+            {"box": (520, 310, 190, 100), "text": "反正都要做交易", "style": "warn"},
+            {"box": (750, 310, 170, 100), "text": "偏离 PRD？", "style": "decision"},
+            {"box": (750, 480, 170, 100), "text": "检查点暂停", "style": "fail"},
+            {"box": (970, 310, 210, 100), "text": "缩小 Brief 重做", "style": "ok"},
+        ],
+        "edges": h_edges((250, 360, 285), (480, 360, 515), (710, 360, 745))
+        + [{"kind": "h", "coords": (920, 360, 965), "label": "是"}, {"kind": "v", "coords": (835, 410, 475), "label": "否"}],
+        "footer": "在范围漂移最便宜的时候纠偏，而不是等最终回复再收拾。",
+    },
     "chapter-20-playbook-ladder.png": {
         "title": "Playbook 推广阶梯",
         "subtitle": "推广不是复制提示词，而是复制经过验证的工作方式",
@@ -538,6 +1058,8 @@ DIAGRAMS: dict[str, dict] = {
 
 
 def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
+    spec = compact_spec(spec)
+    page_width, page_height = spec.get("canvas", (WIDTH, HEIGHT))
     diagram = ET.Element("diagram", id=page_id, name=page_name)
     model = ET.SubElement(
         diagram,
@@ -554,8 +1076,8 @@ def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
             "fold": "1",
             "page": "1",
             "pageScale": "1",
-            "pageWidth": "1440",
-            "pageHeight": "810",
+            "pageWidth": str(page_width),
+            "pageHeight": str(page_height),
             "background": BG,
         },
     )
@@ -574,7 +1096,8 @@ def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
             "parent": "1",
         },
     )
-    ET.SubElement(title_cell, "mxGeometry", {"x": "80", "y": "55", "width": "1100", "height": "55", "as": "geometry"})
+    title_x, title_y = spec.get("title_xy", (80, 55))
+    ET.SubElement(title_cell, "mxGeometry", {"x": str(title_x), "y": str(title_y), "width": "1100", "height": "55", "as": "geometry"})
 
     sub_cell = ET.SubElement(
         root,
@@ -587,7 +1110,8 @@ def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
             "parent": "1",
         },
     )
-    ET.SubElement(sub_cell, "mxGeometry", {"x": "80", "y": "115", "width": "1100", "height": "35", "as": "geometry"})
+    sub_x, sub_y = spec.get("subtitle_xy", (80, 115))
+    ET.SubElement(sub_cell, "mxGeometry", {"x": str(sub_x), "y": str(sub_y), "width": "1100", "height": "35", "as": "geometry"})
 
     for idx, node in enumerate(spec.get("nodes", [])):
         x, y, w, h = node["box"]
@@ -626,6 +1150,8 @@ def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
         ET.SubElement(cell, "mxGeometry", {"relative": "1", "as": "geometry"})
 
     if foot := spec.get("footer"):
+        footer_box = spec.get("footer_box", (300, 650, 1140, 735))
+        fx1, fy1, fx2, fy2 = footer_box
         foot_cell = ET.SubElement(
             root,
             "mxCell",
@@ -637,7 +1163,17 @@ def build_drawio_page(page_id: str, page_name: str, spec: dict) -> ET.Element:
                 "parent": "1",
             },
         )
-        ET.SubElement(foot_cell, "mxGeometry", {"x": "300", "y": "650", "width": "840", "height": "85", "as": "geometry"})
+        ET.SubElement(
+            foot_cell,
+            "mxGeometry",
+            {
+                "x": str(fx1),
+                "y": str(fy1),
+                "width": str(fx2 - fx1),
+                "height": str(fy2 - fy1),
+                "as": "geometry",
+            },
+        )
 
     return diagram
 

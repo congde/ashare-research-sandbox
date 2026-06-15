@@ -3,6 +3,7 @@ from __future__ import annotations
 from backtest.runner import load_prices, run_backtest
 from paths import DATA_DIR
 from research.summary import build_research_summary, load_company
+from risk.config import DEFAULT_RULE_IDS
 from risk.simulation import evaluate_backtest_risk
 
 
@@ -23,6 +24,7 @@ def build_report(short: int = 3, long: int = 7) -> dict:
                 "ai-trading/strategy_engine/dsl",
                 "ai-trading/strategy_engine/runtime/risk_manager.py",
             ],
+            "risk_rules": list(DEFAULT_RULE_IDS),
         },
         "warnings": [
             "教学项目，不构成投资建议。",

@@ -15,6 +15,7 @@ HOST = "127.0.0.1"
 PORT = 8765
 sys.path.insert(0, str(SRC))
 
+from backtest.rolling.service import execute_backtest, list_backtest_strategies  # noqa: E402
 from config.env import load_env  # noqa: E402
 from dashboard import api as dashboard_api  # noqa: E402
 from paths import WEB_STATIC_DIR  # noqa: E402
@@ -26,6 +27,25 @@ from strategy_engine.dsl import (  # noqa: E402
 
 load_env()
 
+STATIC_ASSET_SUFFIXES = frozenset(
+    {
+        ".html",
+        ".js",
+        ".css",
+        ".svg",
+        ".json",
+        ".ico",
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".webp",
+        ".woff",
+        ".woff2",
+        ".map",
+    }
+)
+
 STATIC_CONTENT_TYPES = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
@@ -33,6 +53,11 @@ STATIC_CONTENT_TYPES = {
     ".svg": "image/svg+xml",
     ".json": "application/json; charset=utf-8",
 }
+
+
+def looks_like_static_asset(rel: str) -> bool:
+    suffix = Path(rel).suffix.lower()
+    return bool(suffix) and suffix in STATIC_ASSET_SUFFIXES
 
 
 def assert_port_available(host: str, port: int) -> None:
@@ -69,6 +94,11 @@ class Handler(BaseHTTPRequestHandler):
                 content_type = self.guess_content_type(static_path)
                 self.send_file(static_path, content_type)
                 return
+            if not looks_like_static_asset(rel):
+                index_path = self.resolve_static("index.html")
+                if index_path is not None:
+                    self.send_file(index_path, STATIC_CONTENT_TYPES[".html"])
+                    return
             self.send_error(404)
         except Exception as error:  # pragma: no cover - defensive guard for threaded server
             self.send_json({"error": str(error)}, status=500)
@@ -123,6 +153,12 @@ class Handler(BaseHTTPRequestHandler):
             except ValueError:
                 return default
 
+        def qf(name: str, default: float) -> float:
+            try:
+                return float(q(name, str(default)))
+            except ValueError:
+                return default
+
         routes = {
             "/api/dashboard/config": lambda: dashboard_api.runtime_config(),
             "/api/dashboard/sources/status": lambda: dashboard_api.sources_status(),
@@ -151,6 +187,32 @@ class Handler(BaseHTTPRequestHandler):
                 quote=q("quote", "USDT"),
                 limit=qi("limit", 300),
             ),
+            "/api/market/ticker": lambda: dashboard_api.ticker_stats(q("symbol", "BTC-USDT")),
+            "/api/market/kline-analysis": lambda: dashboard_api.kline_analysis(
+                symbol=q("symbol", "BTC-USDT"),
+                kline_type=q("type", "1hour"),
+                limit=qi("limit", 120),
+            ),
+            "/api/dashboard/signal-analysis": lambda: dashboard_api.signal_analysis(q("symbol", "BTC")),
+            "/api/dashboard/llm-signal-analysis": lambda: dashboard_api.llm_signal_analysis(
+                q("symbol", "BTC"),
+                model=q("model", "") or None,
+            ),
+            "/api/dashboard/llm-signal-analysis/poll": lambda: dashboard_api.llm_signal_poll(q("taskId", "")),
+            "/api/dashboard/backtest/strategies": lambda: {
+                "ok": True,
+                "strategies": list_backtest_strategies(),
+            },
+            "/api/dashboard/backtest": lambda: execute_backtest(
+                strategy_name=q("strategy", "technical_signal"),
+                symbol=q("symbol", "") or None,
+                kline_type=q("type", "") or None,
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+                trailing_stop_pct=qf("trailingStop", 0.0),
+                max_hold_bars=qi("maxHoldBars", 0),
+            ),
         }
         handler = routes.get(path)
         if handler is None:
@@ -158,6 +220,11 @@ class Handler(BaseHTTPRequestHandler):
         try:
             payload = handler()
             self.send_json(payload, status=200 if payload.get("ok", True) else 500)
+        except ValueError as error:
+            self.send_json(
+                {"ok": False, "error": "insufficient_data", "message": str(error)},
+                status=422,
+            )
         except Exception as error:  # pragma: no cover
             self.send_json({"ok": False, "message": str(error)}, status=500)
         return True
@@ -226,7 +293,8 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def log_message(self, format: str, *args: object) -> None:
-        return
+        message = format % args
+        print(f"[{self.log_date_time_string()}] {self.address_string()} {message}", flush=True)
 
 
 if __name__ == "__main__":

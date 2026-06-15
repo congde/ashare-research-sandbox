@@ -42,15 +42,22 @@ interface SourceCard {
 
 
 
+function sectorInflow(sector: NonNullable<DashboardSectorFund["sectors"]>[number], range = "h1") {
+
+  const item = (sector.categoriesTradeDataList || []).find(
+    (entry) => String(entry.timeRange || "").toLowerCase() === range.toLowerCase(),
+  );
+
+  return Number(item?.tradeInflow || 0);
+
+}
+
+
+
 function leadingSector(sectors: DashboardSectorFund["sectors"]) {
 
-  const getInflow = (sector: NonNullable<DashboardSectorFund["sectors"]>[number], range: string) => {
-
-    const item = (sector.categoriesTradeDataList || []).find((entry) => entry.timeRange === range);
-
-    return Number(item?.tradeInflow || 0);
-
-  };
+  const getInflow = (sector: NonNullable<DashboardSectorFund["sectors"]>[number], range: string) =>
+    sectorInflow(sector, range);
 
   const top = [...(sectors || [])].sort((a, b) => getInflow(b, "h1") - getInflow(a, "h1"))[0];
 
@@ -98,17 +105,17 @@ function PickColumn({
 
         {items?.length ? (
 
-          items.slice(0, 6).map((item) => (
+          items.slice(0, 6).map((item, index) => (
 
-            <div key={`${item.symbol}-${item.title}`} className="ds-pick-item">
+            <div key={pickItemKey(item, index)} className="ds-pick-item">
 
               <strong>
 
-                {item.symbol || "?"} · {item.title || "信号"}
+                {item.symbol || "?"} · {item.title || item.summary || "信号"}
 
               </strong>
 
-              <span>{item.summary || "—"}</span>
+              <span>{item.summary || item.title || "—"}</span>
 
             </div>
 
@@ -144,7 +151,52 @@ function formatFundValue(value: unknown) {
 
   }
 
+  const numeric = Number(value);
+
+  if (Number.isFinite(numeric)) {
+
+    return numeric.toLocaleString("zh-CN");
+
+  }
+
   return String(value);
+
+}
+
+
+
+function tradeRow(rows: unknown, range: string) {
+  if (!Array.isArray(rows)) {
+    return null;
+  }
+  return (
+    rows.find((entry) => String((entry as { timeRange?: string }).timeRange || "").toLowerCase() === range.toLowerCase()) as
+      | { tradeInflow?: unknown; tradeIn?: unknown }
+      | undefined
+  );
+}
+
+
+
+function formatPctChange(value: unknown) {
+
+  const numeric = Number(value);
+
+  if (!Number.isFinite(numeric)) {
+
+    return "—";
+
+  }
+
+  return `${numeric.toFixed(1)}%`;
+
+}
+
+
+
+function pickItemKey(item: { symbol?: string; title?: string; vsTokenId?: string }, index: number) {
+
+  return item.vsTokenId || `${item.symbol || "item"}-${item.title || "signal"}-${index}`;
 
 }
 
@@ -182,11 +234,39 @@ export default function DataSourcesPage() {
 
     setLoading(true);
 
+    void fetchDashboardSources()
+
+      .then((status) => {
+
+        setEnv(status.env || {});
+
+        setSources(
+
+          (status.probes || []).map((probe) => ({
+
+            id: probe.id,
+
+            name: probe.name,
+
+            ok: probe.ok,
+
+            detail: probe.error || probe.source || (probe.ok ? "已连接" : "不可用"),
+
+          })),
+
+        );
+
+      })
+
+      .catch(() => {
+
+        /* status panel is optional */
+
+      });
+
     try {
 
-      const [status, onchain, tickers, sector, ai, dex, fund] = await Promise.all([
-
-        fetchDashboardSources(),
+      const [onchain, tickers, sector, ai, dex, fund] = await Promise.all([
 
         fetchOnchain("BTC"),
 
@@ -202,24 +282,6 @@ export default function DataSourcesPage() {
 
       ]);
 
-      setEnv(status.env || {});
-
-      setSources(
-
-        (status.probes || []).map((probe) => ({
-
-          id: probe.id,
-
-          name: probe.name,
-
-          ok: probe.ok,
-
-          detail: probe.error || probe.source || (probe.ok ? "已连接" : "不可用"),
-
-        })),
-
-      );
-
       setFearGreed(onchain.marketSentiment || {});
 
       setTickerCount(String(tickers.count ?? (tickers.tickers || []).length));
@@ -233,6 +295,10 @@ export default function DataSourcesPage() {
       setDexTokens(dex.tokens || []);
 
       setTokenFund(fund as Record<string, unknown>);
+
+    } catch {
+
+      /* keep partial UI instead of crashing the route */
 
     } finally {
 
@@ -254,15 +320,43 @@ export default function DataSourcesPage() {
 
   const liveHint = useMemo(() => {
 
+    const layer = picks?.source;
+
+    if (picks?.live_error) {
+
+      const when = picks.cached_at ? ` · ${picks.cached_at}` : "";
+
+      return `API 失败，展示最新落盘数据${when}`;
+
+    }
+
+    if (layer === "snapshot") {
+
+      return "离线快照 · data/dashboard/snapshots/history";
+
+    }
+
+    if (layer === "fixture") {
+
+      return "内置样本 · data/dashboard";
+
+    }
+
+    if (layer === "live") {
+
+      return "实时 API";
+
+    }
+
     if (env?.valuescan || env?.dexscan) {
 
-      return "已读取 web3-trading .env";
+      return "已读取 API 密钥配置";
 
     }
 
     return "离线样本";
 
-  }, [env]);
+  }, [env, picks?.source]);
 
 
 
@@ -271,6 +365,18 @@ export default function DataSourcesPage() {
   const sentiment = (tokenFund?.sentiment || {}) as Record<string, unknown>;
 
   const ratio = (tokenFund?.fundMarketCapRatio || {}) as Record<string, unknown>;
+
+  const fundDisplay = useMemo(() => {
+    const row24 = tradeRow(fund.spotGoodsList, "24h") || tradeRow(fund.contractList, "24h");
+    const bullish = Number(sentiment.bullishRatio);
+    return {
+      netInflow24h: fund.netInflow24h ?? row24?.tradeInflow,
+      tradeInflow24h: fund.tradeInflow24h ?? row24?.tradeIn,
+      sentimentScore:
+        sentiment.score ?? (Number.isFinite(bullish) ? Math.round(bullish * 1000) / 10 : null),
+      marketCapRatio: ratio.ratio ?? ratio.totalMarketCapRatio ?? ratio.spotMarketCapRatio,
+    };
+  }, [fund, ratio, sentiment]);
 
 
 
@@ -288,7 +394,7 @@ export default function DataSourcesPage() {
 
           <p>
 
-            检测 ValueScan、DexScan、KuCoin 公网与恐贪指数。配置 `.env` 后自动切换实时摘要，否则使用 `data/dashboard` 离线样本。
+            检测 ValueScan、DexScan、web3交易所 公网与恐贪指数。配置 `.env` 后自动切换实时摘要，否则使用 `data/dashboard` 离线样本。
 
           </p>
 
@@ -314,7 +420,9 @@ export default function DataSourcesPage() {
 
           <span className="ds-stat-label">运行模式</span>
 
-          <span className="ds-stat-value">{env?.valuescan || env?.dexscan ? "Live" : "Fixture"}</span>
+          <span className="ds-stat-value">
+            {picks?.source === "live" || env?.valuescan || env?.dexscan ? "Live" : picks?.source === "snapshot" ? "Snapshot" : "Fixture"}
+          </span>
 
           <span className="ds-stat-meta">{liveHint}</span>
 
@@ -350,7 +458,7 @@ export default function DataSourcesPage() {
 
           <span className="ds-stat-value">{tickerCount}</span>
 
-          <span className="ds-stat-meta">KuCoin 公网</span>
+          <span className="ds-stat-meta">web3交易所 公网</span>
 
         </div>
 
@@ -358,7 +466,7 @@ export default function DataSourcesPage() {
 
 
 
-      {loading && !sources.length ? (
+      {loading && !picks ? (
 
         <div className="ds-loading">
 
@@ -378,7 +486,7 @@ export default function DataSourcesPage() {
 
             <h2>接入状态</h2>
 
-            <p>ValueScan · DexScan · KuCoin · 恐贪指数</p>
+            <p>ValueScan · DexScan · web3交易所 · 恐贪指数</p>
 
           </div>
 
@@ -474,7 +582,7 @@ export default function DataSourcesPage() {
 
               <span>24h 净流入</span>
 
-              <strong>{formatFundValue(fund.netInflow24h)}</strong>
+              <strong>{formatFundValue(fundDisplay.netInflow24h)}</strong>
 
             </div>
 
@@ -482,7 +590,7 @@ export default function DataSourcesPage() {
 
               <span>24h 流入</span>
 
-              <strong>{formatFundValue(fund.tradeInflow24h)}</strong>
+              <strong>{formatFundValue(fundDisplay.tradeInflow24h)}</strong>
 
             </div>
 
@@ -490,7 +598,7 @@ export default function DataSourcesPage() {
 
               <span>情绪分数</span>
 
-              <strong>{formatFundValue(sentiment.score)}</strong>
+              <strong>{formatFundValue(fundDisplay.sentimentScore)}</strong>
 
             </div>
 
@@ -498,7 +606,7 @@ export default function DataSourcesPage() {
 
               <span>市值占比</span>
 
-              <strong>{formatFundValue(ratio.ratio)}</strong>
+              <strong>{formatFundValue(fundDisplay.marketCapRatio)}</strong>
 
             </div>
 
@@ -526,9 +634,15 @@ export default function DataSourcesPage() {
 
             {dexTokens.length ? (
 
-              dexTokens.map((token) => (
+              dexTokens.map((token, index) => {
 
-                <div key={token.symbol} className="ds-row">
+                const priceChange = Number(token.priceChange ?? 0);
+
+                const changeUp = Number.isFinite(priceChange) && priceChange >= 0;
+
+                return (
+
+                <div key={`${token.symbol || "token"}-${index}`} className="ds-row">
 
                   <div>
 
@@ -538,15 +652,17 @@ export default function DataSourcesPage() {
 
                   </div>
 
-                  <span className={`ds-badge ${(token.priceChange || 0) >= 0 ? "ds-badge-up" : "ds-badge-down"}`}>
+                  <span className={`ds-badge ${changeUp ? "ds-badge-up" : "ds-badge-down"}`}>
 
-                    {(token.priceChange || 0).toFixed(1)}%
+                    {formatPctChange(token.priceChange)}
 
                   </span>
 
                 </div>
 
-              ))
+              );
+
+              })
 
             ) : (
 
@@ -606,9 +722,9 @@ export default function DataSourcesPage() {
 
         <div className="ds-row-list">
 
-          {(sectors || []).slice(0, 8).map((sector) => (
+          {(sectors || []).slice(0, 8).map((sector, index) => (
 
-            <div key={sector.tag} className="ds-row">
+            <div key={`${sector.tag || sector.tagsSimplified || "sector"}-${index}`} className="ds-row">
 
               <div>
 
@@ -618,7 +734,9 @@ export default function DataSourcesPage() {
 
               </div>
 
-              <span className="ds-badge ds-badge-up">Sector</span>
+              <span className={`ds-badge ${sectorInflow(sector) >= 0 ? "ds-badge-up" : "ds-badge-down"}`}>
+                {formatFundValue(sectorInflow(sector))}
+              </span>
 
             </div>
 

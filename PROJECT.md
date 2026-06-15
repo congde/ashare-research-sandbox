@@ -38,6 +38,9 @@ See [README.md](README.md) for the full repository map.
 ## Artifacts
 
 - [product-brief.md](product-brief.md)
+- [research-brief.md](research-brief.md)
+- [research-acceptance.md](research-acceptance.md)
+- [context-pack.md](context-pack.md)
 - [research-report.md](research-report.md)
 - [prd.md](prd.md)
 - [plan.md](plan.md)

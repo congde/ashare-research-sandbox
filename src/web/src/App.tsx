@@ -14,9 +14,12 @@ import DashboardPage from "./pages/trading/DashboardPage";
 
 import DataSourcesPage from "./pages/trading/DataSourcesPage";
 
+import LiveTradingPage from "./pages/trading/LiveTradingPage";
 import RiskPage from "./pages/trading/RiskPage";
 
 import StrategyPage from "./pages/trading/StrategyPage";
+
+import RadarPage from "./pages/trading/RadarPage";
 
 import ResearchPage from "./pages/research/ResearchPage";
 
@@ -40,11 +43,17 @@ export default function App() {
 
                 <Route path="/" element={<Navigate to="/trading" replace />} />
 
+                <Route path="/dashboard" element={<Navigate to="/trading" replace />} />
+
                 <Route path="/trading" element={<DashboardPage />} />
+
+                <Route path="/radar" element={<RadarPage />} />
 
                 <Route path="/data-sources" element={<DataSourcesPage />} />
 
                 <Route path="/backtests" element={<BacktestsPage />} />
+
+                <Route path="/live-trading" element={<LiveTradingPage />} />
 
                 <Route path="/risk" element={<RiskPage />} />
 

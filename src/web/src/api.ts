@@ -3,10 +3,15 @@ import type {
   DashboardOnchain,
   DashboardSectorFund,
   DashboardSourcesStatus,
+  KlineAnalysisPayload,
   MarketCandlesPayload,
+  OpportunityScanPayload,
   ReportPayload,
   RuntimeConfig,
+  SignalAnalysisPayload,
   StrategyValidationResult,
+  RollingBacktestPayload,
+  RollingBacktestStrategy,
 } from "./types";
 
 export async function fetchReport(short = 3, long = 7): Promise<ReportPayload> {
@@ -55,12 +60,84 @@ export function fetchMarketTickers(limit = 300) {
   );
 }
 
+export function fetchTickerStats(symbol: string) {
+  return fetchDashboard<{ ok: boolean; ticker?: { symbol?: string; last?: number; changeRate?: number } }>(
+    `/api/market/ticker?symbol=${encodeURIComponent(symbol)}`,
+  );
+}
+
 export function fetchTokenFund(symbol: string) {
   return fetchDashboard(`/api/dashboard/vs/token-fund?symbol=${encodeURIComponent(symbol)}`);
 }
 
 export function fetchRuntimeConfig() {
   return fetchDashboard<RuntimeConfig>("/api/dashboard/config");
+}
+
+export function fetchOpportunityScan(options?: {
+  topK?: number;
+  maxSymbols?: number;
+  minVolume24h?: number;
+}) {
+  const params = new URLSearchParams({
+    topK: String(options?.topK ?? 5),
+    maxSymbols: String(options?.maxSymbols ?? 30),
+    minVolume24h: String(options?.minVolume24h ?? 200_000),
+  });
+  return fetchDashboard<OpportunityScanPayload>(`/api/dashboard/opportunity-scan?${params}`);
+}
+
+export function fetchKlineAnalysis(symbol = "BTC-USDT", klineType = "1hour", limit = 120) {
+  const params = new URLSearchParams({
+    symbol,
+    type: klineType,
+    limit: String(limit),
+    realtime: "1",
+  });
+  return fetchDashboard<KlineAnalysisPayload>(`/api/market/kline-analysis?${params}`);
+}
+
+export function fetchSignalAnalysis(symbol = "BTC") {
+  return fetchDashboard<SignalAnalysisPayload>(
+    `/api/dashboard/signal-analysis?symbol=${encodeURIComponent(symbol)}`,
+  );
+}
+
+export interface LlmSignalTaskPayload {
+  ok: boolean;
+  taskId?: string;
+  status?: string;
+  message?: string;
+}
+
+export interface LlmSignalPollPayload {
+  ok: boolean;
+  status?: string;
+  data?: SignalAnalysisPayload;
+  message?: string;
+}
+
+export async function submitLlmSignalAnalysis(symbol = "BTC", model = "deepseek/deepseek-v4-pro") {
+  const params = new URLSearchParams({ symbol, model });
+  const response = await fetch(`/api/dashboard/llm-signal-analysis?${params}`);
+  const payload = (await response.json()) as LlmSignalTaskPayload & SignalAnalysisPayload;
+  if (!response.ok) {
+    throw new Error(payload.message ?? "提交 LLM 信号失败");
+  }
+  return payload;
+}
+
+export async function pollLlmSignalAnalysis(taskId: string) {
+  const response = await fetch(`/api/dashboard/llm-signal-analysis/poll?taskId=${encodeURIComponent(taskId)}`);
+  const payload = (await response.json()) as LlmSignalPollPayload;
+  if (!response.ok && payload.status !== "failed") {
+    throw new Error(payload.message ?? "轮询 LLM 信号失败");
+  }
+  return payload;
+}
+
+export function fetchLlmSignalAnalysis(symbol = "BTC", model = "deepseek/deepseek-v4-pro") {
+  return submitLlmSignalAnalysis(symbol, model);
 }
 
 export function fetchMarketCandles(short = 3, long = 7, symbol?: string) {
@@ -85,6 +162,51 @@ export async function validateStrategy(code: string): Promise<StrategyValidation
   const payload = (await response.json()) as StrategyValidationResult;
   if (!response.ok) {
     throw new Error(payload.error ?? "策略校验失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestStrategies(): Promise<RollingBacktestStrategy[]> {
+  const response = await fetch("/api/dashboard/backtest/strategies");
+  const payload = (await response.json()) as { ok?: boolean; strategies?: RollingBacktestStrategy[]; message?: string };
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "加载策略列表失败");
+  }
+  return payload.strategies ?? [];
+}
+
+export interface RunRollingBacktestOptions {
+  strategy?: string;
+  symbol?: string;
+  type?: string;
+  limit?: number;
+  stopLoss?: number;
+  takeProfit?: number;
+  trailingStop?: number;
+  maxHoldBars?: number;
+}
+
+export async function runRollingBacktest(
+  options: RunRollingBacktestOptions = {},
+): Promise<RollingBacktestPayload> {
+  const params = new URLSearchParams({
+    strategy: options.strategy ?? "technical_signal",
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+    trailingStop: String(options.trailingStop ?? 0),
+    maxHoldBars: String(options.maxHoldBars ?? 0),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  if (options.type) {
+    params.set("type", options.type);
+  }
+  const response = await fetch(`/api/dashboard/backtest?${params}`);
+  const payload = (await response.json()) as RollingBacktestPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "回测失败");
   }
   return payload;
 }

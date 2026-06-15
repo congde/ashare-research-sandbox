@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Report Check"
+  short_description: "检查量化研究报告的证据、限制、失败记录与安全边界"
+  default_prompt: "Use $research-report-check to review this quantitative-trading research report before handoff."

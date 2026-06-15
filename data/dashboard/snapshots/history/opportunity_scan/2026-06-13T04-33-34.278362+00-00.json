@@ -1,0 +1,121 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-13T04:33:34Z",
+  "totalScanned": 30,
+  "topK": 5,
+  "opportunities": [
+    {
+      "symbol": "VELVET",
+      "pair": "VELVET-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -85.9,
+      "confidence": 91.528,
+      "change24h": -0.7588,
+      "volume24h": 20986733.04505,
+      "last": 0.40245,
+      "keyReasons": [
+        "24h 跌幅 -75.9%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "SIREN",
+      "pair": "SIREN-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -61.8,
+      "confidence": 77.104,
+      "change24h": -0.5184,
+      "volume24h": 19918289.342894,
+      "last": 0.24437,
+      "keyReasons": [
+        "24h 跌幅 -51.8%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "TRUMP",
+      "pair": "TRUMP-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 51.1,
+      "confidence": 70.666,
+      "change24h": 0.3111,
+      "volume24h": 30094265.304884706,
+      "last": 2.309,
+      "keyReasons": [
+        "24h 涨幅 31.1%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    },
+    {
+      "symbol": "HMSTR",
+      "pair": "HMSTR-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -39.7,
+      "confidence": 63.82599999999999,
+      "change24h": -0.2971,
+      "volume24h": 6427643.5798546,
+      "last": 0.0001902,
+      "keyReasons": [
+        "24h 跌幅 -29.7%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 4
+    },
+    {
+      "symbol": "STG",
+      "pair": "STG-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -37.6,
+      "confidence": 62.577999999999996,
+      "change24h": -0.2763,
+      "volume24h": 8981748.83198886,
+      "last": 0.4395,
+      "keyReasons": [
+        "24h 跌幅 -27.6%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 5
+    }
+  ],
+  "marketOverview": "扫描 30 个币种，市场整体偏空。多头 1、空头 4、中性 0。综合靠前：VELVET(明显回调)、SIREN(明显回调)、TRUMP(强势上涨)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-13T04:33:34.278362+00:00",
+    "origin": "live",
+    "history_id": "2026-06-13T04-33-34.278362+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-13T04-33-34.278362+00-00.json"
+  }
+}

@@ -80,6 +80,203 @@ def get_vs_token_id(symbol: str) -> int | None:
     return int(token_id) if token_id is not None else None
 
 
+_MS_PER_DAY = 86_400_000
+
+
+def _now_ms() -> int:
+    return int(time.time() * 1000)
+
+
+def get_token_detail(vs_token_id: int) -> dict[str, Any]:
+    resp = vs_post("/vs-token/detail", {"vsTokenId": vs_token_id})
+    data = resp.get("data")
+    return data if isinstance(data, dict) else {}
+
+
+def get_coin_key(vs_token_id: int) -> str:
+    detail = get_token_detail(vs_token_id)
+    chains = detail.get("chainAddresses") or []
+    if not chains or not isinstance(chains[0], dict):
+        return ""
+    return str(chains[0].get("coinKey") or "")
+
+
+_AI_MSG_PATHS = {
+    "chance": "/ai/getChanceCoinMessageList",
+    "risk": "/ai/getRiskCoinMessageList",
+    "funds": "/ai/getFundsCoinMessageList",
+}
+
+
+def get_ai_messages(vs_token_id: int, msg_type: str = "chance") -> list[Any]:
+    path = _AI_MSG_PATHS.get(msg_type, _AI_MSG_PATHS["chance"])
+    resp = vs_post(path, {"vsTokenId": vs_token_id})
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_realtime_fund(vs_token_id: int) -> dict[str, Any]:
+    resp = vs_post("/trade/getCoinTrade", {"vsTokenId": vs_token_id})
+    data = resp.get("data")
+    return data if isinstance(data, dict) else {}
+
+
+def get_fund_snapshot(vs_token_id: int, date_ms: int | None = None) -> dict[str, Any]:
+    resp = vs_post(
+        "/trade/getCoinTradeSnapshot",
+        {"vsTokenId": vs_token_id, "date": date_ms or _now_ms()},
+    )
+    data = resp.get("data")
+    return data if isinstance(data, dict) else {}
+
+
+def get_fund_market_cap_ratio(vs_token_id: int) -> dict[str, Any]:
+    resp = vs_post("/trade/getCoinTradeInflowMarketCapRatio", {"vsTokenId": vs_token_id})
+    data = resp.get("data")
+    return data if isinstance(data, dict) else {}
+
+
+def get_social_sentiment(vs_token_id: int) -> dict[str, Any]:
+    resp = vs_post("/social-sentiment/getCoinSocialSentiment", {"vsTokenId": vs_token_id})
+    data = resp.get("data")
+    return data if isinstance(data, dict) else {}
+
+
+def get_sector_coin_trade_list(tag: str, trade_type: int = 1) -> list[Any]:
+    resp = vs_post("/trade/categories/CoinTradeList", {"tag": tag, "tradeType": trade_type})
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_trade_kline(vs_token_id: int, bucket_type: str = "1h", days: int = 7) -> list[Any]:
+    now = _now_ms()
+    resp = vs_post(
+        "/trade/kline/getTradeKLineList",
+        {
+            "vsTokenId": vs_token_id,
+            "bucketType": bucket_type,
+            "startTime": now - days * _MS_PER_DAY,
+            "endTime": now,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_token_flow(vs_token_id: int) -> dict[str, Any]:
+    resp = vs_post("/trade/getCoinTradeFlow", {"vsTokenId": vs_token_id})
+    data = resp.get("data")
+    return data if isinstance(data, dict) else {}
+
+
+def get_whale_cost(vs_token_id: int, days: int = 90) -> list[Any]:
+    now = _now_ms()
+    resp = vs_post(
+        "/trade/getCoinTradeCost",
+        {
+            "vsTokenId": vs_token_id,
+            "startTime": now - days * _MS_PER_DAY,
+            "endTime": now,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_large_transactions(vs_token_id: int, page: int = 1, page_size: int = 50) -> list[Any]:
+    coin_key = get_coin_key(vs_token_id)
+    if not coin_key:
+        return []
+    resp = vs_post(
+        "/chain/trade/large",
+        {
+            "vsTokenId": vs_token_id,
+            "coinKey": coin_key,
+            "page": page,
+            "pageSize": page_size,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_holder_list(vs_token_id: int, page: int = 1, page_size: int = 50) -> list[Any]:
+    coin_key = get_coin_key(vs_token_id)
+    if not coin_key:
+        return []
+    resp = vs_post(
+        "/chain/trade/token/holdPage",
+        {
+            "vsTokenId": vs_token_id,
+            "coinKey": coin_key,
+            "page": page,
+            "pageSize": page_size,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def _address_trend(vs_token_id: int, address: str, endpoint: str, days: int = 30) -> list[Any]:
+    coin_key = get_coin_key(vs_token_id)
+    if not coin_key:
+        return []
+    now = _now_ms()
+    resp = vs_post(
+        endpoint,
+        {
+            "vsTokenId": vs_token_id,
+            "coinKey": coin_key,
+            "address": address,
+            "startTime": now - days * _MS_PER_DAY,
+            "endTime": now,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_support_resistance(vs_token_id: int, days: int = 30) -> list[Any]:
+    now = _now_ms()
+    resp = vs_post(
+        "/indicator/getDenseAreaList",
+        {
+            "vsTokenId": vs_token_id,
+            "startTime": now - days * _MS_PER_DAY,
+            "endTime": now,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_price_indicators(vs_token_id: int, days: int = 90) -> list[Any]:
+    now = _now_ms()
+    resp = vs_post(
+        "/indicator/getPriceMarketList",
+        {
+            "vsTokenId": vs_token_id,
+            "startTime": now - days * _MS_PER_DAY,
+            "endTime": now,
+        },
+    )
+    data = resp.get("data")
+    return data if isinstance(data, list) else []
+
+
+def get_ai_market_analyse_history(page: int = 1, page_size: int = 30) -> list[Any]:
+    resp = vs_post(
+        "/ai/getAiTokenAnalyseResultList",
+        {"page": page, "pageSize": min(page_size, 100)},
+    )
+    data = resp.get("data")
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict):
+        return list(data.get("list") or data.get("records") or [])
+    return []
+
+
 def get_ai_picks() -> dict[str, Any]:
     chance = vs_post("/ai/getChanceCoinList", {}).get("data") or []
     risk = vs_post("/ai/getRiskCoinList", {}).get("data") or []
@@ -102,21 +299,13 @@ def get_token_fund(symbol: str) -> dict[str, Any]:
     vs_id = get_vs_token_id(symbol)
     if not vs_id:
         return {"ok": False, "message": f"Token {symbol} not found in ValueScan"}
-    fund = vs_post("/trade/getCoinTrade", {"vsTokenId": vs_id}).get("data") or {}
-    ratio = vs_post("/trade/getCoinTradeInflowMarketCapRatio", {"vsTokenId": vs_id}).get("data") or {}
-    sentiment = vs_post("/social-sentiment/getCoinSocialSentiment", {"vsTokenId": vs_id}).get("data") or {}
-    now_ms = int(time.time() * 1000)
-    support = vs_post(
-        "/indicator/getDenseAreaList",
-        {"vsTokenId": vs_id, "startTime": now_ms - 7 * 86_400_000, "endTime": now_ms},
-    ).get("data") or []
     return {
         "ok": True,
         "source": "live",
         "symbol": symbol.strip().upper(),
         "vsTokenId": vs_id,
-        "fund": fund,
-        "fundMarketCapRatio": ratio,
-        "sentiment": sentiment,
-        "supportResistance": support,
+        "fund": get_realtime_fund(vs_id),
+        "fundMarketCapRatio": get_fund_market_cap_ratio(vs_id),
+        "sentiment": get_social_sentiment(vs_id),
+        "supportResistance": get_support_resistance(vs_id, days=7),
     }

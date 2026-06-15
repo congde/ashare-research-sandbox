@@ -88,11 +88,20 @@ def test_risk_checks_flag_large_drawdown() -> None:
             "trade_count": 4,
         },
         "curve": [{"equity": 10_000}] * 35,
+        "risk_rejections": [],
     }
     findings = evaluate_backtest_risk(backtest)
     rule_ids = {item["rule_id"] for item in findings}
     assert "MAX_DAILY_LOSS_PCT" in rule_ids
     assert "STRATEGY_UNDERPERFORM" in rule_ids
+
+
+def test_backtest_includes_runtime_risk_rules() -> None:
+    report = build_report(short=3, long=7)
+    assert report["backtest"]["risk_rules"]
+    assert "EMERGENCY_HALT" in report["backtest"]["risk_rules"]
+    assert "risk_rejections" in report["backtest"]
+    assert report["fusion"]["risk_rules"]
 
 
 def test_event_driven_engine_runs_fixed_sample() -> None:
@@ -113,10 +122,27 @@ def test_event_driven_engine_uses_on_tick_strategy() -> None:
     assert len(result.equity_curve) == 10
 
 
+def test_rolling_backtest_matches_web3_trading_engine() -> None:
+    from backtest.rolling.service import execute_backtest, list_backtest_strategies
+
+    strategies = list_backtest_strategies()
+    names = {item["name"] for item in strategies}
+    assert "technical_signal" in names
+    assert "buy_and_hold" in names
+
+    payload = execute_backtest(strategy_name="ma_crossover", stop_loss_pct=3.0, take_profit_pct=5.0)
+    assert payload["ok"] is True
+    assert payload["engine"] == "web3-trading/rolling-window"
+    assert payload["total_trades"] > 0
+    assert payload["equity_curve"]
+    assert payload["trades"][0]["entryPrice"] > 0
+
+
 def test_src_layout_matches_web3_trading_shape() -> None:
     src = ROOT / "src"
     for relative in (
         "backtest/runner.py",
+        "backtest/rolling/engine.py",
         "research/report.py",
         "strategy_engine/backtest/engine.py",
         "strategy_engine/dsl/validator.py",

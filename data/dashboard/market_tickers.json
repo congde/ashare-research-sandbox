@@ -2,12 +2,620 @@
   "ok": true,
   "source": "fixture",
   "quote": "USDT",
-  "count": 5,
+  "count": 102,
   "tickers": [
-    {"symbol": "BTC-USDT", "last": 95000, "changeRate": 0.012, "volValue": 125000000},
-    {"symbol": "ETH-USDT", "last": 3500, "changeRate": 0.008, "volValue": 82000000},
-    {"symbol": "SOL-USDT", "last": 180, "changeRate": 0.021, "volValue": 45000000},
-    {"symbol": "WEB3-DEMO-USDT", "last": 10.5, "changeRate": 0.015, "volValue": 120000},
-    {"symbol": "DOGE-USDT", "last": 0.18, "changeRate": -0.004, "volValue": 31000000}
-  ]
+    {
+      "symbol": "BTC-USDT",
+      "last": 63572.9,
+      "changeRate": -0.003,
+      "volValue": 227561165.57469243
+    },
+    {
+      "symbol": "ETH-USDT",
+      "last": 1666.49,
+      "changeRate": -0.0075,
+      "volValue": 133141504.47958721
+    },
+    {
+      "symbol": "MNDE-USDT",
+      "last": 0.01855,
+      "changeRate": -0.001,
+      "volValue": 1738.671143364
+    },
+    {
+      "symbol": "CLANKER-USDT",
+      "last": 14.219,
+      "changeRate": 0.0068,
+      "volValue": 33482.44952
+    },
+    {
+      "symbol": "NKN-USDT",
+      "last": 0.00564,
+      "changeRate": 0.0444,
+      "volValue": 5670.766006
+    },
+    {
+      "symbol": "RMV-USDT",
+      "last": 0.005127,
+      "changeRate": -0.0221,
+      "volValue": 37617.38824
+    },
+    {
+      "symbol": "BLEND-USDT",
+      "last": 0.06107,
+      "changeRate": 0.0042,
+      "volValue": 7042799.799124
+    },
+    {
+      "symbol": "CHEQ-USDT",
+      "last": 0.002248,
+      "changeRate": 0.0689,
+      "volValue": 71954.165142
+    },
+    {
+      "symbol": "KNC-USDT",
+      "last": 0.1217,
+      "changeRate": 0.0032,
+      "volValue": 12920.3248797
+    },
+    {
+      "symbol": "KARRAT-USDT",
+      "last": 0.00389,
+      "changeRate": -0.0323,
+      "volValue": 28263.355268
+    },
+    {
+      "symbol": "ADI-USDT",
+      "last": 3.7405,
+      "changeRate": -0.001,
+      "volValue": 2718267.048468
+    },
+    {
+      "symbol": "HAI-USDT",
+      "last": 0.001986,
+      "changeRate": 0.0096,
+      "volValue": 26939.82375
+    },
+    {
+      "symbol": "BOME-USDT",
+      "last": 0.0004388,
+      "changeRate": 0.0064,
+      "volValue": 134620.0557962
+    },
+    {
+      "symbol": "JELLYJELLY-USDT",
+      "last": 0.05926,
+      "changeRate": 0.0147,
+      "volValue": 152184.784062
+    },
+    {
+      "symbol": "BLUAI-USDT",
+      "last": 0.012459,
+      "changeRate": 0.0072,
+      "volValue": 178923.13561
+    },
+    {
+      "symbol": "AGLD-USDT",
+      "last": 0.1702,
+      "changeRate": 0.0094,
+      "volValue": 138.56292256
+    },
+    {
+      "symbol": "MUBARAK-USDT",
+      "last": 0.0108,
+      "changeRate": 0.0,
+      "volValue": 22695.747362
+    },
+    {
+      "symbol": "RONIN-USDT",
+      "last": 0.0578,
+      "changeRate": -0.0334,
+      "volValue": 15162.441502
+    },
+    {
+      "symbol": "FB-USDT",
+      "last": 0.412,
+      "changeRate": 0.0356,
+      "volValue": 4274.642576
+    },
+    {
+      "symbol": "BOS-USDT",
+      "last": 7.72e-05,
+      "changeRate": 0.1319,
+      "volValue": 15915.5995482
+    },
+    {
+      "symbol": "HSK-USDT",
+      "last": 0.0893,
+      "changeRate": 0.0311,
+      "volValue": 23122.433566
+    },
+    {
+      "symbol": "SENSO-USDT",
+      "last": 0.003032,
+      "changeRate": 0.0026,
+      "volValue": 14410.533476
+    },
+    {
+      "symbol": "BONK-USDT",
+      "last": 4.44e-06,
+      "changeRate": 0.0213,
+      "volValue": 1240948.1760935606
+    },
+    {
+      "symbol": "ALICE-USDT",
+      "last": 0.1053,
+      "changeRate": 0.0343,
+      "volValue": 13054.0525498
+    },
+    {
+      "symbol": "VOLT-USDT",
+      "last": 3.94e-08,
+      "changeRate": 0.026,
+      "volValue": 1828.1302191898405
+    },
+    {
+      "symbol": "UP-USDT",
+      "last": 0.06536,
+      "changeRate": 0.0368,
+      "volValue": 5712.411986
+    },
+    {
+      "symbol": "MF-USDT",
+      "last": 0.00707,
+      "changeRate": 0.0231,
+      "volValue": 31647.933098
+    },
+    {
+      "symbol": "WALLI-USDT",
+      "last": 0.0007297,
+      "changeRate": 0.0421,
+      "volValue": 54397.6682486
+    },
+    {
+      "symbol": "ZKJ-USDT",
+      "last": 0.0076,
+      "changeRate": -0.0039,
+      "volValue": 11604.591286
+    },
+    {
+      "symbol": "NODE-USDT",
+      "last": 0.00961,
+      "changeRate": -0.0651,
+      "volValue": 953.035748
+    },
+    {
+      "symbol": "ZAMA-USDT",
+      "last": 0.03215,
+      "changeRate": -0.0095,
+      "volValue": 193097.079074
+    },
+    {
+      "symbol": "XEC-USDT",
+      "last": 5.47e-06,
+      "changeRate": 0.0243,
+      "volValue": 7076.0319864269
+    },
+    {
+      "symbol": "ASP-USDT",
+      "last": 0.02548,
+      "changeRate": -0.0844,
+      "volValue": 2773.456696
+    },
+    {
+      "symbol": "EGL1-USDT",
+      "last": 0.01179,
+      "changeRate": 0.0198,
+      "volValue": 43155.878734
+    },
+    {
+      "symbol": "FLOCK-USDT",
+      "last": 0.0407,
+      "changeRate": 0.0549,
+      "volValue": 10268.7008694
+    },
+    {
+      "symbol": "AI3-USDT",
+      "last": 0.00632,
+      "changeRate": 0.0604,
+      "volValue": 608.376906
+    },
+    {
+      "symbol": "ETC-USDT",
+      "last": 7.2306,
+      "changeRate": 0.0115,
+      "volValue": 352834.8598117394
+    },
+    {
+      "symbol": "RUNE-USDT",
+      "last": 0.3962,
+      "changeRate": -0.0255,
+      "volValue": 393414.41478184
+    },
+    {
+      "symbol": "HYDRA-USDT",
+      "last": 0.0273,
+      "changeRate": -0.0108,
+      "volValue": 7481.9407451
+    },
+    {
+      "symbol": "ASTR-USDT",
+      "last": 0.00596,
+      "changeRate": -0.0355,
+      "volValue": 30806.531151904
+    },
+    {
+      "symbol": "TEAFI-USDT",
+      "last": 0.00092,
+      "changeRate": -0.4742,
+      "volValue": 7157.516724
+    },
+    {
+      "symbol": "WET-USDT",
+      "last": 0.05682,
+      "changeRate": 0.0137,
+      "volValue": 34171.615184
+    },
+    {
+      "symbol": "BCH-USDT",
+      "last": 205.22,
+      "changeRate": 0.0281,
+      "volValue": 1647949.379844
+    },
+    {
+      "symbol": "SWARMS-USDT",
+      "last": 0.00748,
+      "changeRate": 0.0701,
+      "volValue": 194287.739402
+    },
+    {
+      "symbol": "THQ-USDT",
+      "last": 0.01429,
+      "changeRate": 0.0317,
+      "volValue": 17158.073956
+    },
+    {
+      "symbol": "B2-USDT",
+      "last": 0.4325,
+      "changeRate": -0.0239,
+      "volValue": 54060.68625
+    },
+    {
+      "symbol": "KAVA-USDT",
+      "last": 0.04612,
+      "changeRate": 0.0723,
+      "volValue": 12538.78135
+    },
+    {
+      "symbol": "GLQ-USDT",
+      "last": 0.002653,
+      "changeRate": -0.0398,
+      "volValue": 38723.489518
+    },
+    {
+      "symbol": "VSYS-USDT",
+      "last": 0.0002326,
+      "changeRate": -0.0025,
+      "volValue": 176981.72536
+    },
+    {
+      "symbol": "CRTR-USDT",
+      "last": 0.000344,
+      "changeRate": 0.0653,
+      "volValue": 13308.206352
+    },
+    {
+      "symbol": "CTA-USDT",
+      "last": 0.00608,
+      "changeRate": -0.0209,
+      "volValue": 21518.257512
+    },
+    {
+      "symbol": "APT-USDT",
+      "last": 0.6483,
+      "changeRate": 0.0287,
+      "volValue": 818703.4288366
+    },
+    {
+      "symbol": "GAS-USDT",
+      "last": 1.109,
+      "changeRate": 0.007,
+      "volValue": 32552.71263354
+    },
+    {
+      "symbol": "TRX-USDT",
+      "last": 0.3145,
+      "changeRate": -0.0178,
+      "volValue": 12736985.620166
+    },
+    {
+      "symbol": "CELO-USDT",
+      "last": 0.0612,
+      "changeRate": 0.0082,
+      "volValue": 12383.9998289
+    },
+    {
+      "symbol": "READY-USDT",
+      "last": 0.015085,
+      "changeRate": 0.0775,
+      "volValue": 87821.27526
+    },
+    {
+      "symbol": "PTB-USDT",
+      "last": 0.000558,
+      "changeRate": -0.0295,
+      "volValue": 34710.732196
+    },
+    {
+      "symbol": "KLINK-USDT",
+      "last": 0.0002075,
+      "changeRate": 0.0171,
+      "volValue": 79704.6941834
+    },
+    {
+      "symbol": "SAND-USDT",
+      "last": 0.05216,
+      "changeRate": -0.0021,
+      "volValue": 60926.100994582
+    },
+    {
+      "symbol": "NOBODY-USDT",
+      "last": 0.00454,
+      "changeRate": -0.0421,
+      "volValue": 3142.167636
+    },
+    {
+      "symbol": "FIDA-USDT",
+      "last": 0.02336,
+      "changeRate": -0.0722,
+      "volValue": 88238.848654
+    },
+    {
+      "symbol": "LAT-USDT",
+      "last": 0.000601,
+      "changeRate": -0.0098,
+      "volValue": 96818.105954
+    },
+    {
+      "symbol": "T-USDT",
+      "last": 0.00379,
+      "changeRate": 0.0106,
+      "volValue": 3090.838538764
+    },
+    {
+      "symbol": "PUMP-USDT",
+      "last": 0.001499,
+      "changeRate": 0.0438,
+      "volValue": 1125389.301322
+    },
+    {
+      "symbol": "HPP-USDT",
+      "last": 0.0307,
+      "changeRate": 0.0726,
+      "volValue": 9076.308344
+    },
+    {
+      "symbol": "HOME-USDT",
+      "last": 0.029271,
+      "changeRate": -0.1208,
+      "volValue": 151446.612274
+    },
+    {
+      "symbol": "SUN-USDT",
+      "last": 0.01647,
+      "changeRate": -0.0311,
+      "volValue": 3225.837174
+    },
+    {
+      "symbol": "DATA-USDT",
+      "last": 0.0005309,
+      "changeRate": 0.0188,
+      "volValue": 81998.828668
+    },
+    {
+      "symbol": "MGO-USDT",
+      "last": 0.010045,
+      "changeRate": 0.0074,
+      "volValue": 98726.692794
+    },
+    {
+      "symbol": "RAY-USDT",
+      "last": 0.5946,
+      "changeRate": 0.022,
+      "volValue": 57685.90405714
+    },
+    {
+      "symbol": "PIXEL-USDT",
+      "last": 0.00542,
+      "changeRate": 0.0,
+      "volValue": 5553.726734254
+    },
+    {
+      "symbol": "MAPO-USDT",
+      "last": 0.0009074,
+      "changeRate": 0.0015,
+      "volValue": 61518.7253764
+    },
+    {
+      "symbol": "MANYU-USDT",
+      "last": 4.06e-09,
+      "changeRate": -0.0876,
+      "volValue": 18518.43643315686
+    },
+    {
+      "symbol": "PORTALS-USDT",
+      "last": 0.00339,
+      "changeRate": 0.0089,
+      "volValue": 1454.26542
+    },
+    {
+      "symbol": "XAUM-USDT",
+      "last": 4166.31,
+      "changeRate": 0.0282,
+      "volValue": 498534.99704
+    },
+    {
+      "symbol": "LDO-USDT",
+      "last": 0.263,
+      "changeRate": -0.0015,
+      "volValue": 126511.34395438
+    },
+    {
+      "symbol": "NUM-USDT",
+      "last": 0.00326,
+      "changeRate": 0.0,
+      "volValue": 10930.776105746
+    },
+    {
+      "symbol": "NMR-USDT",
+      "last": 8.533,
+      "changeRate": 0.0404,
+      "volValue": 15540.6120826
+    },
+    {
+      "symbol": "TON-USDT",
+      "last": 1.7201,
+      "changeRate": 0.061,
+      "volValue": 26282336.60147414
+    },
+    {
+      "symbol": "AAVE-USDT",
+      "last": 64.382,
+      "changeRate": 0.0164,
+      "volValue": 16140288.1195
+    },
+    {
+      "symbol": "S-USDT",
+      "last": 0.03096,
+      "changeRate": 0.018,
+      "volValue": 253639.878212
+    },
+    {
+      "symbol": "CREDI-USDT",
+      "last": 0.0009075,
+      "changeRate": -0.0026,
+      "volValue": 13787.6599224
+    },
+    {
+      "symbol": "MNT-USDT",
+      "last": 0.5398,
+      "changeRate": 0.0026,
+      "volValue": 53875.02510402
+    },
+    {
+      "symbol": "TRB-USDT",
+      "last": 13.351,
+      "changeRate": -0.0065,
+      "volValue": 16711.2461476
+    },
+    {
+      "symbol": "ELA-USDT",
+      "last": 0.3726,
+      "changeRate": 0.0381,
+      "volValue": 14695.21541148
+    },
+    {
+      "symbol": "DOGE-USDT",
+      "last": 0.08798,
+      "changeRate": 0.0382,
+      "volValue": 16518409.819476265
+    },
+    {
+      "symbol": "MORPHO-USDT",
+      "last": 1.9143,
+      "changeRate": 0.0144,
+      "volValue": 343941.669408
+    },
+    {
+      "symbol": "GPS-USDT",
+      "last": 0.00729,
+      "changeRate": 0.0195,
+      "volValue": 16753.569506
+    },
+    {
+      "symbol": "HPOS10I-USDT",
+      "last": 0.0121,
+      "changeRate": 0.0521,
+      "volValue": 2351.447004
+    },
+    {
+      "symbol": "YB-USDT",
+      "last": 0.0914,
+      "changeRate": 0.0088,
+      "volValue": 19888.784828
+    },
+    {
+      "symbol": "COW-USDT",
+      "last": 0.143,
+      "changeRate": 0.0214,
+      "volValue": 4665.727478
+    },
+    {
+      "symbol": "COQ-USDT",
+      "last": 1.154e-07,
+      "changeRate": 0.154,
+      "volValue": 83796.2750743184
+    },
+    {
+      "symbol": "BICO-USDT",
+      "last": 0.0199,
+      "changeRate": 0.0756,
+      "volValue": 8057.98938888
+    },
+    {
+      "symbol": "SEI-USDT",
+      "last": 0.05138,
+      "changeRate": 0.0574,
+      "volValue": 11918578.803256
+    },
+    {
+      "symbol": "IRYS-USDT",
+      "last": 0.01743,
+      "changeRate": -0.0113,
+      "volValue": 27556.489322
+    },
+    {
+      "symbol": "ENS-USDT",
+      "last": 4.817,
+      "changeRate": 0.0216,
+      "volValue": 97685.8850386
+    },
+    {
+      "symbol": "BNKR-USDT",
+      "last": 0.000477,
+      "changeRate": 0.0602,
+      "volValue": 601814.8686172
+    },
+    {
+      "symbol": "SNEK-USDT",
+      "last": 0.00041,
+      "changeRate": 0.1953,
+      "volValue": 48207.756646
+    },
+    {
+      "symbol": "LPT-USDT",
+      "last": 1.8087,
+      "changeRate": 0.0465,
+      "volValue": 56187.09880768
+    },
+    {
+      "symbol": "TURBOS-USDT",
+      "last": 8.59e-05,
+      "changeRate": -0.0249,
+      "volValue": 5372.3028938
+    },
+    {
+      "symbol": "ESE-USDT",
+      "last": 0.010778,
+      "changeRate": -0.0287,
+      "volValue": 34330.1346
+    },
+    {
+      "symbol": "AGT-USDT",
+      "last": 0.014444,
+      "changeRate": -0.024,
+      "volValue": 98532.443862
+    }
+  ],
+  "live_error": true
 }

@@ -42,19 +42,20 @@ def _signal_from_ticker(ticker: dict[str, Any]) -> tuple[str, str, float, float,
     return signal, label, round(score, 1), confidence, reasons[:3]
 
 
-def scan_opportunities(
+def scan_opportunities_from_tickers(
+    tickers_payload: dict[str, Any],
     *,
-    top_k: int = 5,
-    max_symbols: int = 30,
     min_volume_24h: float = 200_000,
+    max_symbols: int | None = None,
 ) -> dict[str, Any]:
-    """Limited sync replica of web3-trading opportunity radar (rule-based only)."""
     t0 = time.time()
-    tickers_payload = market.fetch_market_tickers(limit=max(50, max_symbols))
     tickers = tickers_payload.get("tickers") or []
     filtered = [item for item in tickers if float(item.get("volValue") or 0) >= min_volume_24h]
     filtered.sort(key=lambda item: float(item.get("volValue") or 0), reverse=True)
-    candidates = filtered[:max_symbols]
+    if max_symbols is not None and max_symbols > 0:
+        candidates = filtered[:max_symbols]
+    else:
+        candidates = filtered
 
     opportunities: list[dict[str, Any]] = []
     errors: list[str] = []
@@ -100,20 +101,52 @@ def scan_opportunities(
             errors.append(f"{base}: {exc}")
 
     opportunities.sort(key=lambda item: abs(float(item["score"])), reverse=True)
-    ranked = [{**item, "rank": index + 1} for index, item in enumerate(opportunities[:top_k])]
-    overview = _market_overview(ranked, len(candidates))
+    ranked = [{**item, "rank": index + 1} for index, item in enumerate(opportunities)]
+    overview = _market_overview(ranked[:5], len(candidates))
     return {
         "ok": True,
         "source": "live",
+        "full": max_symbols is None,
         "scanTime": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "totalScanned": len(candidates),
-        "topK": top_k,
+        "topK": len(ranked),
         "opportunities": ranked,
         "marketOverview": overview,
         "scanDurationMs": int((time.time() - t0) * 1000),
         "engine": "sandbox-rule-based",
         "errors": errors,
     }
+
+
+def scan_opportunities(
+    *,
+    top_k: int = 5,
+    max_symbols: int = 30,
+    min_volume_24h: float = 200_000,
+) -> dict[str, Any]:
+    """Limited sync replica of web3-trading opportunity radar (rule-based only)."""
+    tickers_payload = market.fetch_market_tickers(limit=max(50, max_symbols))
+    payload = scan_opportunities_from_tickers(
+        tickers_payload,
+        min_volume_24h=min_volume_24h,
+        max_symbols=max_symbols,
+    )
+    payload["topK"] = top_k
+    payload["opportunities"] = payload["opportunities"][:top_k]
+    payload["opportunities"] = [
+        {**item, "rank": index + 1} for index, item in enumerate(payload["opportunities"])
+    ]
+    payload["marketOverview"] = _market_overview(payload["opportunities"], payload["totalScanned"])
+    return payload
+
+
+def scan_opportunities_full(*, min_volume_24h: float = 200_000) -> dict[str, Any]:
+    tickers_payload = market.fetch_market_tickers(limit=None)
+    return scan_opportunities_from_tickers(
+        tickers_payload,
+        min_volume_24h=min_volume_24h,
+        max_symbols=None,
+    )
 
 
 def _market_overview(items: list[dict[str, Any]], total_scanned: int) -> str:

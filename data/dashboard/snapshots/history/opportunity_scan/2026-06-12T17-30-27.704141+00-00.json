@@ -1,0 +1,3706 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": true,
+  "scanTime": "2026-06-12T17:30:27Z",
+  "totalScanned": 192,
+  "topK": 192,
+  "opportunities": [
+    {
+      "symbol": "XOXO",
+      "pair": "XOXO-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 382.5,
+      "confidence": 95.0,
+      "change24h": 3.6746,
+      "volume24h": 327513.35399518,
+      "last": 0.00049,
+      "keyReasons": [
+        "24h 涨幅 367.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "ESPORTS",
+      "pair": "ESPORTS-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 80.3,
+      "confidence": 88.20400000000001,
+      "change24h": 0.6334,
+      "volume24h": 4279123.426738,
+      "last": 0.3298,
+      "keyReasons": [
+        "24h 涨幅 63.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "AIN",
+      "pair": "AIN-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 58.1,
+      "confidence": 74.848,
+      "change24h": 0.4308,
+      "volume24h": 427869.31278,
+      "last": 0.11543,
+      "keyReasons": [
+        "24h 涨幅 43.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    },
+    {
+      "symbol": "XPL",
+      "pair": "XPL-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 57.8,
+      "confidence": 74.662,
+      "change24h": 0.4077,
+      "volume24h": 2747363.290972,
+      "last": 0.0908,
+      "keyReasons": [
+        "24h 涨幅 40.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 4
+    },
+    {
+      "symbol": "H",
+      "pair": "H-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 53.4,
+      "confidence": 72.02799999999999,
+      "change24h": 0.3338,
+      "volume24h": 5181221.861382,
+      "last": 0.261949,
+      "keyReasons": [
+        "24h 涨幅 33.4%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 5
+    },
+    {
+      "symbol": "DN",
+      "pair": "DN-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -45.3,
+      "confidence": 67.198,
+      "change24h": -0.3233,
+      "volume24h": 2474990.004668,
+      "last": 0.61664,
+      "keyReasons": [
+        "24h 跌幅 -32.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 6
+    },
+    {
+      "symbol": "AIO",
+      "pair": "AIO-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -45.0,
+      "confidence": 66.982,
+      "change24h": -0.3197,
+      "volume24h": 3004104.330902,
+      "last": 0.14229,
+      "keyReasons": [
+        "24h 跌幅 -32.0%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 7
+    },
+    {
+      "symbol": "JCT",
+      "pair": "JCT-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -42.7,
+      "confidence": 65.638,
+      "change24h": -0.2773,
+      "volume24h": 566942.474716,
+      "last": 0.004635,
+      "keyReasons": [
+        "24h 跌幅 -27.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 8
+    },
+    {
+      "symbol": "TRUMP",
+      "pair": "TRUMP-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 41.8,
+      "confidence": 65.08,
+      "change24h": 0.218,
+      "volume24h": 17729195.459004708,
+      "last": 2.106,
+      "keyReasons": [
+        "24h 涨幅 21.8%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 9
+    },
+    {
+      "symbol": "ENJ",
+      "pair": "ENJ-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 38.8,
+      "confidence": 63.268,
+      "change24h": 0.2378,
+      "volume24h": 361724.608224,
+      "last": 0.03554,
+      "keyReasons": [
+        "24h 涨幅 23.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 10
+    },
+    {
+      "symbol": "CLO",
+      "pair": "CLO-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 37.5,
+      "confidence": 62.47,
+      "change24h": 0.2245,
+      "volume24h": 780682.136694,
+      "last": 0.19002,
+      "keyReasons": [
+        "24h 涨幅 22.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 11
+    },
+    {
+      "symbol": "HMSTR",
+      "pair": "HMSTR-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -37.4,
+      "confidence": 62.452,
+      "change24h": -0.2742,
+      "volume24h": 6233403.651379,
+      "last": 0.0002196,
+      "keyReasons": [
+        "24h 跌幅 -27.4%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 12
+    },
+    {
+      "symbol": "EPIC",
+      "pair": "EPIC-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -36.6,
+      "confidence": 61.954,
+      "change24h": -0.2159,
+      "volume24h": 274305.14504,
+      "last": 0.541,
+      "keyReasons": [
+        "24h 跌幅 -21.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 13
+    },
+    {
+      "symbol": "KBEAT",
+      "pair": "KBEAT-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 33.2,
+      "confidence": 59.943999999999996,
+      "change24h": 0.1324,
+      "volume24h": 6343784.97556,
+      "last": 10.69677,
+      "keyReasons": [
+        "24h 涨幅 13.2%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 14
+    },
+    {
+      "symbol": "TEA",
+      "pair": "TEA-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -31.9,
+      "confidence": 59.11,
+      "change24h": -0.1885,
+      "volume24h": 3422776.82890826,
+      "last": 5.229e-05,
+      "keyReasons": [
+        "24h 跌幅 -18.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 15
+    },
+    {
+      "symbol": "LUMIA",
+      "pair": "LUMIA-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 31.2,
+      "confidence": 58.75,
+      "change24h": 0.1625,
+      "volume24h": 223277.568714,
+      "last": 0.093,
+      "keyReasons": [
+        "24h 涨幅 16.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 16
+    },
+    {
+      "symbol": "WAVES",
+      "pair": "WAVES-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 31.1,
+      "confidence": 58.678,
+      "change24h": 0.1613,
+      "volume24h": 448376.99418552,
+      "last": 0.2994,
+      "keyReasons": [
+        "24h 涨幅 16.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 17
+    },
+    {
+      "symbol": "ALLO",
+      "pair": "ALLO-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 30.7,
+      "confidence": 58.396,
+      "change24h": 0.1366,
+      "volume24h": 2558090.6432335703,
+      "last": 0.4383,
+      "keyReasons": [
+        "24h 涨幅 13.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 18
+    },
+    {
+      "symbol": "LAB",
+      "pair": "LAB-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 30.4,
+      "confidence": 58.228,
+      "change24h": 0.1038,
+      "volume24h": 5840401.65322,
+      "last": 9.83763,
+      "keyReasons": [
+        "24h 涨幅 10.4%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 19
+    },
+    {
+      "symbol": "FOLKS",
+      "pair": "FOLKS-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -29.9,
+      "confidence": 57.964,
+      "change24h": -0.1694,
+      "volume24h": 1194788.335066,
+      "last": 1.9131,
+      "keyReasons": [
+        "24h 跌幅 -16.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 20
+    },
+    {
+      "symbol": "STG",
+      "pair": "STG-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 29.6,
+      "confidence": 57.778,
+      "change24h": 0.0963,
+      "volume24h": 11002063.3491842,
+      "last": 0.6028,
+      "keyReasons": [
+        "24h 涨幅 9.6%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 21
+    },
+    {
+      "symbol": "ARIA",
+      "pair": "ARIA-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 29.5,
+      "confidence": 57.712,
+      "change24h": 0.1452,
+      "volume24h": 412006.95596,
+      "last": 0.03563,
+      "keyReasons": [
+        "24h 涨幅 14.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 22
+    },
+    {
+      "symbol": "D",
+      "pair": "D-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -29.4,
+      "confidence": 57.61,
+      "change24h": -0.1435,
+      "volume24h": 207241.3873,
+      "last": 0.00555,
+      "keyReasons": [
+        "24h 跌幅 -14.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 23
+    },
+    {
+      "symbol": "HYPE",
+      "pair": "HYPE-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 29.3,
+      "confidence": 57.562,
+      "change24h": 0.0927,
+      "volume24h": 11304470.2102,
+      "last": 62.321,
+      "keyReasons": [
+        "24h 涨幅 9.3%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 24
+    },
+    {
+      "symbol": "PIEVERSE",
+      "pair": "PIEVERSE-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 29.2,
+      "confidence": 57.501999999999995,
+      "change24h": 0.0917,
+      "volume24h": 16185131.076804,
+      "last": 0.6627,
+      "keyReasons": [
+        "24h 涨幅 9.2%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 25
+    },
+    {
+      "symbol": "PLAY",
+      "pair": "PLAY-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 29.0,
+      "confidence": 57.418,
+      "change24h": 0.1203,
+      "volume24h": 4171609.712052,
+      "last": 0.04607,
+      "keyReasons": [
+        "24h 涨幅 12.0%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 26
+    },
+    {
+      "symbol": "PROS",
+      "pair": "PROS-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 28.5,
+      "confidence": 57.111999999999995,
+      "change24h": 0.1352,
+      "volume24h": 291548.262756,
+      "last": 0.6146,
+      "keyReasons": [
+        "24h 涨幅 13.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 27
+    },
+    {
+      "symbol": "OFC",
+      "pair": "OFC-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -28.0,
+      "confidence": 56.769999999999996,
+      "change24h": -0.1295,
+      "volume24h": 210690.896684,
+      "last": 0.03306,
+      "keyReasons": [
+        "24h 跌幅 -13.0%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 28
+    },
+    {
+      "symbol": "ZBT",
+      "pair": "ZBT-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 27.9,
+      "confidence": 56.727999999999994,
+      "change24h": 0.1288,
+      "volume24h": 260895.625794,
+      "last": 0.12098,
+      "keyReasons": [
+        "24h 涨幅 12.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 29
+    },
+    {
+      "symbol": "SIREN",
+      "pair": "SIREN-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -27.1,
+      "confidence": 56.260000000000005,
+      "change24h": -0.171,
+      "volume24h": 13470387.286282,
+      "last": 0.48743,
+      "keyReasons": [
+        "24h 跌幅 -17.1%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 30
+    },
+    {
+      "symbol": "QAIT",
+      "pair": "QAIT-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -27.0,
+      "confidence": 56.218,
+      "change24h": -0.1403,
+      "volume24h": 1684900.084686,
+      "last": 0.01984,
+      "keyReasons": [
+        "24h 跌幅 -14.0%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 31
+    },
+    {
+      "symbol": "CROSS",
+      "pair": "CROSS-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 26.9,
+      "confidence": 56.128,
+      "change24h": 0.1188,
+      "volume24h": 229071.974122,
+      "last": 0.09473,
+      "keyReasons": [
+        "24h 涨幅 11.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 32
+    },
+    {
+      "symbol": "SPACE",
+      "pair": "SPACE-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -26.8,
+      "confidence": 56.062,
+      "change24h": -0.1177,
+      "volume24h": 741267.587446,
+      "last": 0.007397,
+      "keyReasons": [
+        "24h 跌幅 -11.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 33
+    },
+    {
+      "symbol": "ICNT",
+      "pair": "ICNT-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.9,
+      "confidence": 55.54,
+      "change24h": 0.109,
+      "volume24h": 435053.915186,
+      "last": 0.20816,
+      "keyReasons": [
+        "24h 涨幅 10.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 34
+    },
+    {
+      "symbol": "ENSO",
+      "pair": "ENSO-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.9,
+      "confidence": 55.558,
+      "change24h": 0.1093,
+      "volume24h": 339386.746544,
+      "last": 0.6553,
+      "keyReasons": [
+        "24h 涨幅 10.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 35
+    },
+    {
+      "symbol": "SEI",
+      "pair": "SEI-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.7,
+      "confidence": 55.414,
+      "change24h": 0.0569,
+      "volume24h": 11790299.419432,
+      "last": 0.05174,
+      "keyReasons": [
+        "24h 涨幅 5.7%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 36
+    },
+    {
+      "symbol": "JUP",
+      "pair": "JUP-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.7,
+      "confidence": 55.42,
+      "change24h": 0.087,
+      "volume24h": 1299084.95712358,
+      "last": 0.1698,
+      "keyReasons": [
+        "24h 涨幅 8.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 37
+    },
+    {
+      "symbol": "TON",
+      "pair": "TON-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.5,
+      "confidence": 55.288,
+      "change24h": 0.0548,
+      "volume24h": 26540722.9819305,
+      "last": 1.7281,
+      "keyReasons": [
+        "24h 涨幅 5.5%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 38
+    },
+    {
+      "symbol": "BERT",
+      "pair": "BERT-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.5,
+      "confidence": 55.275999999999996,
+      "change24h": 0.1046,
+      "volume24h": 207242.80043,
+      "last": 0.01425,
+      "keyReasons": [
+        "24h 涨幅 10.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 39
+    },
+    {
+      "symbol": "BILL",
+      "pair": "BILL-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.3,
+      "confidence": 55.192,
+      "change24h": 0.0532,
+      "volume24h": 9622324.901732,
+      "last": 0.07103,
+      "keyReasons": [
+        "24h 涨幅 5.3%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 40
+    },
+    {
+      "symbol": "STAY",
+      "pair": "STAY-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.1,
+      "confidence": 55.036,
+      "change24h": 0.0806,
+      "volume24h": 2555406.83411088,
+      "last": 2.988e-05,
+      "keyReasons": [
+        "24h 涨幅 8.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 41
+    },
+    {
+      "symbol": "WARD",
+      "pair": "WARD-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 24.9,
+      "confidence": 54.952,
+      "change24h": 0.0992,
+      "volume24h": 210002.8729662,
+      "last": 0.007829,
+      "keyReasons": [
+        "24h 涨幅 9.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 42
+    },
+    {
+      "symbol": "RAVE",
+      "pair": "RAVE-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 24.2,
+      "confidence": 54.502,
+      "change24h": 0.0717,
+      "volume24h": 2071335.2573,
+      "last": 0.478,
+      "keyReasons": [
+        "24h 涨幅 7.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 43
+    },
+    {
+      "symbol": "PORTAL",
+      "pair": "PORTAL-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -24.1,
+      "confidence": 54.484,
+      "change24h": -0.0914,
+      "volume24h": 268355.761728,
+      "last": 0.0141,
+      "keyReasons": [
+        "24h 跌幅 -9.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 44
+    },
+    {
+      "symbol": "BNKR",
+      "pair": "BNKR-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 23.8,
+      "confidence": 54.298,
+      "change24h": 0.0883,
+      "volume24h": 714872.1707584,
+      "last": 0.0004951,
+      "keyReasons": [
+        "24h 涨幅 8.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 45
+    },
+    {
+      "symbol": "VVV",
+      "pair": "VVV-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 23.7,
+      "confidence": 54.22,
+      "change24h": 0.087,
+      "volume24h": 569250.2498,
+      "last": 14.903,
+      "keyReasons": [
+        "24h 涨幅 8.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 46
+    },
+    {
+      "symbol": "RENDER",
+      "pair": "RENDER-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 23.5,
+      "confidence": 54.1,
+      "change24h": 0.065,
+      "volume24h": 1712637.2106,
+      "last": 1.671,
+      "keyReasons": [
+        "24h 涨幅 6.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 47
+    },
+    {
+      "symbol": "CHZ",
+      "pair": "CHZ-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -23.5,
+      "confidence": 54.088,
+      "change24h": -0.0848,
+      "volume24h": 496080.798796928,
+      "last": 0.0263,
+      "keyReasons": [
+        "24h 跌幅 -8.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 48
+    },
+    {
+      "symbol": "KAT",
+      "pair": "KAT-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -23.2,
+      "confidence": 53.92,
+      "change24h": -0.082,
+      "volume24h": 820996.938754,
+      "last": 0.00638,
+      "keyReasons": [
+        "24h 跌幅 -8.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 49
+    },
+    {
+      "symbol": "MELANIA",
+      "pair": "MELANIA-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 23.2,
+      "confidence": 53.902,
+      "change24h": 0.0817,
+      "volume24h": 215083.6241424,
+      "last": 0.08441,
+      "keyReasons": [
+        "24h 涨幅 8.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 50
+    },
+    {
+      "symbol": "PUMP",
+      "pair": "PUMP-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 23.1,
+      "confidence": 53.836,
+      "change24h": 0.0606,
+      "volume24h": 1095200.963052,
+      "last": 0.00154,
+      "keyReasons": [
+        "24h 涨幅 6.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 51
+    },
+    {
+      "symbol": "INIT",
+      "pair": "INIT-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 22.9,
+      "confidence": 53.728,
+      "change24h": 0.0788,
+      "volume24h": 471027.116834,
+      "last": 0.062896,
+      "keyReasons": [
+        "24h 涨幅 7.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 52
+    },
+    {
+      "symbol": "DENT",
+      "pair": "DENT-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -22.9,
+      "confidence": 53.746,
+      "change24h": -0.0791,
+      "volume24h": 231511.07537239033,
+      "last": 3.14e-05,
+      "keyReasons": [
+        "24h 跌幅 -7.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 53
+    },
+    {
+      "symbol": "UB",
+      "pair": "UB-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 22.8,
+      "confidence": 53.674,
+      "change24h": 0.0579,
+      "volume24h": 1530514.109712,
+      "last": 0.137144,
+      "keyReasons": [
+        "24h 涨幅 5.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 54
+    },
+    {
+      "symbol": "ASSET",
+      "pair": "ASSET-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 22.8,
+      "confidence": 53.668,
+      "change24h": 0.0778,
+      "volume24h": 608872.41298,
+      "last": 0.28555,
+      "keyReasons": [
+        "24h 涨幅 7.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 55
+    },
+    {
+      "symbol": "YOM",
+      "pair": "YOM-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 22.6,
+      "confidence": 53.572,
+      "change24h": 0.0562,
+      "volume24h": 3241604.934158,
+      "last": 0.09373,
+      "keyReasons": [
+        "24h 涨幅 5.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 56
+    },
+    {
+      "symbol": "VIRTUAL",
+      "pair": "VIRTUAL-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 22.3,
+      "confidence": 53.385999999999996,
+      "change24h": 0.0731,
+      "volume24h": 650069.246288,
+      "last": 0.6192,
+      "keyReasons": [
+        "24h 涨幅 7.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 57
+    },
+    {
+      "symbol": "OP",
+      "pair": "OP-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 21.6,
+      "confidence": 52.989999999999995,
+      "change24h": 0.0665,
+      "volume24h": 635339.899232,
+      "last": 0.101,
+      "keyReasons": [
+        "24h 涨幅 6.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 58
+    },
+    {
+      "symbol": "PYTH",
+      "pair": "PYTH-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 21.2,
+      "confidence": 52.726,
+      "change24h": 0.0621,
+      "volume24h": 570050.854386548,
+      "last": 0.03792,
+      "keyReasons": [
+        "24h 涨幅 6.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 59
+    },
+    {
+      "symbol": "GOMINING",
+      "pair": "GOMINING-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 21.2,
+      "confidence": 52.732,
+      "change24h": 0.0622,
+      "volume24h": 251231.073264,
+      "last": 0.2732,
+      "keyReasons": [
+        "24h 涨幅 6.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 60
+    },
+    {
+      "symbol": "SENT",
+      "pair": "SENT-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 20.7,
+      "confidence": 52.402,
+      "change24h": 0.0567,
+      "volume24h": 368559.443292,
+      "last": 0.01639,
+      "keyReasons": [
+        "24h 涨幅 5.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 61
+    },
+    {
+      "symbol": "FLR",
+      "pair": "FLR-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 20.6,
+      "confidence": 52.354,
+      "change24h": 0.0559,
+      "volume24h": 218935.556924486,
+      "last": 0.00774,
+      "keyReasons": [
+        "24h 涨幅 5.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 62
+    },
+    {
+      "symbol": "INX",
+      "pair": "INX-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -20.5,
+      "confidence": 52.324,
+      "change24h": -0.0554,
+      "volume24h": 290851.790484,
+      "last": 0.008358,
+      "keyReasons": [
+        "24h 跌幅 -5.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 63
+    },
+    {
+      "symbol": "AI",
+      "pair": "AI-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -20.5,
+      "confidence": 52.294,
+      "change24h": -0.0549,
+      "volume24h": 267978.342572,
+      "last": 0.02702,
+      "keyReasons": [
+        "24h 跌幅 -5.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 64
+    },
+    {
+      "symbol": "GRASS",
+      "pair": "GRASS-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 20.2,
+      "confidence": 52.132,
+      "change24h": 0.0522,
+      "volume24h": 328806.248956,
+      "last": 0.3823,
+      "keyReasons": [
+        "24h 涨幅 5.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 65
+    },
+    {
+      "symbol": "CFG",
+      "pair": "CFG-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 20.2,
+      "confidence": 52.108,
+      "change24h": 0.0518,
+      "volume24h": 328543.0187784,
+      "last": 0.213,
+      "keyReasons": [
+        "24h 涨幅 5.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 66
+    },
+    {
+      "symbol": "WLD",
+      "pair": "WLD-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -18.7,
+      "confidence": 51.196,
+      "change24h": -0.0566,
+      "volume24h": 3090116.424830822,
+      "last": 0.4743,
+      "keyReasons": [
+        "24h 跌幅 -5.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 67
+    },
+    {
+      "symbol": "ENA",
+      "pair": "ENA-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 17.1,
+      "confidence": 50.29,
+      "change24h": 0.0415,
+      "volume24h": 9354407.938983854,
+      "last": 0.0802,
+      "keyReasons": [
+        "24h 涨幅 4.2%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 68
+    },
+    {
+      "symbol": "NEAR",
+      "pair": "NEAR-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 16.7,
+      "confidence": 50.032,
+      "change24h": 0.0372,
+      "volume24h": 31579347.71580553,
+      "last": 2.0678,
+      "keyReasons": [
+        "24h 涨幅 3.7%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 69
+    },
+    {
+      "symbol": "DOGE",
+      "pair": "DOGE-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 16.5,
+      "confidence": 49.918,
+      "change24h": 0.0353,
+      "volume24h": 16806933.781207047,
+      "last": 0.08842,
+      "keyReasons": [
+        "24h 涨幅 3.5%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 70
+    },
+    {
+      "symbol": "ADA",
+      "pair": "ADA-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 16.1,
+      "confidence": 49.666,
+      "change24h": 0.0311,
+      "volume24h": 10516384.514983466,
+      "last": 0.1722,
+      "keyReasons": [
+        "24h 涨幅 3.1%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 71
+    },
+    {
+      "symbol": "TAO",
+      "pair": "TAO-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 15.8,
+      "confidence": 49.45,
+      "change24h": 0.0275,
+      "volume24h": 18780288.74002,
+      "last": 214.24,
+      "keyReasons": [
+        "24h 涨幅 2.8%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 72
+    },
+    {
+      "symbol": "SOL",
+      "pair": "SOL-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 15.6,
+      "confidence": 49.354,
+      "change24h": 0.0259,
+      "volume24h": 28955524.147516422,
+      "last": 67.6,
+      "keyReasons": [
+        "24h 涨幅 2.6%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 73
+    },
+    {
+      "symbol": "ARB",
+      "pair": "ARB-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 13.7,
+      "confidence": 48.208,
+      "change24h": 0.0368,
+      "volume24h": 2769662.51901382,
+      "last": 0.0844,
+      "keyReasons": [
+        "24h 涨幅 3.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 74
+    },
+    {
+      "symbol": "ONDO",
+      "pair": "ONDO-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 13.4,
+      "confidence": 48.064,
+      "change24h": 0.0344,
+      "volume24h": 2646272.22559122,
+      "last": 0.36491,
+      "keyReasons": [
+        "24h 涨幅 3.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 75
+    },
+    {
+      "symbol": "XAUT",
+      "pair": "XAUT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.7,
+      "confidence": 47.644,
+      "change24h": 0.0274,
+      "volume24h": 3200165.376192,
+      "last": 4206.54,
+      "keyReasons": [
+        "24h 涨幅 2.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 76
+    },
+    {
+      "symbol": "PAXG",
+      "pair": "PAXG-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.7,
+      "confidence": 47.608,
+      "change24h": 0.0268,
+      "volume24h": 2407223.30413,
+      "last": 4213.15,
+      "keyReasons": [
+        "24h 涨幅 2.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 77
+    },
+    {
+      "symbol": "CHIP",
+      "pair": "CHIP-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -12.4,
+      "confidence": 47.44,
+      "change24h": -0.044,
+      "volume24h": 672626.113766,
+      "last": 0.030608,
+      "keyReasons": [
+        "24h 跌幅 -4.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 78
+    },
+    {
+      "symbol": "IN",
+      "pair": "IN-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -12.4,
+      "confidence": 47.452,
+      "change24h": -0.0442,
+      "volume24h": 258194.09235,
+      "last": 0.07249,
+      "keyReasons": [
+        "24h 跌幅 -4.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 79
+    },
+    {
+      "symbol": "LIT",
+      "pair": "LIT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.3,
+      "confidence": 47.362,
+      "change24h": 0.0427,
+      "volume24h": 754491.34768,
+      "last": 1.586,
+      "keyReasons": [
+        "24h 涨幅 4.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 80
+    },
+    {
+      "symbol": "PRL",
+      "pair": "PRL-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -12.3,
+      "confidence": 47.385999999999996,
+      "change24h": -0.0431,
+      "volume24h": 235416.879832,
+      "last": 0.19258,
+      "keyReasons": [
+        "24h 跌幅 -4.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 81
+    },
+    {
+      "symbol": "A",
+      "pair": "A-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -12.2,
+      "confidence": 47.302,
+      "change24h": -0.0417,
+      "volume24h": 299161.699272,
+      "last": 0.0711,
+      "keyReasons": [
+        "24h 跌幅 -4.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 82
+    },
+    {
+      "symbol": "ORDI",
+      "pair": "ORDI-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.1,
+      "confidence": 47.242,
+      "change24h": 0.0407,
+      "volume24h": 321701.13892,
+      "last": 3.343,
+      "keyReasons": [
+        "24h 涨幅 4.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 83
+    },
+    {
+      "symbol": "DRIFT",
+      "pair": "DRIFT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.8,
+      "confidence": 47.062,
+      "change24h": 0.0377,
+      "volume24h": 201342.830362,
+      "last": 0.0165,
+      "keyReasons": [
+        "24h 涨幅 3.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 84
+    },
+    {
+      "symbol": "PENDLE",
+      "pair": "PENDLE-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.7,
+      "confidence": 47.032,
+      "change24h": 0.0372,
+      "volume24h": 219766.94273864,
+      "last": 1.2695,
+      "keyReasons": [
+        "24h 涨幅 3.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 85
+    },
+    {
+      "symbol": "CYS",
+      "pair": "CYS-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -11.6,
+      "confidence": 46.93,
+      "change24h": -0.0355,
+      "volume24h": 232204.150448,
+      "last": 0.45947,
+      "keyReasons": [
+        "24h 跌幅 -3.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 86
+    },
+    {
+      "symbol": "MEGA",
+      "pair": "MEGA-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.6,
+      "confidence": 46.972,
+      "change24h": 0.0362,
+      "volume24h": 223228.947958,
+      "last": 0.04799,
+      "keyReasons": [
+        "24h 涨幅 3.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 87
+    },
+    {
+      "symbol": "MBL",
+      "pair": "MBL-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.5,
+      "confidence": 46.906,
+      "change24h": 0.0351,
+      "volume24h": 222703.0440947596,
+      "last": 0.000736,
+      "keyReasons": [
+        "24h 涨幅 3.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 88
+    },
+    {
+      "symbol": "GENIUS",
+      "pair": "GENIUS-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.4,
+      "confidence": 46.852,
+      "change24h": 0.0342,
+      "volume24h": 386753.45679,
+      "last": 0.459,
+      "keyReasons": [
+        "24h 涨幅 3.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 89
+    },
+    {
+      "symbol": "VET",
+      "pair": "VET-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.3,
+      "confidence": 46.774,
+      "change24h": 0.0329,
+      "volume24h": 408554.357716,
+      "last": 0.00499,
+      "keyReasons": [
+        "24h 涨幅 3.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 90
+    },
+    {
+      "symbol": "XNY",
+      "pair": "XNY-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -11.3,
+      "confidence": 46.78,
+      "change24h": -0.033,
+      "volume24h": 250500.833196,
+      "last": 0.006515,
+      "keyReasons": [
+        "24h 跌幅 -3.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 91
+    },
+    {
+      "symbol": "BIO",
+      "pair": "BIO-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -11.3,
+      "confidence": 46.81,
+      "change24h": -0.0335,
+      "volume24h": 232427.901106,
+      "last": 0.03081,
+      "keyReasons": [
+        "24h 跌幅 -3.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 92
+    },
+    {
+      "symbol": "BR",
+      "pair": "BR-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -11.3,
+      "confidence": 46.762,
+      "change24h": -0.0327,
+      "volume24h": 232213.80886,
+      "last": 0.14117,
+      "keyReasons": [
+        "24h 跌幅 -3.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 93
+    },
+    {
+      "symbol": "BASED",
+      "pair": "BASED-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.2,
+      "confidence": 46.696,
+      "change24h": 0.0316,
+      "volume24h": 214805.6733656,
+      "last": 0.07357,
+      "keyReasons": [
+        "24h 涨幅 3.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 94
+    },
+    {
+      "symbol": "XAUM",
+      "pair": "XAUM-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.1,
+      "confidence": 46.636,
+      "change24h": 0.0306,
+      "volume24h": 491992.115484,
+      "last": 4176.95,
+      "keyReasons": [
+        "24h 涨幅 3.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 95
+    },
+    {
+      "symbol": "USELESS",
+      "pair": "USELESS-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.0,
+      "confidence": 46.594,
+      "change24h": 0.0299,
+      "volume24h": 581358.139416,
+      "last": 0.06389,
+      "keyReasons": [
+        "24h 涨幅 3.0%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 96
+    },
+    {
+      "symbol": "ZEREBRO",
+      "pair": "ZEREBRO-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.0,
+      "confidence": 46.624,
+      "change24h": 0.0304,
+      "volume24h": 348463.881326,
+      "last": 0.02772,
+      "keyReasons": [
+        "24h 涨幅 3.0%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 97
+    },
+    {
+      "symbol": "APT",
+      "pair": "APT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.8,
+      "confidence": 46.462,
+      "change24h": 0.0277,
+      "volume24h": 804311.80104484,
+      "last": 0.652,
+      "keyReasons": [
+        "24h 涨幅 2.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 98
+    },
+    {
+      "symbol": "BERA",
+      "pair": "BERA-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.8,
+      "confidence": 46.498,
+      "change24h": 0.0283,
+      "volume24h": 215609.103262,
+      "last": 0.2577,
+      "keyReasons": [
+        "24h 涨幅 2.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 99
+    },
+    {
+      "symbol": "BOSON",
+      "pair": "BOSON-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.7,
+      "confidence": 46.396,
+      "change24h": 0.0266,
+      "volume24h": 473408.352678,
+      "last": 0.02888,
+      "keyReasons": [
+        "24h 涨幅 2.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 100
+    },
+    {
+      "symbol": "LUNC",
+      "pair": "LUNC-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.7,
+      "confidence": 46.414,
+      "change24h": 0.0269,
+      "volume24h": 379679.90186558006,
+      "last": 7.243e-05,
+      "keyReasons": [
+        "24h 涨幅 2.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 101
+    },
+    {
+      "symbol": "RUNE",
+      "pair": "RUNE-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.6,
+      "confidence": 46.384,
+      "change24h": 0.0264,
+      "volume24h": 373459.95696488,
+      "last": 0.4109,
+      "keyReasons": [
+        "24h 涨幅 2.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 102
+    },
+    {
+      "symbol": "NAKA",
+      "pair": "NAKA-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.6,
+      "confidence": 46.384,
+      "change24h": 0.0264,
+      "volume24h": 223267.621428,
+      "last": 0.03882,
+      "keyReasons": [
+        "24h 涨幅 2.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 103
+    },
+    {
+      "symbol": "EWT",
+      "pair": "EWT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.3,
+      "confidence": 46.162,
+      "change24h": 0.0227,
+      "volume24h": 264994.233688,
+      "last": 0.31898,
+      "keyReasons": [
+        "24h 涨幅 2.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 104
+    },
+    {
+      "symbol": "AKT",
+      "pair": "AKT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.2,
+      "confidence": 46.096000000000004,
+      "change24h": 0.0216,
+      "volume24h": 626783.3388781,
+      "last": 0.6283,
+      "keyReasons": [
+        "24h 涨幅 2.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 105
+    },
+    {
+      "symbol": "ZEST",
+      "pair": "ZEST-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -10.1,
+      "confidence": 46.036,
+      "change24h": -0.0206,
+      "volume24h": 498722.718664,
+      "last": 0.27182,
+      "keyReasons": [
+        "24h 跌幅 -2.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 106
+    },
+    {
+      "symbol": "9BIT",
+      "pair": "9BIT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.1,
+      "confidence": 46.054,
+      "change24h": 0.0209,
+      "volume24h": 378656.335368,
+      "last": 0.044005,
+      "keyReasons": [
+        "24h 涨幅 2.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 107
+    },
+    {
+      "symbol": "W",
+      "pair": "W-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.1,
+      "confidence": 46.054,
+      "change24h": 0.0209,
+      "volume24h": 295743.582602,
+      "last": 0.00927,
+      "keyReasons": [
+        "24h 涨幅 2.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 108
+    },
+    {
+      "symbol": "CRV",
+      "pair": "CRV-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -9.3,
+      "confidence": 45.586,
+      "change24h": -0.0331,
+      "volume24h": 1583157.79089604,
+      "last": 0.2389,
+      "keyReasons": [
+        "24h 跌幅 -3.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 109
+    },
+    {
+      "symbol": "XDC",
+      "pair": "XDC-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -8.4,
+      "confidence": 45.07,
+      "change24h": -0.0245,
+      "volume24h": 1292925.918165048,
+      "last": 0.03023,
+      "keyReasons": [
+        "24h 跌幅 -2.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 110
+    },
+    {
+      "symbol": "AAVE",
+      "pair": "AAVE-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.6,
+      "confidence": 43.954,
+      "change24h": 0.0159,
+      "volume24h": 15964600.5528144,
+      "last": 64.798,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 111
+    },
+    {
+      "symbol": "LTC",
+      "pair": "LTC-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.4,
+      "confidence": 43.828,
+      "change24h": 0.0138,
+      "volume24h": 7686789.747297176,
+      "last": 43.11,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 112
+    },
+    {
+      "symbol": "BTC",
+      "pair": "BTC-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.3,
+      "confidence": 43.786,
+      "change24h": 0.0131,
+      "volume24h": 274372740.24977326,
+      "last": 63833.0,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 113
+    },
+    {
+      "symbol": "XRP",
+      "pair": "XRP-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.3,
+      "confidence": 43.756,
+      "change24h": 0.0126,
+      "volume24h": 47070032.83393905,
+      "last": 1.13285,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 114
+    },
+    {
+      "symbol": "LINK",
+      "pair": "LINK-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.1,
+      "confidence": 43.647999999999996,
+      "change24h": 0.0108,
+      "volume24h": 10829849.8620133,
+      "last": 7.8828,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 115
+    },
+    {
+      "symbol": "ETH",
+      "pair": "ETH-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.0,
+      "confidence": 43.576,
+      "change24h": 0.0096,
+      "volume24h": 201429308.7092373,
+      "last": 1670.33,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 116
+    },
+    {
+      "symbol": "BNB",
+      "pair": "BNB-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.0,
+      "confidence": 43.624,
+      "change24h": 0.0104,
+      "volume24h": 16166311.640537,
+      "last": 606.597,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 117
+    },
+    {
+      "symbol": "DOT",
+      "pair": "DOT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 5.7,
+      "confidence": 43.432,
+      "change24h": 0.0072,
+      "volume24h": 15659541.6059686,
+      "last": 0.9623,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 118
+    },
+    {
+      "symbol": "VELVET",
+      "pair": "VELVET-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 5.7,
+      "confidence": 43.408,
+      "change24h": 0.0068,
+      "volume24h": 13919774.321926,
+      "last": 0.94439,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 119
+    },
+    {
+      "symbol": "UNI",
+      "pair": "UNI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 5.6,
+      "confidence": 43.378,
+      "change24h": 0.0063,
+      "volume24h": 11957665.32203634,
+      "last": 2.5383,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 120
+    },
+    {
+      "symbol": "XLM",
+      "pair": "XLM-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 5.4,
+      "confidence": 43.252,
+      "change24h": 0.0042,
+      "volume24h": 6574280.977008,
+      "last": 0.1899,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 121
+    },
+    {
+      "symbol": "SUI",
+      "pair": "SUI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 5.1,
+      "confidence": 43.06,
+      "change24h": 0.001,
+      "volume24h": 6415162.08252,
+      "last": 0.7555,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 122
+    },
+    {
+      "symbol": "USDC",
+      "pair": "USDC-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 5.0,
+      "confidence": 42.976,
+      "change24h": -0.0004,
+      "volume24h": 23797316.928632,
+      "last": 1.0004,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 123
+    },
+    {
+      "symbol": "XMR",
+      "pair": "XMR-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 4.6,
+      "confidence": 42.778,
+      "change24h": -0.0037,
+      "volume24h": 156723479.82022,
+      "last": 358.95,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 124
+    },
+    {
+      "symbol": "TRX",
+      "pair": "TRX-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 4.3,
+      "confidence": 42.586,
+      "change24h": -0.0069,
+      "volume24h": 11615476.27736,
+      "last": 0.3143,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 125
+    },
+    {
+      "symbol": "ASTER",
+      "pair": "ASTER-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 4.3,
+      "confidence": 42.586,
+      "change24h": -0.0069,
+      "volume24h": 9756585.510877712,
+      "last": 0.6263,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 126
+    },
+    {
+      "symbol": "RAIN",
+      "pair": "RAIN-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 4.3,
+      "confidence": 42.604,
+      "change24h": -0.0066,
+      "volume24h": 5349040.513268,
+      "last": 0.013065,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 127
+    },
+    {
+      "symbol": "FET",
+      "pair": "FET-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.9,
+      "confidence": 42.322,
+      "change24h": 0.0187,
+      "volume24h": 1981684.53105964,
+      "last": 0.1903,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 128
+    },
+    {
+      "symbol": "ZEC",
+      "pair": "ZEC-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.8,
+      "confidence": 42.304,
+      "change24h": -0.0116,
+      "volume24h": 31964435.66450422,
+      "last": 418.299,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 129
+    },
+    {
+      "symbol": "PEPE",
+      "pair": "PEPE-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.8,
+      "confidence": 42.274,
+      "change24h": 0.0179,
+      "volume24h": 4878407.605162453,
+      "last": 2.83e-06,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 130
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.7,
+      "confidence": 42.244,
+      "change24h": -0.0126,
+      "volume24h": 7015525.936318,
+      "last": 0.0607,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 131
+    },
+    {
+      "symbol": "ICP",
+      "pair": "ICP-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.6,
+      "confidence": 42.178,
+      "change24h": 0.0163,
+      "volume24h": 1305171.7309396,
+      "last": 2.295,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 132
+    },
+    {
+      "symbol": "WIF",
+      "pair": "WIF-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.5,
+      "confidence": 42.118,
+      "change24h": 0.0153,
+      "volume24h": 2616757.9156739,
+      "last": 0.159,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 133
+    },
+    {
+      "symbol": "PENGU",
+      "pair": "PENGU-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.4,
+      "confidence": 42.04,
+      "change24h": 0.014,
+      "volume24h": 1617727.621282,
+      "last": 0.0068,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 134
+    },
+    {
+      "symbol": "BCH",
+      "pair": "BCH-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.3,
+      "confidence": 41.974,
+      "change24h": 0.0129,
+      "volume24h": 1610085.602818,
+      "last": 204.9,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 135
+    },
+    {
+      "symbol": "BONK",
+      "pair": "BONK-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.3,
+      "confidence": 41.992,
+      "change24h": 0.0132,
+      "volume24h": 1259103.1051122802,
+      "last": 4.445e-06,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 136
+    },
+    {
+      "symbol": "ETHFI",
+      "pair": "ETHFI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 3.2,
+      "confidence": 41.938,
+      "change24h": 0.0123,
+      "volume24h": 1050135.6492412915,
+      "last": 0.3109,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 137
+    },
+    {
+      "symbol": "SHIB",
+      "pair": "SHIB-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 2.9,
+      "confidence": 41.722,
+      "change24h": 0.0087,
+      "volume24h": 4519463.326332308,
+      "last": 4.857e-06,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 138
+    },
+    {
+      "symbol": "NXT",
+      "pair": "NXT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 2.9,
+      "confidence": 41.716,
+      "change24h": 0.0086,
+      "volume24h": 2420790.981458,
+      "last": 0.32293,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 139
+    },
+    {
+      "symbol": "DEXE",
+      "pair": "DEXE-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 2.8,
+      "confidence": 41.686,
+      "change24h": 0.0081,
+      "volume24h": 1840089.02973524,
+      "last": 20.7958,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 140
+    },
+    {
+      "symbol": "AVAX",
+      "pair": "AVAX-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 2.5,
+      "confidence": 41.524,
+      "change24h": 0.0054,
+      "volume24h": 4823843.386093181,
+      "last": 6.609,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 141
+    },
+    {
+      "symbol": "DASH",
+      "pair": "DASH-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 2.1,
+      "confidence": 41.248,
+      "change24h": 0.0008,
+      "volume24h": 2766821.014364,
+      "last": 35.17,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 142
+    },
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.9,
+      "confidence": 41.11,
+      "change24h": -0.0015,
+      "volume24h": 2649768.157514,
+      "last": 3.7401,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 143
+    },
+    {
+      "symbol": "AVNT",
+      "pair": "AVNT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -1.9,
+      "confidence": 41.17,
+      "change24h": -0.0195,
+      "volume24h": 276937.14626,
+      "last": 0.11074,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 144
+    },
+    {
+      "symbol": "CATI",
+      "pair": "CATI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.8,
+      "confidence": 41.056,
+      "change24h": 0.0176,
+      "volume24h": 257606.473674,
+      "last": 0.05829,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 145
+    },
+    {
+      "symbol": "POL",
+      "pair": "POL-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.7,
+      "confidence": 40.99,
+      "change24h": 0.0165,
+      "volume24h": 483470.87014352,
+      "last": 0.0738,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 146
+    },
+    {
+      "symbol": "EDEN",
+      "pair": "EDEN-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.7,
+      "confidence": 41.002,
+      "change24h": 0.0167,
+      "volume24h": 220611.947396,
+      "last": 0.0425,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 147
+    },
+    {
+      "symbol": "INJ",
+      "pair": "INJ-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.6,
+      "confidence": 40.972,
+      "change24h": -0.0038,
+      "volume24h": 2760846.1177812,
+      "last": 5.144,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 148
+    },
+    {
+      "symbol": "ATOM",
+      "pair": "ATOM-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.6,
+      "confidence": 40.954,
+      "change24h": -0.0041,
+      "volume24h": 1366986.57405628,
+      "last": 1.9664,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 149
+    },
+    {
+      "symbol": "ZRO",
+      "pair": "ZRO-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.6,
+      "confidence": 40.972,
+      "change24h": -0.0038,
+      "volume24h": 1000279.289078,
+      "last": 0.9072,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 150
+    },
+    {
+      "symbol": "TEL",
+      "pair": "TEL-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.6,
+      "confidence": 40.954,
+      "change24h": 0.0159,
+      "volume24h": 395718.887024,
+      "last": 0.002477,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 151
+    },
+    {
+      "symbol": "FIL",
+      "pair": "FIL-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.5,
+      "confidence": 40.894,
+      "change24h": -0.0051,
+      "volume24h": 1346144.71839052,
+      "last": 0.7556,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 152
+    },
+    {
+      "symbol": "NOT",
+      "pair": "NOT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.5,
+      "confidence": 40.924,
+      "change24h": 0.0154,
+      "volume24h": 639081.716222,
+      "last": 0.000426,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 153
+    },
+    {
+      "symbol": "GALAX",
+      "pair": "GALAX-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -1.5,
+      "confidence": 40.888,
+      "change24h": -0.0148,
+      "volume24h": 297616.780162864,
+      "last": 0.00266,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 154
+    },
+    {
+      "symbol": "ALGO",
+      "pair": "ALGO-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.4,
+      "confidence": 40.864,
+      "change24h": -0.0056,
+      "volume24h": 2102023.26059566,
+      "last": 0.0877,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 155
+    },
+    {
+      "symbol": "MORPHO",
+      "pair": "MORPHO-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.4,
+      "confidence": 40.81,
+      "change24h": 0.0135,
+      "volume24h": 344583.842932,
+      "last": 1.9239,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 156
+    },
+    {
+      "symbol": "WLFI",
+      "pair": "WLFI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.3,
+      "confidence": 40.798,
+      "change24h": -0.0067,
+      "volume24h": 2641543.866062,
+      "last": 0.0585,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 157
+    },
+    {
+      "symbol": "HBAR",
+      "pair": "HBAR-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.3,
+      "confidence": 40.804,
+      "change24h": -0.0066,
+      "volume24h": 1396650.408357014,
+      "last": 0.07765,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 158
+    },
+    {
+      "symbol": "TIA",
+      "pair": "TIA-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.3,
+      "confidence": 40.792,
+      "change24h": 0.0132,
+      "volume24h": 494325.98279998,
+      "last": 0.3286,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 159
+    },
+    {
+      "symbol": "QNT",
+      "pair": "QNT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.3,
+      "confidence": 40.768,
+      "change24h": 0.0128,
+      "volume24h": 429202.5663494504,
+      "last": 66.247,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 160
+    },
+    {
+      "symbol": "FARTCOIN",
+      "pair": "FARTCOIN-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.2,
+      "confidence": 40.714,
+      "change24h": 0.0119,
+      "volume24h": 530626.324362,
+      "last": 0.1184,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 161
+    },
+    {
+      "symbol": "SPX",
+      "pair": "SPX-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.2,
+      "confidence": 40.744,
+      "change24h": 0.0124,
+      "volume24h": 362859.386634,
+      "last": 0.3249,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 162
+    },
+    {
+      "symbol": "BDX",
+      "pair": "BDX-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.1,
+      "confidence": 40.666,
+      "change24h": -0.0089,
+      "volume24h": 2615978.337587816,
+      "last": 0.07821,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 163
+    },
+    {
+      "symbol": "RIO",
+      "pair": "RIO-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -1.1,
+      "confidence": 40.63,
+      "change24h": -0.0105,
+      "volume24h": 217185.551844,
+      "last": 0.0385,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 164
+    },
+    {
+      "symbol": "KONET",
+      "pair": "KONET-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -1.0,
+      "confidence": 40.582,
+      "change24h": -0.0097,
+      "volume24h": 885140.606414,
+      "last": 0.04579,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 165
+    },
+    {
+      "symbol": "KAS",
+      "pair": "KAS-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.0,
+      "confidence": 40.582,
+      "change24h": 0.0097,
+      "volume24h": 876644.700800674,
+      "last": 0.03097,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 166
+    },
+    {
+      "symbol": "BNRENSHENG",
+      "pair": "BNRENSHENG-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -1.0,
+      "confidence": 40.606,
+      "change24h": -0.0101,
+      "volume24h": 317488.068644,
+      "last": 0.66998,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 167
+    },
+    {
+      "symbol": "KCS",
+      "pair": "KCS-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.9,
+      "confidence": 40.54,
+      "change24h": -0.011,
+      "volume24h": 1600137.975728,
+      "last": 6.61,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 168
+    },
+    {
+      "symbol": "S",
+      "pair": "S-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.9,
+      "confidence": 40.528,
+      "change24h": 0.0088,
+      "volume24h": 245785.691336,
+      "last": 0.03082,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 169
+    },
+    {
+      "symbol": "NIGHT",
+      "pair": "NIGHT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.8,
+      "confidence": 40.48,
+      "change24h": 0.008,
+      "volume24h": 788415.874434,
+      "last": 0.03376,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 170
+    },
+    {
+      "symbol": "IP",
+      "pair": "IP-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.8,
+      "confidence": 40.45,
+      "change24h": -0.0075,
+      "volume24h": 227303.993736,
+      "last": 0.28891,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 171
+    },
+    {
+      "symbol": "SAHARA",
+      "pair": "SAHARA-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.8,
+      "confidence": 40.48,
+      "change24h": -0.008,
+      "volume24h": 209040.329166,
+      "last": 0.01599,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 172
+    },
+    {
+      "symbol": "CRO",
+      "pair": "CRO-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.7,
+      "confidence": 40.408,
+      "change24h": -0.0068,
+      "volume24h": 352700.904360168,
+      "last": 0.05967,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 173
+    },
+    {
+      "symbol": "BAS",
+      "pair": "BAS-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.7,
+      "confidence": 40.402,
+      "change24h": -0.0067,
+      "volume24h": 228170.87079,
+      "last": 0.03232,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 174
+    },
+    {
+      "symbol": "ZBCN",
+      "pair": "ZBCN-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.6,
+      "confidence": 40.336,
+      "change24h": -0.0056,
+      "volume24h": 388463.0815842,
+      "last": 0.0025297,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 175
+    },
+    {
+      "symbol": "XPR",
+      "pair": "XPR-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.6,
+      "confidence": 40.366,
+      "change24h": 0.0061,
+      "volume24h": 339395.68668375205,
+      "last": 0.0021961,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 176
+    },
+    {
+      "symbol": "KITE",
+      "pair": "KITE-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.5,
+      "confidence": 40.294,
+      "change24h": -0.0049,
+      "volume24h": 337511.145792,
+      "last": 0.19009,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 177
+    },
+    {
+      "symbol": "PARTI",
+      "pair": "PARTI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.5,
+      "confidence": 40.3,
+      "change24h": 0.005,
+      "volume24h": 282360.304812,
+      "last": 0.0596,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 178
+    },
+    {
+      "symbol": "COLS",
+      "pair": "COLS-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.5,
+      "confidence": 40.3,
+      "change24h": 0.005,
+      "volume24h": 223482.951916,
+      "last": 0.00396,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 179
+    },
+    {
+      "symbol": "STRK",
+      "pair": "STRK-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.4,
+      "confidence": 40.258,
+      "change24h": -0.0157,
+      "volume24h": 3388351.2306748,
+      "last": 0.03429,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 180
+    },
+    {
+      "symbol": "ACN",
+      "pair": "ACN-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.3,
+      "confidence": 40.156,
+      "change24h": 0.0026,
+      "volume24h": 285856.117106,
+      "last": 0.007126,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 181
+    },
+    {
+      "symbol": "HNT",
+      "pair": "HNT-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.3,
+      "confidence": 40.198,
+      "change24h": 0.0033,
+      "volume24h": 268266.6328998,
+      "last": 0.301,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 182
+    },
+    {
+      "symbol": "CC",
+      "pair": "CC-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.2,
+      "confidence": 40.114,
+      "change24h": -0.0019,
+      "volume24h": 551455.624942,
+      "last": 0.16007,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 183
+    },
+    {
+      "symbol": "ETC",
+      "pair": "ETC-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.2,
+      "confidence": 40.12,
+      "change24h": 0.002,
+      "volume24h": 342881.734699088,
+      "last": 7.201,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 184
+    },
+    {
+      "symbol": "DOGS",
+      "pair": "DOGS-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.2,
+      "confidence": 40.096,
+      "change24h": 0.0016,
+      "volume24h": 280041.69323688,
+      "last": 4.342e-05,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 185
+    },
+    {
+      "symbol": "ANKR",
+      "pair": "ANKR-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.2,
+      "confidence": 40.15,
+      "change24h": -0.0025,
+      "volume24h": 214262.460534796,
+      "last": 0.00388,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 186
+    },
+    {
+      "symbol": "USD1",
+      "pair": "USD1-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.1,
+      "confidence": 40.054,
+      "change24h": 0.0009,
+      "volume24h": 323640.415046,
+      "last": 1.0005,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 187
+    },
+    {
+      "symbol": "PLAI",
+      "pair": "PLAI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.1,
+      "confidence": 40.078,
+      "change24h": 0.0013,
+      "volume24h": 212204.8459496,
+      "last": 0.0018741,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 188
+    },
+    {
+      "symbol": "VR",
+      "pair": "VR-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.1,
+      "confidence": 40.078,
+      "change24h": 0.0013,
+      "volume24h": 209485.217788,
+      "last": 0.001523,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 189
+    },
+    {
+      "symbol": "ULTIMA",
+      "pair": "ULTIMA-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.0,
+      "confidence": 40.018,
+      "change24h": -0.0003,
+      "volume24h": 282887.762828,
+      "last": 2289.01,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 190
+    },
+    {
+      "symbol": "USDG",
+      "pair": "USDG-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": -0.0,
+      "confidence": 40.012,
+      "change24h": -0.0002,
+      "volume24h": 236728.635364,
+      "last": 1.0008,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 191
+    },
+    {
+      "symbol": "NIL",
+      "pair": "NIL-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 0.0,
+      "confidence": 40.0,
+      "change24h": 0.0,
+      "volume24h": 227567.266328,
+      "last": 0.03728,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 192
+    }
+  ],
+  "marketOverview": "扫描 192 个币种，市场整体偏多。多头 5、空头 0、中性 0。综合靠前：XOXO(强势上涨)、ESPORTS(强势上涨)、AIN(强势上涨)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-12T17:30:27.704141+00:00",
+    "origin": "live",
+    "history_id": "2026-06-12T17-30-27.704141+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-12T17-30-27.704141+00-00.json"
+  }
+}

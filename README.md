@@ -1,8 +1,8 @@
 # ashare-research-sandbox
 
-**Codex 创意交付实战课 · Web3 研究与模拟策略验证台**
+**《Codex 与 LLM 量化交易实战》配套研究与模拟策略验证台**
 
-本仓库是 Codex 交付与验收课程的配套工作区：可运行产品在根目录 `src/`，上游对照在 `vendor/`，固定样本在 `data/`，20 讲正文在 `docs/v2/`。
+本仓库是《Codex 与 LLM 量化交易实战》的配套工作区：可运行产品在根目录 `src/`，上游对照在 `vendor/`，固定样本在 `data/`，35 讲正文在 `docs/v2/`。
 
 > **课堂契约**：课程训练的是 Codex 交付与验收，不是 Web3 交易入门。案例资产 `示例协议（WEB3-DEMO/USDT）` 完全虚构；运行时只读取固定离线样本，不连接真实交易所账户或钱包，也不能执行真实交易。
 
@@ -53,40 +53,53 @@ Get-NetTCPConnection -LocalPort 8765 -ErrorAction SilentlyContinue |
 py app.py
 ```
 
-### 与 web3-trading 联调（完整行情服务）
+### Dashboard / 机会雷达（已内置）
 
-**web3-trading** 是完整产品（FastAPI + Jinja 机会雷达），用 `python main.py` 启动；本仓库是**课程教学沙箱**（React + 固定回测样本），两者分工不同。
+交易总览、机会雷达、数据源面板均已集成在 `src/`，**只需启动本仓库**：
 
 ```powershell
-# 终端 1 — 完整 web3-trading（读取其 .env + conf/default.yaml）
-cd D:\work\gitee\web3-trading
-python main.py
-# 浏览器：http://127.0.0.1:1024/dashboard
-# 端口以 web3-trading/.env 中 SERVER_PORT 为准（常见 1024 或 10240）
-
-# 终端 2 — 课程沙箱
-cd D:\work\gitee\ashare-research-sandbox
 py app.py
-# 浏览器：http://127.0.0.1:8765/trading
+# 浏览器：http://127.0.0.1:8765/trading  或  /dashboard  或  /radar
 ```
 
-沙箱启动时会自动：
+左侧菜单「雷达」即机会雷达，无需单独启动 `vendor/web3-trading`。
 
-1. 读取 sibling 目录 `../web3-trading/.env` 与 `conf/default.yaml`
-2. 若 web3-trading 已在运行，**优先代理**其 `/api/dashboard/*`、`/api/market/*`（与机会雷达同源）
-3. 否则用 `.env` 里的密钥直连 ValueScan / DexScan / KuCoin
-4. 再不行则回退 **`data/dashboard/snapshots/`** 已保存快照
-5. 最后回退 `data/dashboard/*.json` 内置教学样本
+数据加载顺序（`src/dashboard/snapshot.py`）：
 
-**保存离线快照**（联网时执行一次，便于断网演示）：
+1. **快照层** `data/dashboard/snapshots/*.json` — 最新落盘指针；完整历史在 `snapshots/history/<dataset>/`（优先）
+2. **样本层** `data/dashboard/*.json` — 仓库内置教学样本（快照缺失或不完整时回退）
+3. **实时层** — 仅在配置了 API 密钥且 `DASHBOARD_DATA_MODE=auto|live` 时尝试公网 API
 
-```powershell
-py scripts/course.py snapshot
-# 或
-py dashboard_snapshot.py
+数据源页或 API 在线拉取成功时会自动追加历史快照；API 失败时优先展示最新落盘数据。完整性由 `src/dashboard/catalog.py` 校验；不完整的快照会被跳过，自动回退到完整样本。
+
+### 离线数据设计
+
+```text
+data/dashboard/
+├── manifest.json              # 数据集索引：来源、完整性、最近更新时间
+├── ai_picks.json              # 内置样本（git 跟踪，断网可演示）
+├── market_candles.json
+├── opportunity_scan.json
+├── …
+└── snapshots/                 # 运行时快照（联网后生成，优先于样本层）
+    ├── ai_picks.json          # 各数据集最新指针
+    ├── market_candles.json
+    └── history/               # 可回溯历史（每次在线成功追加，不覆盖）
+        ├── ai_picks/
+        └── …
 ```
 
-快照写入 `data/dashboard/snapshots/*.json`；`py app.py` 离线启动时会自动读取。
+| 命令 | 作用 |
+|------|------|
+| `py scripts/course.py snapshot` | 联网抓取 8 类 dashboard 数据，写入 `snapshots/` 并更新 `manifest.json` |
+| `py scripts/course.py sync-fixtures` | 将完整快照复制到 `data/dashboard/*.json` 内置样本（便于 git 提交、无 snapshots 也能演示） |
+| `py scripts/course.py save-offline-data` | 一键：`snapshot` + `sync-fixtures` |
+| `py scripts/course.py build-fixtures` | 用快照或种子数据补齐不完整的内置样本 |
+| `py dashboard_snapshot.py --mode auto` | 同上，可 `--dry-run` 预览 |
+
+推荐工作流：联网时执行一次 `snapshot` → 断网演示自动读快照；若快照也没有，读内置样本。
+
+可选：从 sibling `../web3-trading/.env` 复用同名 API 密钥；`vendor/web3-trading` 仅作对照，默认不代理。
 
 可选环境变量见 `.env.example`（`WEB3_TRADING_BASE_URL`、`WEB3_TRADING_UPSTREAM`）。
 
@@ -106,7 +119,7 @@ ashare-research-sandbox/
 │   └── web/                  # React 前端（Vite）→ 构建到 web/static/
 ├── vendor/                   # 只读上游：web3-trading、ai-trading
 ├── data/                     # 固定离线教学样本
-├── docs/v2/                  # 20 讲正文
+├── docs/v2/                  # 35 讲正文
 ├── docs/samples/             # 非代码练习用的小样本
 ├── skills/                   # 课程示范 Skill（repo-readiness、weekly-brief）
 ├── tests/                    # 项目验收测试
@@ -126,7 +139,7 @@ ashare-research-sandbox/
 | 策略引擎 | `src/strategy_engine/backtest/` | ai-trading 风格事件驱动回测循环 |
 | 受限 DSL | `src/strategy_engine/dsl/` | AST 白名单、校验器、前视偏差检查 |
 | 模拟风控 | `src/risk/` | 回测后的规则化风险提示 |
-| Dashboard 数据层 | `src/dashboard/` | 有限复刻 web3-trading：ValueScan / DexScan / KuCoin / 机会雷达 + 快照离线 |
+| Dashboard 数据层 | `src/dashboard/` | 有限复刻 web3-trading：ValueScan / DexScan / web3交易所 / 机会雷达 + 快照离线 |
 | Web UI | `src/web/` → `src/web/static/` | ai-trading React 壳：Ant Design 侧栏 + Quant Atelier + TradingPageShell |
 
 ### 前端开发
@@ -174,7 +187,7 @@ macOS / Linux 等价命令：`make verify`、`make check`、`make courseware-che
 
 ## 课程文档
 
-- [20 讲正文目录](docs/v2/README.md)
+- [35 讲正文目录](docs/v2/README.md)
 - [项目说明（原 lab README）](PROJECT.md)
 - [Agent / 贡献约定](AGENTS.md)
 
@@ -184,7 +197,10 @@ macOS / Linux 等价命令：`make verify`、`make check`、`make courseware-che
 
 | 文档 | 用途 |
 |------|------|
-| [product-brief.md](product-brief.md) | 产品边界与完成标准 |
+| [product-brief.md](product-brief.md) | 产品边界、完成标准与待验证假设 |
+| [research-brief.md](research-brief.md) | 调研目标、问题、证据边界与停止条件 |
+| [research-acceptance.md](research-acceptance.md) | 调研证据规则与通过、拒绝、停止条件 |
+| [context-pack.md](context-pack.md) | 验收条款到资料、权限、风险与缺口的映射 |
 | [research-report.md](research-report.md) | 调研证据包 |
 | [prd.md](prd.md) | 产品需求 |
 | [plan.md](plan.md) | 实施计划 |

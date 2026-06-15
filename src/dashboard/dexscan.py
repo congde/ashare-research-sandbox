@@ -46,22 +46,29 @@ def dex_post(path: str, body: dict[str, Any]) -> dict[str, Any]:
     return data if isinstance(data, dict) else {}
 
 
-def get_dex_trending(*, chain: str = "solana", limit: int = 20) -> dict[str, Any]:
+DEX_TRENDING_MAX_PAGE_SIZE = 50
+
+
+def get_dex_trending(*, chain: str = "solana", limit: int | None = None) -> dict[str, Any]:
     chain_name = _normalize_chain(chain)
+    page_size = DEX_TRENDING_MAX_PAGE_SIZE if limit is None else max(1, min(DEX_TRENDING_MAX_PAGE_SIZE, limit))
     body = {
         "chainName": chain_name,
         "bar": "24h",
         "order": [{"column": "value", "asc": False}],
         "page": 1,
-        "pageSize": max(1, min(50, limit)),
+        "pageSize": page_size,
     }
     resp = dex_post("/v3/dex/market/coin-rank", body)
     data = resp.get("data") or {}
     tokens = data.get("list", []) if isinstance(data, dict) else []
-    return {
+    payload: dict[str, Any] = {
         "ok": True,
         "source": "live",
         "chain": chain_name,
         "tokens": tokens,
         "total": data.get("total", len(tokens)) if isinstance(data, dict) else len(tokens),
     }
+    if limit is None:
+        payload["full"] = True
+    return payload

@@ -9,7 +9,7 @@ from dashboard.http_client import http_get
 
 
 def upstream_mode() -> str:
-    return os.environ.get("WEB3_TRADING_UPSTREAM", "auto").strip().lower()
+    return os.environ.get("WEB3_TRADING_UPSTREAM", "never").strip().lower()
 
 
 def upstream_enabled() -> bool:

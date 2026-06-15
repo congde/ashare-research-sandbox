@@ -66,17 +66,26 @@ def python_task(script: str, *args: str) -> None:
     run([str(require_venv("python")), script, *args])
 
 
+def save_offline_data() -> None:
+    python_task("dashboard_snapshot.py", "--mode", "auto")
+    python_task("scripts/build_dashboard_fixtures.py", "--sync-all")
+
+
 TASKS = {
     "setup": setup,
     "verify": lambda: python_task("verify.py"),
     "snapshot": lambda: python_task("dashboard_snapshot.py"),
+    "build-fixtures": lambda: python_task("scripts/build_dashboard_fixtures.py"),
+    "sync-fixtures": lambda: python_task("scripts/build_dashboard_fixtures.py", "--sync-all"),
+    "save-offline-data": save_offline_data,
     "courseware-check": lambda: python_task("scripts/verify_courseware.py"),
+    "asset-audit": lambda: python_task("scripts/audit_assets.py"),
     "lab-10": lambda: python_task("verify.py"),
 }
 
 
 def check() -> None:
-    for task in ("verify", "courseware-check"):
+    for task in ("verify", "asset-audit", "courseware-check"):
         print(f"==> {task}", flush=True)
         TASKS[task]()
     print("All repository checks passed.")

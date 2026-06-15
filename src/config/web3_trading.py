@@ -56,6 +56,10 @@ def get_upstream_base_url() -> str | None:
     if explicit:
         return explicit
 
+    mode = os.environ.get("WEB3_TRADING_UPSTREAM", "never").strip().lower()
+    if mode == "never":
+        return None
+
     host = os.environ.get("SERVER_HOST", "").strip()
     port = os.environ.get("SERVER_PORT", "").strip()
     if not port:

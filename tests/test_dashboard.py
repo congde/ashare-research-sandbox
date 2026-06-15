@@ -1,5 +1,14 @@
+import shutil
+
 from dashboard import api as dashboard_api
-from dashboard.snapshot import load_offline, save_snapshot
+from dashboard.snapshot import history_dir, load_offline, save_snapshot, snapshot_path
+
+
+def _cleanup_test_dataset(name: str) -> None:
+    snapshot_path(name).unlink(missing_ok=True)
+    hist = history_dir(name)
+    if hist.is_dir():
+        shutil.rmtree(hist)
 
 
 def test_dashboard_ai_picks_fixture() -> None:
@@ -10,13 +19,15 @@ def test_dashboard_ai_picks_fixture() -> None:
 
 
 def test_snapshot_roundtrip() -> None:
+    name = "test_ai_picks"
+    _cleanup_test_dataset(name)
     sample = {"ok": True, "chance": [{"symbol": "BTC"}], "risk": [], "funds": []}
-    path = save_snapshot("test_ai_picks", sample, origin="test")
+    path = save_snapshot(name, sample, origin="test")
     assert path.is_file()
-    cached = load_offline("test_ai_picks")
+    cached = load_offline(name)
     assert cached["source"] == "snapshot"
     assert cached["chance"][0]["symbol"] == "BTC"
-    path.unlink(missing_ok=True)
+    _cleanup_test_dataset(name)
 
 
 def test_opportunity_scan_offline_shape() -> None:

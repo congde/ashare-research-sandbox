@@ -69,6 +69,15 @@ class BacktestTrade:
 
 
 @dataclass(frozen=True, slots=True)
+class RiskRejection:
+    ts: datetime
+    symbol: str
+    side: str
+    rule_id: str
+    reason: str
+
+
+@dataclass(frozen=True, slots=True)
 class BacktestMetrics:
     period_start: datetime
     period_end: datetime
@@ -87,6 +96,7 @@ class BacktestResult:
     metrics: BacktestMetrics
     trades: list[BacktestTrade] = field(default_factory=list)
     equity_curve: list[tuple[datetime, Decimal]] = field(default_factory=list)
+    risk_rejections: list[RiskRejection] = field(default_factory=list)
 
 
 def compute_metrics(

@@ -12,6 +12,7 @@ from strategy_engine.backtest.models import (
     BacktestResult,
     BacktestTrade,
     FeeModel,
+    RiskRejection,
     SlippageModel,
     ZeroFee,
     ZeroSlippage,
@@ -67,7 +68,9 @@ class BacktestEngine:
     initial_capital: Decimal = Decimal("10000")
     fee_model: FeeModel = field(default_factory=ZeroFee)
     slippage_model: SlippageModel = field(default_factory=ZeroSlippage)
+    risk_manager: object | None = None
     _pending: list[_PendingOrder] = field(default_factory=list, init=False)
+    _risk_rejections: list[RiskRejection] = field(default_factory=list, init=False)
 
     def pending_orders_snapshot(self) -> list[OrderIntent]:
         return [entry.intent for entry in self._pending]
@@ -81,18 +84,67 @@ class BacktestEngine:
         trades: list[BacktestTrade] = []
         equity_curve: list[tuple[datetime, Decimal]] = []
         self._pending = []
+        self._risk_rejections = []
 
         for candle in candles:
-            self._settle_pending(candle, portfolio, trades)
+            self._settle_pending(candle, portfolio, trades, ctx)
             ctx.history.append(candle)
             intent = self.strategy_fn(ctx, candle)
             if intent is not None:
-                self._submit(intent, candle, portfolio, trades)
+                self._submit(intent, candle, portfolio, trades, ctx)
             portfolio.record_equity(candle.ts, {symbol: candle.close})
             equity_curve.append((candle.ts, portfolio.equity({symbol: candle.close})))
 
         metrics = compute_metrics(self.initial_capital, trades, equity_curve)
-        return BacktestResult(metrics=metrics, trades=trades, equity_curve=equity_curve)
+        return BacktestResult(
+            metrics=metrics,
+            trades=trades,
+            equity_curve=equity_curve,
+            risk_rejections=list(self._risk_rejections),
+        )
+
+    def _record_risk_block(
+        self,
+        intent: OrderIntent,
+        candle: Candle,
+        *,
+        rule_id: str,
+        reason: str,
+    ) -> None:
+        self._risk_rejections.append(
+            RiskRejection(
+                ts=candle.ts,
+                symbol=intent.symbol,
+                side=intent.side.value,
+                rule_id=rule_id,
+                reason=reason,
+            )
+        )
+
+    def _risk_allows(
+        self,
+        intent: OrderIntent,
+        candle: Candle,
+        ctx: StrategyContext,
+        portfolio: Portfolio,
+    ) -> bool:
+        if self.risk_manager is None:
+            return True
+        result = self.risk_manager.check(
+            intent,
+            ctx=ctx,
+            portfolio=portfolio,
+            candle=candle,
+        )
+        if result.allowed:
+            return True
+        self._record_risk_block(
+            intent,
+            candle,
+            rule_id=result.rule_id,
+            reason=result.reason,
+        )
+        return False
 
     def _submit(
         self,
@@ -100,7 +152,11 @@ class BacktestEngine:
         candle: Candle,
         portfolio: Portfolio,
         trades: list[BacktestTrade],
+        ctx: StrategyContext,
     ) -> None:
+        if not self._risk_allows(intent, candle, ctx, portfolio):
+            return
+
         if intent.type == OrderType.MARKET:
             self._fill_at_price(
                 intent,
@@ -126,13 +182,14 @@ class BacktestEngine:
         candle: Candle,
         portfolio: Portfolio,
         trades: list[BacktestTrade],
+        ctx: StrategyContext,
     ) -> None:
         if not self._pending:
             return
 
         still_pending: list[_PendingOrder] = []
         for entry in self._pending:
-            if not self._try_fill_pending(entry, candle, portfolio, trades):
+            if not self._try_fill_pending(entry, candle, portfolio, trades, ctx):
                 still_pending.append(entry)
         self._pending = still_pending
 
@@ -142,6 +199,7 @@ class BacktestEngine:
         candle: Candle,
         portfolio: Portfolio,
         trades: list[BacktestTrade],
+        ctx: StrategyContext,
     ) -> bool:
         intent = entry.intent
 
@@ -150,6 +208,8 @@ class BacktestEngine:
                 return True
             if not self._limit_crossable(intent, candle):
                 return False
+            if not self._risk_allows(intent, candle, ctx, portfolio):
+                return True
             self._fill_at_price(intent, candle, intent.price, portfolio, trades)
             return True
 
@@ -158,6 +218,8 @@ class BacktestEngine:
                 return True
             if not self._stop_triggered(intent, candle):
                 return False
+            if not self._risk_allows(intent, candle, ctx, portfolio):
+                return True
             fill_price = self.slippage_model.fill_price(intent, candle)
             self._fill_at_price(intent, candle, fill_price, portfolio, trades)
             return True

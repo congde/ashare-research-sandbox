@@ -7,6 +7,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from backtest.metrics import sharpe_ratio
+from risk.config import DEFAULT_RULE_IDS, default_risk_manager
 from strategy_engine.backtest.candles import Candle
 from strategy_engine.backtest.engine import BacktestEngine
 from strategy_engine.strategies.ma_crossover import make_ma_crossover_strategy
@@ -65,8 +66,8 @@ def prices_to_candles(prices: list[Price], symbol: str = SYMBOL) -> list[Candle]
                 timeframe="1day",
                 ts=ts,
                 open=close,
-                high=close,
-                low=close,
+                high=close * Decimal("1.002"),
+                low=close * Decimal("0.998"),
                 close=close,
                 volume=Decimal("1"),
             )
@@ -111,6 +112,17 @@ def _format_engine_result(
         for trade in result.trades
     ]
 
+    risk_rejections = [
+        {
+            "date": ts_to_date.get(rejection.ts, rejection.ts.date().isoformat()),
+            "symbol": rejection.symbol,
+            "side": rejection.side.upper(),
+            "rule_id": rejection.rule_id,
+            "reason": rejection.reason,
+        }
+        for rejection in result.risk_rejections
+    ]
+
     buy_hold_return = closes[-1] / closes[0] - 1
     strategy_return_pct = round(result.metrics.pnl_pct, 2)
     maximum_drawdown_pct = round(-result.metrics.max_drawdown_pct, 2)
@@ -131,9 +143,12 @@ def _format_engine_result(
         },
         "trades": trades,
         "curve": curve,
+        "risk_rejections": risk_rejections,
+        "risk_rules": list(DEFAULT_RULE_IDS),
         "engine": "ai-trading/event-driven",
         "assumptions": [
             "Uses ai-trading event-driven BacktestEngine (ADR-0009).",
+            "Pre-trade RiskManager gates every order intent (5 MVP rules).",
             "Uses fixed fictional Web3 daily close prices.",
             "Teaching run uses zero fee and zero slippage models.",
             "Historical sample performance cannot predict future returns.",
@@ -151,6 +166,7 @@ def run_backtest(prices: list[Price], short: int = 3, long: int = 7) -> dict:
     engine = BacktestEngine(
         strategy_fn=make_ma_crossover_strategy(short, long),
         initial_capital=INITIAL_CAPITAL,
+        risk_manager=default_risk_manager(initial_capital=INITIAL_CAPITAL),
     )
     result = engine.run(candles, symbol=SYMBOL, timeframe="1day")
     return _format_engine_result(result, prices, candles, short=short, long=long)

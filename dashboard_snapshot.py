@@ -13,8 +13,23 @@ from dashboard.refresh import refresh_all  # noqa: E402
 
 
 def main() -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Refresh dashboard snapshots for offline use.")
+    parser.add_argument(
+        "--mode",
+        default="auto",
+        choices=["auto", "live", "offline"],
+        help="Force data mode during refresh (default: auto, tries live APIs first).",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Fetch payloads without writing snapshot files.",
+    )
+    args = parser.parse_args()
     load_env()
-    result = refresh_all(save=True)
+    result = refresh_all(save=not args.dry_run, data_mode=args.mode)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if result.get("ok") else 1
 

@@ -1,22 +1,109 @@
 {
   "ok": true,
   "source": "fixture",
+  "scanTime": "2026-06-12T16:56:30Z",
+  "totalScanned": 7,
   "topK": 5,
-  "totalScanned": 30,
-  "scanTime": "2026-06-12T10:00:00Z",
-  "marketOverview": "离线样本：未连接 web3-trading 上游或未配置密钥。",
   "opportunities": [
     {
-      "symbol": "BTC",
-      "score": 82,
-      "summary": "示例机会 · 双均线 + 量能共振",
-      "signals": ["trend", "volume"]
+      "symbol": "BONK",
+      "pair": "BONK-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.8,
+      "confidence": 47.686,
+      "change24h": 0.0281,
+      "volume24h": 1257742.900318153,
+      "last": 4.46e-06,
+      "keyReasons": [
+        "24h 涨幅 2.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
     },
     {
-      "symbol": "ETH",
-      "score": 74,
-      "summary": "示例机会 · 板块资金回流",
-      "signals": ["sector", "funds"]
+      "symbol": "BCH",
+      "pair": "BCH-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.7,
+      "confidence": 47.62,
+      "change24h": 0.027,
+      "volume24h": 1648460.370034,
+      "last": 205.58,
+      "keyReasons": [
+        "24h 涨幅 2.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "APT",
+      "pair": "APT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.5,
+      "confidence": 47.512,
+      "change24h": 0.0452,
+      "volume24h": 818531.03248306,
+      "last": 0.6536,
+      "keyReasons": [
+        "24h 涨幅 4.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 4.5,
+      "confidence": 42.67,
+      "change24h": -0.0055,
+      "volume24h": 7019843.611426,
+      "last": 0.06081,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 4
+    },
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 1.8,
+      "confidence": 41.086,
+      "change24h": -0.0019,
+      "volume24h": 2686187.916622,
+      "last": 3.738,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 5
     }
-  ]
+  ],
+  "marketOverview": "扫描 7 个币种，市场整体偏多。多头 3、空头 0、中性 2。综合靠前：BONK(温和上涨)、BCH(温和上涨)、APT(温和上涨)。",
+  "scanDurationMs": 7504,
+  "engine": "sandbox-rule-based",
+  "errors": []
 }

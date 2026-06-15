@@ -78,42 +78,109 @@ def fetch_onchain(symbol: str = "BTC", *, limit: int = 1) -> dict[str, Any]:
     }
 
 
-def fetch_market_tickers(*, quote: str = "USDT", limit: int = 300) -> dict[str, Any]:
+_NUMERIC_TICKER_KEYS = (
+    "last",
+    "buy",
+    "sell",
+    "changeRate",
+    "changePrice",
+    "high",
+    "low",
+    "vol",
+    "volValue",
+    "averagePrice",
+    "takerFeeRate",
+    "makerFeeRate",
+    "takerCoefficient",
+    "makerCoefficient",
+)
+
+
+def _normalize_ticker_row(item: dict[str, Any]) -> dict[str, Any]:
+    row = dict(item)
+    for key in _NUMERIC_TICKER_KEYS:
+        if key in row and row[key] not in (None, ""):
+            try:
+                row[key] = float(row[key])
+            except (TypeError, ValueError):
+                pass
+    return row
+
+
+def fetch_kucoin_markets() -> dict[str, Any]:
+    """web3交易所 交易对元数据（全量 markets 列表）。"""
+    refresh_bases()
+    data = http_get(f"{KUCOIN_API_BASE}/api/v1/markets", timeout=15)
+    if data.get("code") not in (None, "200000"):
+        raise RuntimeError(data.get("msg", "web3交易所 markets error"))
+    markets = data.get("data") or []
+    if not isinstance(markets, list):
+        markets = []
+    return {
+        "ok": True,
+        "source": "live",
+        "full": True,
+        "count": len(markets),
+        "markets": markets,
+    }
+
+
+def fetch_ticker_stats(symbol: str = "BTC-USDT") -> dict[str, Any]:
+    """Fetch a single web3交易所 spot ticker (stats) for major pairs."""
+    refresh_bases()
+    pair = symbol.strip().upper()
+    if "-" not in pair:
+        pair = f"{pair}-USDT"
+    data = http_get(f"{KUCOIN_API_BASE}/api/v1/market/stats?symbol={quote(pair)}", timeout=10)
+    if data.get("code") not in (None, "200000"):
+        raise RuntimeError(data.get("msg", "web3交易所 stats error"))
+    raw = data.get("data") or {}
+    if not isinstance(raw, dict):
+        raise RuntimeError("web3交易所 stats payload invalid")
+    row = _normalize_ticker_row({**raw, "symbol": pair})
+    return {
+        "ok": True,
+        "source": "live",
+        "symbol": pair,
+        "ticker": row,
+    }
+
+
+def fetch_market_tickers(*, quote: str = "USDT", limit: int | None = None) -> dict[str, Any]:
+    """Fetch web3交易所 tickers. ``limit=None`` keeps every pair for the quote (full dataset)."""
     refresh_bases()
     data = http_get(f"{KUCOIN_API_BASE}/api/v1/market/allTickers", timeout=15)
     if data.get("code") not in (None, "200000"):
-        raise RuntimeError(data.get("msg", "KuCoin API error"))
+        raise RuntimeError(data.get("msg", "web3交易所 API error"))
     raw = ((data.get("data") or {}).get("ticker") or [])
     quote_upper = quote.upper()
     tickers = []
     for item in raw:
+        if not isinstance(item, dict):
+            continue
         symbol = str(item.get("symbol", ""))
         if not symbol.endswith(f"-{quote_upper}"):
             continue
-        tickers.append(
-            {
-                "symbol": symbol,
-                "last": float(item.get("last") or 0),
-                "changeRate": float(item.get("changeRate") or 0),
-                "volValue": float(item.get("volValue") or 0),
-            }
-        )
-        if len(tickers) >= limit:
+        tickers.append(_normalize_ticker_row(item))
+        if limit is not None and len(tickers) >= limit:
             break
-    return {
+    body: dict[str, Any] = {
         "ok": True,
         "source": "live",
         "quote": quote_upper,
         "count": len(tickers),
         "tickers": tickers,
     }
+    if limit is None:
+        body["full"] = True
+    return body
 
 
 def fetch_candles(
     symbol: str = "BTC-USDT",
     *,
     kline_type: str = "1day",
-    limit: int = 120,
+    limit: int | None = 120,
 ) -> dict[str, Any]:
     refresh_bases()
     pair = symbol.strip().upper()
@@ -125,19 +192,22 @@ def fetch_candles(
     )
     data = http_get(url, timeout=15)
     if data.get("code") not in (None, "200000"):
-        raise RuntimeError(data.get("msg", "KuCoin candles error"))
+        raise RuntimeError(data.get("msg", "web3交易所 candles error"))
     raw = data.get("data") or []
     candles = [item for row in raw if (item := normalize_candle(row))]
     candles.sort(key=lambda item: item["tsSec"])
-    if limit > 0:
+    if limit is not None and limit > 0:
         candles = candles[-limit:]
-    return {
+    body: dict[str, Any] = {
         "ok": True,
         "source": "live",
         "symbol": pair,
         "type": kline_type,
         "candles": candles,
     }
+    if limit is None:
+        body["full"] = True
+    return body
 
 
 def candles_to_curve(candles: list[dict[str, Any]], *, short: int = 3, long: int = 7) -> list[dict[str, Any]]:
