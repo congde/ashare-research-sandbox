@@ -1,4 +1,4 @@
-# ashare-research-sandbox 项目说明
+﻿# ashare-research-sandbox 项目说明
 
 This repository is the companion workspace for a Codex delivery course. Treat
 course prose and the runnable Web3 research sandbox as one product: examples in
@@ -8,7 +8,7 @@ course prose and the runnable Web3 research sandbox as one product: examples in
 
 - `docs/v2/`: publishable chapter drafts.
 - `src/`: runnable product code (backtest, research, strategy engine, web UI).
-- `vendor/`: read-only upstream baselines (`web3-trading`, `ai-trading`).
+- `vendor/`: read-only upstream baselines (`web3-trading`, `ai-trading`, `Qbot`).
 - `data/`: fixed offline teaching samples.
 - `skills/`: reusable Codex skills taught by the course.
 - `docs/samples/`: small source artifacts used by non-code exercises.
@@ -34,7 +34,7 @@ make verify
 On Windows PowerShell:
 
 ```powershell
-py scripts/course.py verify
+python scripts/course.py verify
 ```
 
 Before finishing a repository-wide change, run:
@@ -47,4 +47,10 @@ On Windows PowerShell:
 
 ```powershell
 py scripts/course.py check
+```
+
+Regenerate Qbot-style teaching figures after editing plot scripts:
+
+```powershell
+py scripts/course.py teaching-plots
 ```

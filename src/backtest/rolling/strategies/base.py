@@ -72,3 +72,7 @@ class Strategy(ABC):
         may do its own computation.
         """
         return True
+
+    def backtest_config_overrides(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """Optional BacktestConfig overrides for this strategy (e.g. max_hold_bars)."""
+        return {}

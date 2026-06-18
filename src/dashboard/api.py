@@ -12,7 +12,8 @@ from config.web3_trading import (
 )
 from dashboard import dexscan, market, opportunity, valuescan
 from dashboard.fixtures import load_offline
-from dashboard.mode import dashboard_data_mode, prefer_offline, try_live_public
+from dashboard.mode import dashboard_data_mode, prefer_offline, serve_offline_first, try_live_public
+from dashboard.resolve import try_cached_first
 from dashboard.normalize import normalize_ai_picks, normalize_token_fund
 from dashboard.dataset_views import trim_dex_trending, trim_market_tickers
 from dashboard.persist import annotate_cached, maybe_persist
@@ -75,8 +76,21 @@ def runtime_config() -> dict[str, Any]:
     }
 
 
-def ai_picks() -> dict[str, Any]:
+def ai_picks(*, refresh: bool = False) -> dict[str, Any]:
     load_env()
+
+    def _refresh() -> None:
+        ai_picks(refresh=True)
+
+    cached = try_cached_first(
+        "ai_picks",
+        refresh=refresh,
+        background_key="ai_picks",
+        fetch_live=_refresh,
+    )
+    if cached is not None:
+        return normalize_ai_picks(cached)
+
     hit = _try_upstream("/api/dashboard/vs/ai-picks")
     if hit:
         payload = normalize_ai_picks(hit)
@@ -92,8 +106,24 @@ def ai_picks() -> dict[str, Any]:
     return normalize_ai_picks(load_offline("ai_picks"))
 
 
-def sector_fund(trade_type: int = 1) -> dict[str, Any]:
+def sector_fund(trade_type: int = 1, *, refresh: bool = False) -> dict[str, Any]:
     load_env()
+
+    def _refresh() -> None:
+        sector_fund(trade_type, refresh=True)
+
+    cached = try_cached_first(
+        "sector_fund",
+        refresh=refresh,
+        background_key=f"sector_fund:{trade_type}",
+        fetch_live=_refresh,
+        trade_type=trade_type,
+    )
+    if cached is not None:
+        fixture = dict(cached)
+        fixture["tradeType"] = trade_type
+        return fixture
+
     hit = _try_upstream("/api/dashboard/vs/sector-fund", {"trade_type": trade_type})
     if hit:
         maybe_persist("sector_fund", hit, trade_type=trade_type)
@@ -115,9 +145,25 @@ def sector_fund(trade_type: int = 1) -> dict[str, Any]:
     return fixture
 
 
-def token_fund(symbol: str) -> dict[str, Any]:
+def token_fund(symbol: str, *, refresh: bool = False) -> dict[str, Any]:
     load_env()
     sym = symbol.strip().upper()
+
+    def _refresh() -> None:
+        token_fund(sym, refresh=True)
+
+    cached = try_cached_first(
+        "token_fund",
+        refresh=refresh,
+        background_key=f"token_fund:{sym}",
+        fetch_live=_refresh,
+        symbol=sym,
+    )
+    if cached is not None:
+        fixture = dict(cached)
+        fixture["symbol"] = sym
+        return normalize_token_fund(fixture)
+
     hit = _try_upstream("/api/dashboard/vs/token-fund", {"symbol": sym})
     if hit:
         hit["symbol"] = sym
@@ -144,9 +190,25 @@ def token_fund(symbol: str) -> dict[str, Any]:
     return normalize_token_fund(fixture)
 
 
-def onchain(symbol: str = "BTC", *, limit: int = 1) -> dict[str, Any]:
+def onchain(symbol: str = "BTC", *, limit: int = 1, refresh: bool = False) -> dict[str, Any]:
     load_env()
     sym = symbol.strip().upper()
+
+    def _refresh() -> None:
+        onchain(sym, limit=limit, refresh=True)
+
+    cached = try_cached_first(
+        "onchain",
+        refresh=refresh,
+        background_key=f"onchain:{sym}",
+        fetch_live=_refresh,
+        symbol=sym,
+    )
+    if cached is not None:
+        payload = dict(cached)
+        payload["symbol"] = sym
+        return payload
+
     hit = _try_upstream(
         "/api/dashboard/onchain",
         {"symbol": sym, "limit": max(1, min(20, limit))},
@@ -175,8 +237,24 @@ def onchain(symbol: str = "BTC", *, limit: int = 1) -> dict[str, Any]:
     return cached
 
 
-def dex_trending(*, chain: str = "solana", limit: int = 5) -> dict[str, Any]:
+def dex_trending(*, chain: str = "solana", limit: int = 5, refresh: bool = False) -> dict[str, Any]:
     load_env()
+
+    def _refresh() -> None:
+        dex_trending(chain=chain, limit=limit, refresh=True)
+
+    cached = try_cached_first(
+        "dex_trending",
+        refresh=refresh,
+        background_key=f"dex_trending:{chain}",
+        fetch_live=_refresh,
+        chain=chain,
+    )
+    if cached is not None:
+        fixture = dict(cached)
+        fixture["chain"] = chain
+        return trim_dex_trending(fixture, limit=limit)
+
     hit = _try_upstream("/api/dashboard/dex/trending", {"chain": chain, "limit": limit})
     if hit:
         hit["chain"] = chain
@@ -203,8 +281,21 @@ def dex_trending(*, chain: str = "solana", limit: int = 5) -> dict[str, Any]:
     return fixture
 
 
-def market_tickers(*, quote: str = "USDT", limit: int = 300) -> dict[str, Any]:
+def market_tickers(*, quote: str = "USDT", limit: int = 300, refresh: bool = False) -> dict[str, Any]:
     load_env()
+
+    def _refresh() -> None:
+        market_tickers(quote=quote, limit=limit, refresh=True)
+
+    cached = try_cached_first(
+        "market_tickers",
+        refresh=refresh,
+        background_key="market_tickers",
+        fetch_live=_refresh,
+    )
+    if cached is not None:
+        return trim_market_tickers(cached, quote=quote, limit=limit)
+
     hit = _try_upstream("/api/market/tickers", {"quote": quote.upper(), "limit": limit})
     if hit:
         trimmed = trim_market_tickers(hit, quote=quote, limit=limit)
@@ -242,11 +333,17 @@ def _offline_ticker_stats(symbol: str) -> dict[str, Any] | None:
     return None
 
 
-def ticker_stats(symbol: str = "BTC-USDT") -> dict[str, Any]:
+def ticker_stats(symbol: str = "BTC-USDT", *, refresh: bool = False) -> dict[str, Any]:
     load_env()
     pair = symbol.strip().upper()
     if "-" not in pair:
         pair = f"{pair}-USDT"
+
+    if serve_offline_first(refresh=refresh):
+        offline = _offline_ticker_stats(pair)
+        if offline:
+            return offline
+
     hit = _try_upstream("/api/market/ticker", {"symbol": pair})
     if hit and hit.get("ticker"):
         return hit
@@ -269,8 +366,29 @@ def opportunity_scan(
     top_k: int = 5,
     max_symbols: int = 30,
     min_volume_24h: float = 200000,
+    refresh: bool = False,
 ) -> dict[str, Any]:
     load_env()
+
+    def _refresh() -> None:
+        opportunity_scan(
+            top_k=top_k,
+            max_symbols=max_symbols,
+            min_volume_24h=min_volume_24h,
+            refresh=True,
+        )
+
+    cached = try_cached_first(
+        "opportunity_scan",
+        refresh=refresh,
+        background_key="opportunity_scan",
+        fetch_live=_refresh,
+    )
+    if cached is not None:
+        payload = dict(cached)
+        payload["topK"] = top_k
+        return payload
+
     hit = _try_upstream(
         "/api/dashboard/opportunity-scan",
         {
@@ -309,9 +427,32 @@ def market_candles(
     limit: int = 120,
     short: int = 3,
     long: int = 7,
+    refresh: bool = False,
 ) -> dict[str, Any]:
     load_env()
     pair = (symbol or primary_market_symbol()).strip().upper()
+
+    def _refresh() -> None:
+        market_candles(
+            symbol=pair,
+            kline_type=kline_type,
+            limit=limit,
+            short=short,
+            long=long,
+            refresh=True,
+        )
+
+    cached = try_cached_first(
+        "market_candles",
+        refresh=refresh,
+        background_key="market_candles",
+        fetch_live=_refresh,
+    )
+    if cached is not None:
+        payload = dict(cached)
+        payload["symbol"] = pair
+        return payload
+
     hit = _try_upstream(
         "/api/market/kline-analysis",
         {"symbol": pair, "type": kline_type, "limit": limit, "realtime": "false"},

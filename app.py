@@ -15,7 +15,15 @@ HOST = "127.0.0.1"
 PORT = 8765
 sys.path.insert(0, str(SRC))
 
-from backtest.rolling.service import execute_backtest, list_backtest_strategies  # noqa: E402
+from backtest.rolling.service import (  # noqa: E402
+    compare_strategies,
+    compare_windows,
+    execute_backtest,
+    list_backtest_strategies,
+    run_walk_forward,
+)
+from backtest.rolling.portfolio import compare_portfolio  # noqa: E402
+from factor_mining.service import run_factor_mining, run_mined_factor_backtest  # noqa: E402
 from config.env import load_env  # noqa: E402
 from dashboard import api as dashboard_api  # noqa: E402
 from paths import WEB_STATIC_DIR  # noqa: E402
@@ -125,6 +133,9 @@ class Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/validate-strategy":
                 self.validate_strategy()
                 return
+            if parsed.path == "/api/dashboard/factor-mine/backtest":
+                self.factor_mine_backtest()
+                return
             self.send_error(404)
         except Exception as error:  # pragma: no cover
             self.send_json({"error": str(error)}, status=500)
@@ -159,22 +170,37 @@ class Handler(BaseHTTPRequestHandler):
             except ValueError:
                 return default
 
+        def qb(name: str, default: bool = False) -> bool:
+            return q(name, "true" if default else "false").lower() in {"1", "true", "yes"}
+
         routes = {
             "/api/dashboard/config": lambda: dashboard_api.runtime_config(),
             "/api/dashboard/sources/status": lambda: dashboard_api.sources_status(),
             "/api/dashboard/snapshots": lambda: dashboard_api.snapshots_status(),
-            "/api/dashboard/vs/ai-picks": lambda: dashboard_api.ai_picks(),
-            "/api/dashboard/vs/sector-fund": lambda: dashboard_api.sector_fund(qi("trade_type", 1)),
-            "/api/dashboard/vs/token-fund": lambda: dashboard_api.token_fund(q("symbol", "BTC")),
-            "/api/dashboard/onchain": lambda: dashboard_api.onchain(q("symbol", "BTC"), limit=qi("limit", 1)),
+            "/api/dashboard/vs/ai-picks": lambda: dashboard_api.ai_picks(refresh=qb("refresh")),
+            "/api/dashboard/vs/sector-fund": lambda: dashboard_api.sector_fund(
+                qi("trade_type", 1),
+                refresh=qb("refresh"),
+            ),
+            "/api/dashboard/vs/token-fund": lambda: dashboard_api.token_fund(
+                q("symbol", "BTC"),
+                refresh=qb("refresh"),
+            ),
+            "/api/dashboard/onchain": lambda: dashboard_api.onchain(
+                q("symbol", "BTC"),
+                limit=qi("limit", 1),
+                refresh=qb("refresh"),
+            ),
             "/api/dashboard/dex/trending": lambda: dashboard_api.dex_trending(
                 chain=q("chain", "solana"),
                 limit=qi("limit", 5),
+                refresh=qb("refresh"),
             ),
             "/api/dashboard/opportunity-scan": lambda: dashboard_api.opportunity_scan(
                 top_k=qi("topK", 5),
                 max_symbols=qi("maxSymbols", 30),
                 min_volume_24h=float(q("minVolume24h", "200000")),
+                refresh=qb("refresh"),
             ),
             "/api/market/candles": lambda: dashboard_api.market_candles(
                 symbol=q("symbol", "") or None,
@@ -182,12 +208,17 @@ class Handler(BaseHTTPRequestHandler):
                 limit=qi("limit", 120),
                 short=qi("short", 3),
                 long=qi("long", 7),
+                refresh=qb("refresh"),
             ),
             "/api/market/tickers": lambda: dashboard_api.market_tickers(
                 quote=q("quote", "USDT"),
                 limit=qi("limit", 300),
+                refresh=qb("refresh"),
             ),
-            "/api/market/ticker": lambda: dashboard_api.ticker_stats(q("symbol", "BTC-USDT")),
+            "/api/market/ticker": lambda: dashboard_api.ticker_stats(
+                q("symbol", "BTC-USDT"),
+                refresh=qb("refresh"),
+            ),
             "/api/market/kline-analysis": lambda: dashboard_api.kline_analysis(
                 symbol=q("symbol", "BTC-USDT"),
                 kline_type=q("type", "1hour"),
@@ -212,6 +243,53 @@ class Handler(BaseHTTPRequestHandler):
                 take_profit_pct=qf("takeProfit", 5.0),
                 trailing_stop_pct=qf("trailingStop", 0.0),
                 max_hold_bars=qi("maxHoldBars", 0),
+                refresh=qb("refresh"),
+            ),
+            "/api/dashboard/backtest/compare": lambda: compare_strategies(
+                symbol=q("symbol", "") or None,
+                kline_type=q("type", "") or None,
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+                trailing_stop_pct=qf("trailingStop", 0.0),
+                max_hold_bars=qi("maxHoldBars", 0),
+            ),
+            "/api/dashboard/backtest/windows": lambda: compare_windows(
+                strategy_name=q("strategy", "ma_crossover"),
+                num_windows=qi("windows", 3),
+                symbol=q("symbol", "") or None,
+                kline_type=q("type", "") or None,
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+                trailing_stop_pct=qf("trailingStop", 0.0),
+                max_hold_bars=qi("maxHoldBars", 0),
+            ),
+            "/api/dashboard/backtest/walk-forward": lambda: run_walk_forward(
+                strategy_name=q("strategy", "ma_crossover"),
+                num_windows=qi("windows", 3),
+                symbol=q("symbol", "") or None,
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+            ),
+            "/api/dashboard/backtest/portfolio": lambda: compare_portfolio(
+                strategy_name=q("strategy", "ma_crossover"),
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+            ),
+            "/api/dashboard/factor-mine": lambda: run_factor_mining(
+                mode=q("mode", "both"),  # type: ignore[arg-type]
+                target=q("target", "return"),  # type: ignore[arg-type]
+                risk_kind=q("riskKind", "abs_ret"),  # type: ignore[arg-type]
+                symbol=q("symbol", "") or None,
+                limit=qi("limit", 120),
+                horizon=qi("horizon", 1),
+                refresh=qb("refresh"),
+                gp_generations=qi("gpGenerations", 12),
+                gp_population=qi("gpPopulation", 24),
+                seed=qi("seed", 42),
             ),
         }
         handler = routes.get(path)
@@ -275,6 +353,41 @@ class Handler(BaseHTTPRequestHandler):
             },
             status=200,
         )
+
+    def factor_mine_backtest(self) -> None:
+        length = int(self.headers.get("Content-Length", "0"))
+        body = self.rfile.read(length) if length else b"{}"
+        try:
+            payload = json.loads(body.decode("utf-8"))
+        except json.JSONDecodeError as error:
+            self.send_json({"ok": False, "message": str(error)}, status=400)
+            return
+
+        spec = payload.get("backtest_spec") or payload.get("backtestSpec")
+        if not spec:
+            self.send_json({"ok": False, "message": "缺少 backtest_spec"}, status=400)
+            return
+
+        try:
+            result = run_mined_factor_backtest(
+                backtest_spec=spec,
+                symbol=payload.get("symbol") or None,
+                limit=int(payload.get("limit") or 120),
+                stop_loss_pct=float(payload.get("stopLoss") or payload.get("stop_loss_pct") or 3.0),
+                take_profit_pct=float(payload.get("takeProfit") or payload.get("take_profit_pct") or 5.0),
+                trailing_stop_pct=float(payload.get("trailingStop") or payload.get("trailing_stop_pct") or 0.0),
+                max_hold_bars=int(payload.get("maxHoldBars") or payload.get("max_hold_bars") or 0),
+                refresh=bool(payload.get("refresh")),
+                entry_threshold=float(payload.get("entryThreshold") or payload.get("entry_threshold") or 0.5),
+            )
+            self.send_json(result, status=200 if result.get("ok", True) else 500)
+        except ValueError as error:
+            self.send_json(
+                {"ok": False, "error": "insufficient_data", "message": str(error)},
+                status=422,
+            )
+        except Exception as error:  # pragma: no cover
+            self.send_json({"ok": False, "message": str(error)}, status=500)
 
     def send_json(self, payload: dict, *, status: int) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")

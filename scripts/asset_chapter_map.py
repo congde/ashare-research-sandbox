@@ -41,9 +41,9 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "侧栏「数据源」：接入顺序与离线回退",
     ),
     "回测详情.png": (
-        "00-",
-        "回测详情页",
-        "侧栏「回测详情」：样本内指标与假设说明",
+        "26-",
+        "回测组合图表",
+        "回测页：日 K、权益曲线与买卖标记（BacktestComboChart）",
     ),
     "策略DSL.png": (
         "00-",
@@ -54,6 +54,16 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "00-",
         "风控中心页",
         "侧栏「风控中心」：回测后模拟风控提示",
+    ),
+    "多策略比较.png": (
+        "21-",
+        "多策略比较表",
+        "回测页五策略同屏比较（收益、回撤、Sharpe、交易数）",
+    ),
+    "成交明细.png": (
+        "26-",
+        "成交明细表",
+        "回测页逐笔交易：入场/出场、PnL、平仓原因、持仓K",
     ),
     "雷达数据-今日机会.png": (
         "00-",
@@ -197,6 +207,11 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "主张台账流程",
         "主张台账：从来源到 F/I/R/U",
     ),
+    "chapter-04-price-signal-equity.png": (
+        "04-",
+        "价格、信号与策略累计收益三面板",
+        "3/7 双均线：价格+指标、规则信号、shift(1) 策略路径（参考 Qbot 01-strategy）",
+    ),
     "chapter-05-entry-decision.png": (
         "05-",
         "任务能力到 Codex 入口的选择路径",
@@ -283,6 +298,11 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "从真实轨迹提炼 Skill",
         "从成功轨迹提炼 Skill 的流程（预告）",
     ),
+    "chapter-09-indicators-panel.png": (
+        "09-",
+        "固定样本上的趋势动量波动指标",
+        "SMA20、RSI、布林带与 ATR 同屏（参考 Qbot notebook 出图）",
+    ),
     "chapter-10-solution-space.png": (
         "10-",
         "从问题定义到候选方案的展开与收敛",
@@ -363,6 +383,11 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "按风险优先级做 Review",
         "Diff 审查：按风险优先级排序",
     ),
+    "chapter-16-breakout-signal-equity.png": (
+        "16-",
+        "通道突破规则三面板",
+        "价格/前高前低/信号/路径（参考 Qbot 01-strategy 第二段）",
+    ),
     "chapter-17-milestones.png": (
         "17-",
         "从用户闭环到证据门里程碑",
@@ -377,6 +402,11 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "17-",
         "并行任务依赖与所有权",
         "并行里程碑的依赖与所有权",
+    ),
+    "chapter-17-ma-crossover-trades.png": (
+        "17-",
+        "3/7 双均线交叉买卖点",
+        "固定样本上的金叉/死叉标记（参考 Qbot average.ipynb）",
     ),
     "chapter-18-repo-map.png": (
         "18-",
@@ -393,6 +423,21 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "评测改进循环",
         "Eval 改进循环（与第 31 讲呼应）",
     ),
+    "chapter-18-event-backtest-combo.png": (
+        "18-",
+        "事件驱动回测组合图",
+        "日 K 成交标记 + 权益曲线（参考 average.ipynb / BacktestComboChart）",
+    ),
+    "chapter-18-macd-trailing-backtest.png": (
+        "18-",
+        "MACD 事件回测三面板",
+        "MACD 柱 + 成交 + 权益（参考 bitcoin_bt_example 叙事）",
+    ),
+    "chapter-18-backtrader-vs-local.png": (
+        "18-",
+        "Cerebro 装配 vs 本地事件引擎",
+        "Qbot 03-backtrader.ipynb 装配顺序对照（概念图）",
+    ),
     "chapter-19-data-pipeline.png": (
         "19-",
         "竖切实现中的输入保护与边界检查点",
@@ -402,6 +447,16 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "32-",
         "毕业交付包流转",
         "毕业交付包流转（对照）",
+    ),
+    "chapter-19-metrics-comparison.png": (
+        "19-",
+        "多策略收益与回撤对比",
+        "同窗口五策略：累计收益 vs 最大回撤（参考 quantstats-rolling 思路）",
+    ),
+    "chapter-19-equity-drawdown.png": (
+        "19-",
+        "权益曲线与最大回撤",
+        "权益路径、历史峰值与回撤阴影（参考 Qbot pandas.ipynb）",
     ),
     "chapter-20-checkpoint-loop.png": (
         "20-",
@@ -427,6 +482,26 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "21-",
         "自动验收覆盖范围与人工判断缺口",
         "自动验收覆盖范围与人工判断缺口",
+    ),
+    "chapter-21-factor-mining-pipeline.png": (
+        "21-",
+        "因子挖掘工业流水线与本沙箱覆盖范围",
+        "因子挖掘：业界流水线与本沙箱边界（图 21-5）",
+    ),
+    "chapter-21-factor-ic-panel.png": (
+        "21-",
+        "因子 IC 与 train/test 对比",
+        "基线 IC + GP/ML leader train/test（参考 02-alphalens 精简）",
+    ),
+    "chapter-21-rolling-sharpe.png": (
+        "21-",
+        "滚动 Sharpe 曲线",
+        "由权益序列推导的滚动 Sharpe（参考 quantstats-rolling）",
+    ),
+    "chapter-21-compare-windows.png": (
+        "21-",
+        "多窗口收益与回撤",
+        "compare_windows 三分窗并排（稳定性检查）",
     ),
     "chapter-22-path-state.png": (
         "22-",

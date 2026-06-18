@@ -1,4 +1,4 @@
-"""Fix mechanical courseware verify issues in publishable chapters."""
+﻿"""Fix mechanical courseware verify issues in publishable chapters."""
 
 from __future__ import annotations
 
@@ -238,7 +238,7 @@ def pad_characters(text: str, num: int, minimum: int = 5000) -> str:
 
 **原理层：** Codex 创意交付要求每个阶段都能脱离聊天被接手；进度写在仓库文件（如 product-brief.md、plan.md）里。
 
-**方法层：** 委托应包含上下文、目标、边界、完成条件、禁止动作与验收命令（`py scripts/course.py verify`）。
+**方法层：** 委托应包含上下文、目标、边界、完成条件、禁止动作与验收命令（`python scripts/course.py verify`）。
 
 **案例层：** 主案例使用虚构资产 WEB3-DEMO/USDT 与 data/prices.csv；不要把样本内 Sharpe 比率写成产品价值。
 

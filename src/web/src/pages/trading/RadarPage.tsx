@@ -8,7 +8,6 @@ import {
   fetchOnchain,
   fetchOpportunityScan,
   fetchSectorFund,
-  fetchTickerStats,
 } from "../../api";
 import type { OpportunityItem, OpportunityScanPayload } from "../../types";
 import { StatusPill, TradingPageShell } from "./TradingPageShell";
@@ -61,21 +60,6 @@ function formatPrice(value?: number) {
     return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   return value.toLocaleString("en-US", { maximumFractionDigits: 4 });
-}
-
-async function ensureMajorTickers(tickers: TickerRow[]) {
-  const merged = [...tickers];
-  const missing = ["BTC", "ETH"].filter((base) => !findTickerRow(merged, base));
-  if (!missing.length) return merged;
-  const results = await Promise.allSettled(
-    missing.map((base) => fetchTickerStats(`${base}-USDT`)),
-  );
-  for (const result of results) {
-    if (result.status === "fulfilled" && result.value.ticker) {
-      merged.push(result.value.ticker as TickerRow);
-    }
-  }
-  return merged;
 }
 
 function formatChange(rate?: number) {
@@ -150,6 +134,7 @@ function RadarCard({
 export default function RadarPage() {
   const navigate = useNavigate();
   const [scanning, setScanning] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
   const [scanResult, setScanResult] = useState<OpportunityScanPayload | null>(null);
   const [tickers, setTickers] = useState<TickerRow[]>([]);
@@ -157,35 +142,50 @@ export default function RadarPage() {
   const [sectorLead, setSectorLead] = useState("-");
   const scanningRef = useRef(false);
 
-  const loadContext = useCallback(async () => {
-    const marketResult = await fetchMarketTickers(300).catch(() => null);
-    let nextTickers = ((marketResult?.tickers as TickerRow[]) || []);
-    nextTickers = await ensureMajorTickers(nextTickers);
-    setTickers(nextTickers);
+  const applyContext = useCallback(
+    (
+      marketResult: Awaited<ReturnType<typeof fetchMarketTickers>> | null,
+      onchainResult: PromiseSettledResult<Awaited<ReturnType<typeof fetchOnchain>>>,
+      sectorResult: PromiseSettledResult<Awaited<ReturnType<typeof fetchSectorFund>>>,
+    ) => {
+      const nextTickers = ((marketResult?.tickers as TickerRow[]) || []);
+      setTickers(nextTickers);
 
-    const [onchainResult, sectorResult] = await Promise.allSettled([
-      fetchOnchain("BTC"),
-      fetchSectorFund(1),
-    ]);
-
-    if (onchainResult.status === "fulfilled") {
-      const fg = onchainResult.value.marketSentiment?.fearGreed;
-      if (fg?.value != null) {
-        setFearGreed(`${fg.value}${fg.label ? ` · ${fg.label}` : ""}`);
+      if (onchainResult.status === "fulfilled") {
+        const fg = onchainResult.value.marketSentiment?.fearGreed;
+        if (fg?.value != null) {
+          setFearGreed(`${fg.value}${fg.label ? ` · ${fg.label}` : ""}`);
+        }
       }
-    }
-    if (sectorResult.status === "fulfilled") {
-      setSectorLead(leadingSector(sectorResult.value.sectors));
-    }
-  }, []);
+      if (sectorResult.status === "fulfilled") {
+        setSectorLead(leadingSector(sectorResult.value.sectors));
+      }
+    },
+    [],
+  );
 
-  const loadScan = useCallback(async () => {
+  const loadContext = useCallback(async (options?: { refresh?: boolean }) => {
+    const refresh = options?.refresh ?? false;
+    const marketResult = await fetchMarketTickers(300, { refresh }).catch(() => null);
+    const [onchainResult, sectorResult] = await Promise.allSettled([
+      fetchOnchain("BTC", { refresh }),
+      fetchSectorFund(1, { refresh }),
+    ]);
+    applyContext(marketResult, onchainResult, sectorResult);
+  }, [applyContext]);
+
+  const loadScan = useCallback(async (options?: { refresh?: boolean }) => {
+    const refresh = options?.refresh ?? false;
     if (scanningRef.current) return;
     scanningRef.current = true;
-    setScanning(true);
+    if (refresh) {
+      setRefreshing(true);
+    } else if (!scanResult) {
+      setScanning(true);
+    }
     setScanError(null);
     try {
-      const payload = await fetchOpportunityScan();
+      const payload = await fetchOpportunityScan({ refresh });
       if (!payload.ok) {
         throw new Error(payload.message || "机会扫描失败");
       }
@@ -195,12 +195,18 @@ export default function RadarPage() {
     } finally {
       scanningRef.current = false;
       setScanning(false);
+      setRefreshing(false);
     }
-  }, []);
+  }, [scanResult]);
 
   useEffect(() => {
     void loadContext();
     void loadScan();
+    const timer = window.setTimeout(() => {
+      void loadContext({ refresh: true });
+      void loadScan({ refresh: true });
+    }, 800);
+    return () => window.clearTimeout(timer);
   }, [loadContext, loadScan]);
 
   const opportunities = scanResult?.opportunities || [];
@@ -218,7 +224,8 @@ export default function RadarPage() {
   }, [scanResult?.scanTime]);
 
   const overview = useMemo(() => {
-    if (scanning && !scanResult) return "多源信号扫描进行中...";
+    if (scanning && !scanResult) return "正在加载离线样本...";
+    if (refreshing) return "后台刷新实时数据中...";
     if (scanError) return "请稍后重试或点击「扫描机会」";
     const base = scanResult?.marketOverview || "";
     const duration = scanResult?.scanDurationMs ? ` · ${(scanResult.scanDurationMs / 1000).toFixed(1)}s` : "";
@@ -227,21 +234,21 @@ export default function RadarPage() {
       return `已扫描 ${scanResult?.totalScanned || opportunities.length} 个标的${duration}`;
     }
     return "暂无扫描结果";
-  }, [scanError, opportunities.length, scanResult, scanning]);
+  }, [refreshing, scanError, opportunities.length, scanResult, scanning]);
 
   return (
     <TradingPageShell
       eyebrow="Opportunity Radar"
       title="机会雷达"
-      description="内置规则扫描：web3交易所 行情 + 可选 ValueScan 摘要。无需启动 web3-trading，直连或离线样本均可运行。"
+      description="内置规则扫描：优先展示 data/dashboard 离线全量样本；auto 模式下后台可静默刷新实时数据。"
       actions={
         <>
           <Button
             type="primary"
             className="btn-gradient"
             icon={<ReloadOutlined />}
-            loading={scanning}
-            onClick={() => void loadScan()}
+            loading={refreshing}
+            onClick={() => void loadScan({ refresh: true })}
           >
             扫描机会
           </Button>
@@ -328,7 +335,7 @@ export default function RadarPage() {
           ) : scanError ? (
             <div className="radar-state-box error">
               <span>扫描失败：{scanError}</span>
-              <Button onClick={() => void loadScan()}>重试</Button>
+              <Button onClick={() => void loadScan({ refresh: true })}>重试</Button>
             </div>
           ) : opportunities.length ? (
             <div className="radar-list">

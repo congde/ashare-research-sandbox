@@ -1,4 +1,4 @@
-"""Promote legacy 20-chapter drafts into new 33-chapter structure."""
+﻿"""Promote legacy 20-chapter drafts into new 33-chapter structure."""
 
 from __future__ import annotations
 
@@ -45,15 +45,15 @@ def fix_links(text: str) -> str:
         ("../../labs/09-weekly-brief-skill/", "../../docs/samples/"),
         ("../../skills/weekly-brief/", "../../docs/samples/"),
         ("../../skills/repo-readiness/", "../../docs/samples/"),
-        ("py scripts/course.py lab-10", "py scripts/course.py verify"),
-        ("py scripts/course.py lab-04", "py scripts/course.py verify"),
-        ("py scripts/course.py lab-06", "py scripts/course.py verify"),
-        ("py scripts/course.py lab-09", "py scripts/course.py verify"),
+        ("py scripts/course.py lab-10", "python scripts/course.py verify"),
+        ("py scripts/course.py lab-04", "python scripts/course.py verify"),
+        ("py scripts/course.py lab-06", "python scripts/course.py verify"),
+        ("py scripts/course.py lab-09", "python scripts/course.py verify"),
         ("py scripts/course.py lab-16", "py scripts/course.py check"),
-        ("make lab-04", "py scripts/course.py verify"),
-        ("make lab-10", "py scripts/course.py verify"),
+        ("make lab-04", "python scripts/course.py verify"),
+        ("make lab-10", "python scripts/course.py verify"),
         ("make check", "py scripts/course.py check"),
-        ("make verify", "py scripts/course.py verify"),
+        ("make verify", "python scripts/course.py verify"),
         ("Import-Csv labs\\10-a-share-research\\data\\prices.csv", "Import-Csv data\\prices.csv"),
         ("labs\\10-a-share-research\\data\\prices.csv", "data\\prices.csv"),
     ]
@@ -247,7 +247,7 @@ def promote_28() -> None:
 
 ## 28.4 完整示例
 
-比较「每周生成研究摘要草稿」与「自动发布买卖建议」：前者可读取固定 `data/`、运行 `py scripts/course.py verify` 并输出草稿；后者越过 PRD 非目标，必须拒绝 Automation。
+比较「每周生成研究摘要草稿」与「自动发布买卖建议」：前者可读取固定 `data/`、运行 `python scripts/course.py verify` 并输出草稿；后者越过 PRD 非目标，必须拒绝 Automation。
 
 ## 本章总结
 
@@ -988,7 +988,7 @@ def write_18() -> None:
 
 ## 18.3 完整示例
 
-委托 Codex 生成「第一条竖切」实现 Brief：改哪些模块、禁止什么、如何运行 `py scripts/course.py verify`。
+委托 Codex 生成「第一条竖切」实现 Brief：改哪些模块、禁止什么、如何运行 `python scripts/course.py verify`。
 
 ## 本章总结
 
@@ -1101,7 +1101,7 @@ def write_22() -> None:
 
 ## 22.3 完整示例
 
-从 `py scripts/course.py verify` 通过后启动本地服务，逐步记录到查看 warnings 的全路径。
+从 `python scripts/course.py verify` 通过后启动本地服务，逐步记录到查看 warnings 的全路径。
 
 ## 本章总结
 
@@ -1137,7 +1137,7 @@ def write_23() -> None:
 
 ## 23.2 从现象到最小复现
 
-以非法回测窗口 `short >= long` 为例：应先写失败测试证明问题存在，再改 [src/backtest/runner.py](../../src/backtest/runner.py)，最后运行 `py scripts/course.py verify`。
+以非法回测窗口 `short >= long` 为例：应先写失败测试证明问题存在，再改 [src/backtest/runner.py](../../src/backtest/runner.py)，最后运行 `python scripts/course.py verify`。
 
 ## 23.3 失败分类
 
@@ -1216,7 +1216,7 @@ def write_24() -> None:
 
 ## 24.3 完整示例
 
-请未参与开发的读者仅依 README、PROJECT、playbook 启动、`py scripts/course.py verify` 并说明限制。
+请未参与开发的读者仅依 README、PROJECT、playbook 启动、`python scripts/course.py verify` 并说明限制。
 
 ## 本章总结
 

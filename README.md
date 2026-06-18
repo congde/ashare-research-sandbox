@@ -1,4 +1,4 @@
-# ashare-research-sandbox
+﻿# ashare-research-sandbox
 
 **《Codex 与 LLM 量化交易实战》配套研究与模拟策略验证台**
 
@@ -105,6 +105,19 @@ data/dashboard/
 
 教学回测仍只用 `data/prices.csv` 固定样本，不构成投资建议。
 
+### 课程教学图（Qbot notebook 模式）
+
+第 4、9、16–19、21 讲正文引用的 matplotlib/PIL 教学图位于 `docs/v2/assets/generated/`。
+数据源固定为 `data/prices.csv` 与 rolling 回测引擎输出，**不**调用 tushare / backtrader。
+
+| 命令 | 作用 |
+|------|------|
+| `py scripts/course.py teaching-plots` | 重生成全部 12 张 Qbot 风格教学 PNG（200 DPI） |
+| `py scripts/generate_chapter01_figures.py` | 重生成第 1 讲证据链 PIL 图 |
+| `py scripts/scan_qbot_notebooks.py` | 扫描 `vendor/Qbot` notebook 出图模式（维护者） |
+
+对照表与落地状态见 [`vendor/QBOT_AUDIT.md`](vendor/QBOT_AUDIT.md)「已落地 notebook → 课程章节映射」。
+
 无 web3-trading 时也可单独运行沙箱；`make verify` 不依赖上游服务。
 
 ## 仓库结构
@@ -117,7 +130,7 @@ ashare-research-sandbox/
 │   ├── risk/                 # 回测后模拟风控检查
 │   ├── strategy_engine/      # 事件驱动引擎 + 受限 DSL
 │   └── web/                  # React 前端（Vite）→ 构建到 web/static/
-├── vendor/                   # 只读上游：web3-trading、ai-trading
+├── vendor/                   # 只读上游：web3-trading、ai-trading、Qbot
 ├── data/                     # 固定离线教学样本
 ├── docs/v2/                  # 35 讲正文
 ├── docs/samples/             # 非代码练习用的小样本
@@ -161,7 +174,7 @@ cd src/web
 npm run dev
 ```
 
-融合决策与已迁移模块清单见 [`vendor/FUSION.md`](vendor/FUSION.md)；ai-trading 待迁移项见 [`vendor/AI_TRADING_MIGRATION.md`](vendor/AI_TRADING_MIGRATION.md)。
+融合决策与已迁移模块清单见 [`vendor/FUSION.md`](vendor/FUSION.md)；ai-trading 待迁移项见 [`vendor/AI_TRADING_MIGRATION.md`](vendor/AI_TRADING_MIGRATION.md)；Qbot 对照审计见 [`vendor/QBOT_AUDIT.md`](vendor/QBOT_AUDIT.md)。
 
 ## HTTP API
 
@@ -176,7 +189,7 @@ npm run dev
 ## 验收
 
 ```powershell
-py scripts/course.py verify              # 交付物检查 + 上游 baseline + pytest
+python scripts/course.py verify              # 交付物检查 + 上游 baseline + pytest
 py scripts/course.py check               # verify + 章节稿链接检查
 py scripts/course.py courseware-check
 ```

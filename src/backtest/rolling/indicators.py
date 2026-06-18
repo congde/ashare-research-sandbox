@@ -40,6 +40,13 @@ class IndicatorSeries:
     macd_line: List[Optional[float]] = field(default_factory=list)
     macd_signal: List[Optional[float]] = field(default_factory=list)
     macd_histogram: List[Optional[float]] = field(default_factory=list)
+    # ADX / trend EMAs (Qbot adx_strategy.py)
+    adx: List[Optional[float]] = field(default_factory=list)
+    plus_di: List[Optional[float]] = field(default_factory=list)
+    minus_di: List[Optional[float]] = field(default_factory=list)
+    ema13: List[Optional[float]] = field(default_factory=list)
+    ema55: List[Optional[float]] = field(default_factory=list)
+    ema89: List[Optional[float]] = field(default_factory=list)
 
 
 def compute_all_indicators(candles: List[Dict[str, Any]]) -> IndicatorSeries:
@@ -91,6 +98,12 @@ def compute_all_indicators(candles: List[Dict[str, Any]]) -> IndicatorSeries:
     # --- MACD (12, 26, 9) ---
     macd_line, macd_signal, macd_hist = _rolling_macd(closes, 12, 26, 9)
 
+    # --- ADX (14) and Qbot EMA stack (13 / 55 / 89) ---
+    adx_series, plus_di, minus_di = _rolling_adx(highs, lows, closes, 14)
+    ema13 = _rolling_ema(closes, 13)
+    ema55 = _rolling_ema(closes, 55)
+    ema89 = _rolling_ema(closes, 89)
+
     return IndicatorSeries(
         sma20=sma20, sma60=sma60, rsi=rsi_series,
         bb_upper=bb_upper, bb_lower=bb_lower,
@@ -103,6 +116,8 @@ def compute_all_indicators(candles: List[Dict[str, Any]]) -> IndicatorSeries:
         support=support_s, resistance=resistance_s,
         macd_line=macd_line, macd_signal=macd_signal,
         macd_histogram=macd_hist,
+        adx=adx_series, plus_di=plus_di, minus_di=minus_di,
+        ema13=ema13, ema55=ema55, ema89=ema89,
     )
 
 
@@ -130,6 +145,9 @@ def get_analysis_at(indicators: IndicatorSeries, idx: int) -> Optional[Dict[str,
         "macdLine": round(indicators.macd_line[idx], 6) if indicators.macd_line[idx] is not None else None,
         "macdSignal": round(indicators.macd_signal[idx], 6) if indicators.macd_signal[idx] is not None else None,
         "macdHistogram": round(indicators.macd_histogram[idx], 6) if indicators.macd_histogram[idx] is not None else None,
+        "adx": round(indicators.adx[idx], 2) if indicators.adx[idx] is not None else None,
+        "plusDi": round(indicators.plus_di[idx], 2) if indicators.plus_di[idx] is not None else None,
+        "minusDi": round(indicators.minus_di[idx], 2) if indicators.minus_di[idx] is not None else None,
     }
 
 
@@ -403,6 +421,82 @@ def _classify_regime_series(
         else:
             result[i] = "transitional"
     return result
+
+
+def _ema_series(values: List[float], period: int) -> List[float]:
+    """Full-length EMA array (used internally by ADX)."""
+    n = len(values)
+    if n == 0:
+        return []
+    alpha = 2.0 / (period + 1)
+    out = [values[0]]
+    for i in range(1, n):
+        out.append(alpha * values[i] + (1 - alpha) * out[-1])
+    return out
+
+
+def _rolling_ema(values: List[float], period: int) -> List[Optional[float]]:
+    """O(n) EMA with None until `period` bars are available."""
+    n = len(values)
+    result: List[Optional[float]] = [None] * n
+    if n < period:
+        return result
+    ema_vals = _ema_series(values, period)
+    for i in range(period - 1, n):
+        result[i] = ema_vals[i]
+    return result
+
+
+def _rolling_adx(
+    highs: List[float],
+    lows: List[float],
+    closes: List[float],
+    period: int = 14,
+) -> tuple:
+    """O(n) ADX with +DI / -DI (Wilder-style EMA smoothing)."""
+    n = len(closes)
+    adx: List[Optional[float]] = [None] * n
+    plus_di: List[Optional[float]] = [None] * n
+    minus_di: List[Optional[float]] = [None] * n
+
+    if n < period + 1:
+        return adx, plus_di, minus_di
+
+    tr = [0.0] * n
+    plus_dm = [0.0] * n
+    minus_dm = [0.0] * n
+    for i in range(1, n):
+        hl = highs[i] - lows[i]
+        hc = abs(highs[i] - closes[i - 1])
+        lc = abs(lows[i] - closes[i - 1])
+        tr[i] = max(hl, hc, lc)
+        up_move = highs[i] - highs[i - 1]
+        down_move = lows[i - 1] - lows[i]
+        if up_move > down_move and up_move > 0:
+            plus_dm[i] = up_move
+        if down_move > up_move and down_move > 0:
+            minus_dm[i] = down_move
+
+    atr_ema = _ema_series(tr, period)
+    plus_ema = _ema_series(plus_dm, period)
+    minus_ema = _ema_series(minus_dm, period)
+
+    dx = [0.0] * n
+    for i in range(period, n):
+        atr_val = max(atr_ema[i], 1e-10)
+        pdi = 100.0 * plus_ema[i] / atr_val
+        mdi = 100.0 * minus_ema[i] / atr_val
+        plus_di[i] = pdi
+        minus_di[i] = mdi
+        denom = max(pdi + mdi, 1e-10)
+        dx[i] = 100.0 * abs(pdi - mdi) / denom
+
+    adx_ema = _ema_series(dx, period)
+    warmup = period * 2 - 1
+    for i in range(warmup, n):
+        adx[i] = adx_ema[i]
+
+    return adx, plus_di, minus_di
 
 
 def _rolling_macd(

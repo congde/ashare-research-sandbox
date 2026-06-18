@@ -12,6 +12,13 @@ import type {
   StrategyValidationResult,
   RollingBacktestPayload,
   RollingBacktestStrategy,
+  BacktestComparePayload,
+  BacktestPortfolioPayload,
+  BacktestWalkForwardPayload,
+  BacktestWindowsPayload,
+  FactorBacktestSpec,
+  FactorMiningPayload,
+  MinedFactorBacktestPayload,
 } from "./types";
 
 export async function fetchReport(short = 3, long = 7): Promise<ReportPayload> {
@@ -32,20 +39,32 @@ async function fetchDashboard<T>(path: string): Promise<T> {
   return payload;
 }
 
+function withRefresh(path: string, refresh?: boolean) {
+  if (!refresh) {
+    return path;
+  }
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}refresh=true`;
+}
+
 export function fetchDashboardSources(): Promise<DashboardSourcesStatus> {
   return fetchDashboard("/api/dashboard/sources/status");
 }
 
-export function fetchAiPicks(): Promise<DashboardAiPicks> {
-  return fetchDashboard("/api/dashboard/vs/ai-picks");
+export function fetchAiPicks(options?: { refresh?: boolean }) {
+  return fetchDashboard<DashboardAiPicks>(withRefresh("/api/dashboard/vs/ai-picks", options?.refresh));
 }
 
-export function fetchOnchain(symbol = "BTC"): Promise<DashboardOnchain> {
-  return fetchDashboard(`/api/dashboard/onchain?symbol=${encodeURIComponent(symbol)}&limit=1`);
+export function fetchOnchain(symbol = "BTC", options?: { refresh?: boolean }) {
+  return fetchDashboard<DashboardOnchain>(
+    withRefresh(`/api/dashboard/onchain?symbol=${encodeURIComponent(symbol)}&limit=1`, options?.refresh),
+  );
 }
 
-export function fetchSectorFund(tradeType = 1): Promise<DashboardSectorFund> {
-  return fetchDashboard(`/api/dashboard/vs/sector-fund?trade_type=${tradeType}`);
+export function fetchSectorFund(tradeType = 1, options?: { refresh?: boolean }) {
+  return fetchDashboard<DashboardSectorFund>(
+    withRefresh(`/api/dashboard/vs/sector-fund?trade_type=${tradeType}`, options?.refresh),
+  );
 }
 
 export function fetchDexTrending(chain = "solana", limit = 5) {
@@ -54,15 +73,15 @@ export function fetchDexTrending(chain = "solana", limit = 5) {
   );
 }
 
-export function fetchMarketTickers(limit = 300) {
+export function fetchMarketTickers(limit = 300, options?: { refresh?: boolean }) {
   return fetchDashboard<{ ok: boolean; count?: number; tickers?: unknown[] }>(
-    `/api/market/tickers?quote=USDT&limit=${limit}`,
+    withRefresh(`/api/market/tickers?quote=USDT&limit=${limit}`, options?.refresh),
   );
 }
 
-export function fetchTickerStats(symbol: string) {
+export function fetchTickerStats(symbol: string, options?: { refresh?: boolean }) {
   return fetchDashboard<{ ok: boolean; ticker?: { symbol?: string; last?: number; changeRate?: number } }>(
-    `/api/market/ticker?symbol=${encodeURIComponent(symbol)}`,
+    withRefresh(`/api/market/ticker?symbol=${encodeURIComponent(symbol)}`, options?.refresh),
   );
 }
 
@@ -78,12 +97,16 @@ export function fetchOpportunityScan(options?: {
   topK?: number;
   maxSymbols?: number;
   minVolume24h?: number;
+  refresh?: boolean;
 }) {
   const params = new URLSearchParams({
     topK: String(options?.topK ?? 5),
     maxSymbols: String(options?.maxSymbols ?? 30),
     minVolume24h: String(options?.minVolume24h ?? 200_000),
   });
+  if (options?.refresh) {
+    params.set("refresh", "true");
+  }
   return fetchDashboard<OpportunityScanPayload>(`/api/dashboard/opportunity-scan?${params}`);
 }
 
@@ -140,7 +163,7 @@ export function fetchLlmSignalAnalysis(symbol = "BTC", model = "deepseek/deepsee
   return submitLlmSignalAnalysis(symbol, model);
 }
 
-export function fetchMarketCandles(short = 3, long = 7, symbol?: string) {
+export function fetchMarketCandles(short = 3, long = 7, symbol?: string, options?: { refresh?: boolean }) {
   const params = new URLSearchParams({
     short: String(short),
     long: String(long),
@@ -149,6 +172,9 @@ export function fetchMarketCandles(short = 3, long = 7, symbol?: string) {
   });
   if (symbol) {
     params.set("symbol", symbol);
+  }
+  if (options?.refresh) {
+    params.set("refresh", "true");
   }
   return fetchDashboard<MarketCandlesPayload>(`/api/market/candles?${params.toString()}`);
 }
@@ -184,6 +210,7 @@ export interface RunRollingBacktestOptions {
   takeProfit?: number;
   trailingStop?: number;
   maxHoldBars?: number;
+  refresh?: boolean;
 }
 
 export async function runRollingBacktest(
@@ -203,10 +230,164 @@ export async function runRollingBacktest(
   if (options.type) {
     params.set("type", options.type);
   }
+  if (options.refresh) {
+    params.set("refresh", "1");
+  }
   const response = await fetch(`/api/dashboard/backtest?${params}`);
   const payload = (await response.json()) as RollingBacktestPayload;
   if (!response.ok || !payload.ok) {
     throw new Error(payload.message ?? "回测失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestCompare(
+  options: RunRollingBacktestOptions = {},
+): Promise<BacktestComparePayload> {
+  const params = new URLSearchParams({
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+    trailingStop: String(options.trailingStop ?? 0),
+    maxHoldBars: String(options.maxHoldBars ?? 0),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  if (options.type) {
+    params.set("type", options.type);
+  }
+  const response = await fetch(`/api/dashboard/backtest/compare?${params}`);
+  const payload = (await response.json()) as BacktestComparePayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "策略比较失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestWindows(
+  options: RunRollingBacktestOptions & { windows?: number } = {},
+): Promise<BacktestWindowsPayload> {
+  const params = new URLSearchParams({
+    strategy: options.strategy ?? "ma_crossover",
+    windows: String(options.windows ?? 3),
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  const response = await fetch(`/api/dashboard/backtest/windows?${params}`);
+  const payload = (await response.json()) as BacktestWindowsPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "窗口比较失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestWalkForward(
+  options: RunRollingBacktestOptions & { windows?: number } = {},
+): Promise<BacktestWalkForwardPayload> {
+  const params = new URLSearchParams({
+    strategy: options.strategy ?? "ma_crossover",
+    windows: String(options.windows ?? 3),
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  const response = await fetch(`/api/dashboard/backtest/walk-forward?${params}`);
+  const payload = (await response.json()) as BacktestWalkForwardPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "Walk-forward 优化失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestPortfolio(
+  options: RunRollingBacktestOptions = {},
+): Promise<BacktestPortfolioPayload> {
+  const params = new URLSearchParams({
+    strategy: options.strategy ?? "ma_crossover",
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+  });
+  const response = await fetch(`/api/dashboard/backtest/portfolio?${params}`);
+  const payload = (await response.json()) as BacktestPortfolioPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "组合回测失败");
+  }
+  return payload;
+}
+
+export interface FetchFactorMineOptions {
+  mode?: "gp" | "ml" | "both";
+  target?: "return" | "risk";
+  riskKind?: "abs_ret" | "realized_vol";
+  symbol?: string;
+  limit?: number;
+  horizon?: number;
+  gpGenerations?: number;
+  gpPopulation?: number;
+  seed?: number;
+  refresh?: boolean;
+}
+
+export async function fetchFactorMine(options: FetchFactorMineOptions = {}): Promise<FactorMiningPayload> {
+  const params = new URLSearchParams({
+    mode: options.mode ?? "both",
+    target: options.target ?? "return",
+    riskKind: options.riskKind ?? "abs_ret",
+    limit: String(options.limit ?? 120),
+    horizon: String(options.horizon ?? 1),
+    gpGenerations: String(options.gpGenerations ?? 10),
+    gpPopulation: String(options.gpPopulation ?? 20),
+    seed: String(options.seed ?? 42),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  if (options.refresh) {
+    params.set("refresh", "1");
+  }
+  const response = await fetch(`/api/dashboard/factor-mine?${params}`);
+  const payload = (await response.json()) as FactorMiningPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "因子挖掘失败");
+  }
+  return payload;
+}
+
+export interface RunMinedFactorBacktestOptions extends RunRollingBacktestOptions {
+  backtestSpec: FactorBacktestSpec;
+  entryThreshold?: number;
+}
+
+export async function runMinedFactorBacktest(
+  options: RunMinedFactorBacktestOptions,
+): Promise<MinedFactorBacktestPayload> {
+  const response = await fetch("/api/dashboard/factor-mine/backtest", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      backtest_spec: options.backtestSpec,
+      symbol: options.symbol,
+      limit: options.limit ?? 120,
+      stopLoss: options.stopLoss ?? 3,
+      takeProfit: options.takeProfit ?? 5,
+      trailingStop: options.trailingStop ?? 0,
+      maxHoldBars: options.maxHoldBars ?? 0,
+      refresh: options.refresh ?? false,
+      entryThreshold: options.entryThreshold ?? 0.5,
+    }),
+  });
+  const payload = (await response.json()) as MinedFactorBacktestPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "挖掘因子回测失败");
   }
   return payload;
 }

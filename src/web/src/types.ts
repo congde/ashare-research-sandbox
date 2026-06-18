@@ -31,8 +31,13 @@ export interface BacktestMetrics {
 
 export interface CurvePoint {
   date: string;
+  /** Unix seconds — preferred for lightweight-charts markers alignment */
+  ts?: number;
   equity: number;
   close: number;
+  open?: number;
+  high?: number;
+  low?: number;
   short_ma?: number | null;
   long_ma?: number | null;
 }
@@ -345,6 +350,15 @@ export interface RollingBacktestStrategy {
   displayName: string;
 }
 
+export interface RollingChartCandle {
+  ts: number;
+  date?: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
 export interface RollingEquityPoint {
   idx: number;
   ts: number;
@@ -394,8 +408,221 @@ export interface RollingBacktestPayload {
   trailing_stop_pct?: number;
   max_hold_bars?: number;
   equity_curve: RollingEquityPoint[];
+  chart_candles?: RollingChartCandle[];
+  warmup_bars?: number;
+  data_source?: string;
+  data_from?: string;
+  data_through?: string;
+  data_saved_at?: string;
+  data_note?: string;
   trades: RollingTrade[];
   assumptions?: string[];
   message?: string;
   error?: string;
+}
+
+export interface BacktestCompareRow {
+  strategy_key: string;
+  strategy: string;
+  total_return_pct: number;
+  max_drawdown_pct: number;
+  sharpe_ratio: number;
+  win_rate: number;
+  total_trades: number;
+  calmar_ratio: number;
+  profit_factor: number;
+}
+
+export interface BacktestComparePayload {
+  ok: boolean;
+  engine?: string;
+  symbol: string;
+  kline_type: string;
+  total_candles: number;
+  stop_loss_pct: number;
+  take_profit_pct: number;
+  strategies: BacktestCompareRow[];
+  leader?: string;
+  laggard?: string;
+  assumptions?: string[];
+  message?: string;
+}
+
+export interface BacktestWindowRow {
+  window: number;
+  bars?: number;
+  candles?: number;
+  start_idx?: number;
+  end_idx?: number;
+  total_return_pct: number;
+  max_drawdown_pct: number;
+  total_trades: number;
+  win_rate?: number;
+}
+
+export interface BacktestWindowsPayload {
+  ok: boolean;
+  engine?: string;
+  strategy_key: string;
+  strategy?: string;
+  symbol: string;
+  kline_type: string;
+  num_windows: number;
+  windows: BacktestWindowRow[];
+  positive_windows: number;
+  stable: boolean;
+  assumptions?: string[];
+  message?: string;
+}
+
+export interface BacktestWalkForwardWindowRow {
+  window: number;
+  trainSize: number;
+  testSize: number;
+  inSampleSharpe: number;
+  outOfSampleSharpe: number;
+  outOfSampleReturn: number;
+  bestParams: Record<string, unknown>;
+}
+
+export interface BacktestWalkForwardPayload {
+  ok: boolean;
+  strategy_key: string;
+  symbol: string;
+  kline_type: string;
+  best_params: Record<string, unknown>;
+  in_sample_sharpe: number;
+  out_of_sample_sharpe: number;
+  out_of_sample_return_pct: number;
+  is_oos_sharpe_gap: number;
+  overfit_warning: boolean;
+  num_windows: number;
+  windows: BacktestWalkForwardWindowRow[];
+  assumptions?: string[];
+  message?: string;
+}
+
+export interface BacktestPortfolioLegRow {
+  symbol: string;
+  weight: number;
+  total_return_pct: number;
+  max_drawdown_pct: number;
+  sharpe_ratio: number;
+  total_trades: number;
+}
+
+export interface BacktestPortfolioCorrelation {
+  a: string;
+  b: string;
+  correlation: number;
+}
+
+export interface BacktestPortfolioPayload {
+  ok: boolean;
+  strategy_key: string;
+  legs: BacktestPortfolioLegRow[];
+  pair_correlations: BacktestPortfolioCorrelation[];
+  equal_weight_daily_return_sum_pct: number;
+  equal_weight_leg_avg_return_pct: number;
+  diversification_hint?: string;
+  assumptions?: string[];
+  message?: string;
+}
+
+export interface FactorMetricsView {
+  ic_mean: number;
+  ic_std: number;
+  ir: number;
+  hit_rate: number;
+  sample_count: number;
+  quintile_spread?: number;
+  turnover_rate?: number;
+  top_quintile_return?: number;
+  bottom_quintile_return?: number;
+}
+
+export interface FactorValidationView {
+  quintile_spread: number;
+  turnover_rate: number;
+  ic_decay: number;
+}
+
+export interface FactorBacktestSpec {
+  factor_source: "gp" | "ml";
+  expr?: Record<string, unknown>;
+  weights?: Record<string, number>;
+  label?: string;
+  horizon?: number;
+  mining_target?: "return" | "risk";
+  application?: string;
+}
+
+export interface FactorRiskSpec extends FactorBacktestSpec {
+  application?: "position_scale";
+}
+
+export interface RiskApplicationPreview {
+  method?: string;
+  base_size?: number;
+  sample_tail?: Array<{ idx: number; risk_z: number; position_scale: number }>;
+  mean_position_scale?: number;
+  note?: string;
+}
+
+export interface FactorMiningLeader {
+  method: "gp" | "ml";
+  label?: string;
+  train_ic?: number;
+  test_ic?: number;
+  backtest_spec?: FactorBacktestSpec;
+  risk_spec?: FactorRiskSpec;
+  validation?: FactorValidationView;
+}
+
+export interface FactorMiningBranch {
+  method: "gp" | "ml";
+  expression?: string;
+  formula?: string;
+  fitness?: number;
+  complexity?: number;
+  selected_features?: string[];
+  weights?: Record<string, number>;
+  train?: FactorMetricsView;
+  test?: FactorMetricsView;
+  overfit_gap?: number;
+  backtest_spec?: FactorBacktestSpec;
+  univariate_screen?: Array<{ feature: string; ic_mean: number; abs_ic?: number }>;
+}
+
+export interface FactorMiningPayload {
+  ok: boolean;
+  engine?: string;
+  mining_target?: "return" | "risk";
+  risk_kind?: "abs_ret" | "realized_vol";
+  metric_name?: string;
+  label_description?: string;
+  application?: string;
+  mode: "gp" | "ml" | "both";
+  symbol: string;
+  kline_type: string;
+  horizon_bars: number;
+  sample_bars: number;
+  train_bars: number;
+  test_bars: number;
+  feature_count: number;
+  features: string[];
+  baseline_univariate?: Array<{ feature: string; ic_mean: number; ir: number; hit_rate: number }>;
+  gp?: FactorMiningBranch;
+  ml?: FactorMiningBranch;
+  leader?: FactorMiningLeader | null;
+  warnings?: string[];
+  what_it_proves?: string[];
+  risk_application?: RiskApplicationPreview;
+  message?: string;
+}
+
+export interface MinedFactorBacktestPayload extends RollingBacktestPayload {
+  factor_source?: string;
+  factor_label?: string;
+  backtest_spec?: FactorBacktestSpec;
 }

@@ -1,8 +1,14 @@
 # Upstream fusion plan
 
-Two upstream repositories are preserved as read-only baselines under `vendor/`.
+Three upstream repositories are preserved as read-only baselines under `vendor/`.
 All runnable product code lives under `src/`, aligned with the web3-trading
 `src/` layout.
+
+| Baseline | Role |
+|---|---|
+| `web3-trading` | Primary product shape, metrics, dashboard patterns |
+| `ai-trading` | Restricted DSL, event-driven backtest, risk simulation |
+| `Qbot` | Classic strategy rules and quant concept docs (see [`QBOT_AUDIT.md`](QBOT_AUDIT.md)) |
 
 | Product concern | Primary source | Secondary source | Local decision |
 |---|---|---|---|
@@ -34,7 +40,8 @@ All runnable product code lives under `src/`, aligned with the web3-trading
 | Teaching UI | `src/web/static/` | Metrics, risk checks, DSL validator panel |
 
 See also [`AI_TRADING_MIGRATION.md`](AI_TRADING_MIGRATION.md) for the remaining
-ai-trading migration backlog.
+ai-trading migration backlog, and [`QBOT_AUDIT.md`](QBOT_AUDIT.md) for Qbot
+comparison (baseline-only; no runtime import).
 
 ## Still baseline-only (not wired into the teaching app)
 

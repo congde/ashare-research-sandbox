@@ -80,6 +80,7 @@ TASKS = {
     "save-offline-data": save_offline_data,
     "courseware-check": lambda: python_task("scripts/verify_courseware.py"),
     "asset-audit": lambda: python_task("scripts/audit_assets.py"),
+    "teaching-plots": lambda: python_task("scripts/generate_qbot_teaching_plots.py"),
     "lab-10": lambda: python_task("verify.py"),
 }
 

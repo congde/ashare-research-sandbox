@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-"""MACD Strategy — trend-following via MACD crossover and histogram."""
+"""MACD Strategy — trend-following via MACD crossover and histogram.
+
+Scoring variant used in multi-strategy compare; see also `macd_crossover.py`
+for Qbot-style binary cross (vendor/Qbot/qbot/engine/backtest/bitcoin_bt_example.py).
+"""
 from __future__ import annotations
 from typing import Any, Dict, List, Optional
 

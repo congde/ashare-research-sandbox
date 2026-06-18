@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Button, Space } from "antd";
 import { validateStrategy } from "../../api";
 import type { StrategyValidationResult } from "../../types";
-import { QuantGlowCard, SectionHeader, StatusPill, TradingPageShell } from "./TradingPageShell";
+import { QuantGlowCard, SectionHeader, SignalRow, StatusPill, TradingPageShell } from "./TradingPageShell";
 
 const DEFAULT_CODE = `def on_tick(ctx, candle):
     short = sum(ctx.history[-3:]) / 3
@@ -13,6 +14,7 @@ const DEFAULT_CODE = `def on_tick(ctx, candle):
 `;
 
 export default function StrategyPage() {
+  const navigate = useNavigate();
   const [code, setCode] = useState(DEFAULT_CODE);
   const [result, setResult] = useState<StrategyValidationResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -38,11 +40,15 @@ export default function StrategyPage() {
     <TradingPageShell
       eyebrow="Strategy DSL"
       title="受限策略 DSL 校验"
-      description="在策略代码进入回测前，先检查 import 安全与前视偏差。接口来自 ai-trading strategy_engine/dsl。"
+      description="在策略代码进入回测前，先检查 import 安全与前视偏差。通过后进入 /backtests 做历史模拟，再到 /risk 核对拒绝。"
       actions={
-        <StatusPill tone={result?.valid ? "profit" : "ai"}>
-          {result ? (result.valid ? "通过" : "待修复") : "等待校验"}
-        </StatusPill>
+        <Space>
+          <Button onClick={() => navigate("/backtests")}>去策略回测</Button>
+          <Button onClick={() => navigate("/risk")}>去风控中心</Button>
+          <StatusPill tone={result?.valid ? "profit" : "ai"}>
+            {result ? (result.valid ? "通过" : "待修复") : "等待校验"}
+          </StatusPill>
+        </Space>
       }
     >
       <section className="trading-grid">
@@ -81,6 +87,17 @@ export default function StrategyPage() {
           >
             {result ? JSON.stringify(result, null, 2) : "等待校验..."}
           </pre>
+        </QuantGlowCard>
+
+        <QuantGlowCard
+          className="trading-span-12"
+          title={<SectionHeader title="下一步：回测证据链" description="docs/samples/backtest-teaching-guide.md" />}
+        >
+          <div className="trading-list">
+            <SignalRow title="回测 = 历史模拟，不是真实下单" meta="第 18–21 讲" />
+            <SignalRow title="策略 DSL 通过 → /backtests 运行 → /risk 复核" meta="第 26 讲页面路径" />
+            <SignalRow title="CLI：py scripts/backtest_lab.py compare" meta="五策略同屏比较" />
+          </div>
         </QuantGlowCard>
       </section>
     </TradingPageShell>

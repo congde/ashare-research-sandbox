@@ -7,14 +7,21 @@ import {
   type LineData,
 } from "lightweight-charts";
 import { useThemeMode } from "../../contexts/ThemeContext";
-import type { CurvePoint, Trade } from "../../types";
+import type { CurvePoint, RollingTrade, Trade } from "../../types";
 import { baseChartOptions, chartPalette } from "./chartTheme";
-import { curveToCandles, curveToEquitySeries, curveToMaSeries, tradesToMarkers } from "./series";
+import {
+  curveToCandles,
+  curveToEquitySeries,
+  curveToMaSeries,
+  rollingTradesToMarkers,
+  tradesToMarkers,
+} from "./series";
 import "./trading-chart.css";
 
 export interface TradingChartProps {
   curve: CurvePoint[];
   trades?: Trade[];
+  rollingTrades?: RollingTrade[];
   height?: number;
   variant?: "compact" | "standard" | "mini";
   showEquity?: boolean;
@@ -24,6 +31,7 @@ export interface TradingChartProps {
 export default function TradingChart({
   curve,
   trades = [],
+  rollingTrades = [],
   height,
   variant = "standard",
   showEquity = false,
@@ -106,24 +114,36 @@ export default function TradingChart({
       }
     }
 
-    if (showEquity && variant === "standard") {
+    if (showEquity && variant !== "mini") {
       const equitySeries = chart.addLineSeries({
         color: colors.equity,
         lineWidth: 2,
         title: "权益",
         priceScaleId: "equity",
         priceLineVisible: false,
+        lastValueVisible: variant !== "compact",
       });
       chart.priceScale("equity").applyOptions({
-        scaleMargins: { top: 0.75, bottom: 0 },
+        scaleMargins: { top: variant === "compact" ? 0.82 : 0.75, bottom: 0 },
         borderColor: colors.border,
       });
       equitySeries.setData(curveToEquitySeries(curve) as LineData[]);
+
+      const equityMarkers =
+        rollingTrades.length > 0
+          ? rollingTradesToMarkers(rollingTrades)
+          : tradesToMarkers(trades);
+      if (equityMarkers.length) {
+        equitySeries.setMarkers(equityMarkers);
+      }
     }
 
-    const markers = tradesToMarkers(trades);
-    if (markers.length && variant !== "mini") {
-      candleSeries.setMarkers(markers);
+    const priceMarkers =
+      rollingTrades.length > 0
+        ? rollingTradesToMarkers(rollingTrades)
+        : tradesToMarkers(trades);
+    if (priceMarkers.length && variant !== "mini") {
+      candleSeries.setMarkers(priceMarkers);
     }
 
     chart.timeScale().fitContent();
@@ -141,7 +161,7 @@ export default function TradingChart({
       chart.remove();
       chartRef.current = null;
     };
-  }, [curve, trades, mode, resolvedHeight, showEquity, variant]);
+  }, [curve, trades, rollingTrades, mode, resolvedHeight, showEquity, variant]);
 
   if (!curve.length) {
     return <div className={`trading-chart trading-chart-empty ${className ?? ""}`}>暂无 K 线数据</div>;

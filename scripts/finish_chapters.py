@@ -1,4 +1,4 @@
-"""Create asset placeholders and pad chapters to pass courseware verify."""
+﻿"""Create asset placeholders and pad chapters to pass courseware verify."""
 
 from __future__ import annotations
 
@@ -317,7 +317,7 @@ def generic_pad() -> None:
                 f"\n\n## 深化讨论 {n}（第 {num} 讲·{title}）\n\n"
                 f"本段补充第 {num} 讲「{title}」的论证材料。Codex 创意交付强调：每个阶段都要能脱离聊天被接手。"
                 f"请检查本讲交付物是否服务固定离线 Web3 沙盒，是否写清停止线，是否可用 "
-                f"`py scripts/course.py verify` 或相应用户测试脚本验证。"
+                f"`python scripts/course.py verify` 或相应用户测试脚本验证。"
                 f"不要把样本内回测盈利写成产品价值；不要把 Unknown 改成 Fact；不要扩大实时交易范围。"
                 f"委托示范应包含：上下文、目标、边界、完成条件、禁止动作、验收命令。"
                 f"人工必须保留：方向决定、风险接受、范围批准、停止与升级。"
