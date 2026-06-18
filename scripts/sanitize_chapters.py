@@ -41,8 +41,53 @@ def remove_section(text: str, heading_prefix: str) -> str:
     return text
 
 
+def remove_numbered_section(text: str, heading_text: str) -> str:
+    pattern = re.compile(
+        rf"^## \d+\.\d+\s+{re.escape(heading_text)}.*$",
+        re.M,
+    )
+    while True:
+        match = pattern.search(text)
+        if not match:
+            break
+        start = match.start()
+        rest = text[match.end() :]
+        next_heading = re.search(r"^## ", rest, re.M)
+        end = match.end() + (next_heading.start() if next_heading else len(rest))
+        text = text[:start].rstrip() + "\n\n" + text[end:].lstrip()
+    return text
+
+
+def remove_any_heading_section(text: str, heading_text: str) -> str:
+    pattern = re.compile(
+        rf"^(?P<marks>##+) {re.escape(heading_text)}.*$",
+        re.M,
+    )
+    while True:
+        match = pattern.search(text)
+        if not match:
+            break
+        marks = match.group("marks")
+        level = len(marks)
+        start = match.start()
+        rest = text[match.end() :]
+        next_heading = re.search(rf"^#{{2,{level}}} ", rest, re.M)
+        end = match.end() + (next_heading.start() if next_heading else len(rest))
+        text = text[:start].rstrip() + "\n\n" + text[end:].lstrip()
+    return text
+
+
 def remove_extended_reading(text: str) -> str:
     return remove_section(text, "延伸阅读")
+
+
+def remove_editorial_scaffolding(text: str) -> str:
+    text = remove_any_heading_section(text, "本章交付物")
+    text = remove_numbered_section(text, "外部研究依据与阅读边界")
+    text = remove_section(text, "外部研究依据与阅读边界")
+    text = re.sub(r"^### 本章在全书中的位置\s*\n+", "", text, flags=re.M)
+    text = text.replace("在全书中的位置", "在本书中的衔接")
+    return text
 
 
 def remove_deep_discussion(text: str) -> str:
@@ -102,6 +147,7 @@ def sanitize_file(path: Path) -> bool:
     text = original
     text = drop_metadata_block(text)
     text = remove_extended_reading(text)
+    text = remove_editorial_scaffolding(text)
     text = remove_deep_discussion(text)
     text = remove_section(text, "旧稿复用说明")
     text = remove_section(text, "完整示例（大纲）")

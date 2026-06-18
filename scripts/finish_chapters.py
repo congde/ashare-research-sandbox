@@ -289,7 +289,7 @@ def pad_from_legacy() -> None:
         if not old_path.exists():
             continue
         excerpt = strip_images(old_path.read_text(encoding="utf-8"))[:2800]
-        extra = f"\n\n## 延伸阅读（旧稿摘录，不含重复配图）\n\n{excerpt}\n"
+        extra = f"\n\n## 旧稿材料摘录\n\n{excerpt}\n"
         pad_file(path, extra)
 
 
@@ -327,13 +327,13 @@ def generic_pad() -> None:
 
 def fix_merged_figures(path: Path, chapter: int) -> None:
     text = path.read_text(encoding="utf-8")
-    if "## 延伸阅读" in text:
-        head, tail = text.split("## 延伸阅读", 1)
+    if "## 旧稿材料摘录" in text:
+        head, tail = text.split("## 旧稿材料摘录", 1)
         tail = "\n".join(
             ln for ln in tail.splitlines()
             if not re.match(r"^!\[", ln) and not re.match(r"^\*\*图 ", ln)
         )
-        text = head + "## 延伸阅读" + tail
+        text = head + "## 旧稿材料摘录" + tail
     lines: list[str] = []
     img_count = 0
     for ln in text.splitlines():

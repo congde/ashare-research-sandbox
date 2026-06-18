@@ -281,7 +281,7 @@ def render_detail(num: int, item: dict[str, str]) -> str:
 
 {item["interpretation"]}
 
-### 本章交付物
+### 验收标准
 
 {item["delivery"]}
 

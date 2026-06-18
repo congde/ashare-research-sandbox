@@ -696,3 +696,43 @@ ASSET_USAGE.setdefault(
     ("19-", "竖切实现总览", "第一条最小竖切实现总览",
     ),
 )
+
+ASSET_USAGE.setdefault(
+    "LLM信号分析.png",
+    ("25-", "LLM 信号分析页面", "LLM 信号分析页面（补充素材）"),
+)
+
+ASSET_USAGE.setdefault(
+    "币种K线.png",
+    ("25-", "币种 K 线页面", "币种 K 线分析页面（补充素材）"),
+)
+
+ASSET_USAGE.setdefault(
+    "chapter-00-safety-boundary.png",
+    ("00-", "交易研究系统安全边界", "交易研究系统的安全边界"),
+)
+
+ASSET_USAGE.setdefault(
+    "chapter-00-system-overview.png",
+    ("00-", "全书构建的交易研究系统总览", "全书构建的交易研究系统总览"),
+)
+
+ASSET_USAGE.setdefault(
+    "chapter-16-grid-position-function.png",
+    ("16-", "网格仓位函数", "网格策略仓位函数（补充素材）"),
+)
+
+ASSET_USAGE.setdefault(
+    "chapter-16-turning-state-machine.png",
+    ("16-", "转向状态机", "策略转向状态机（补充素材）"),
+)
+
+ASSET_USAGE.setdefault(
+    "chapter-21-pairs-zscore-threshold.png",
+    ("21-", "配对交易 z-score 阈值", "配对交易 z-score 阈值（补充素材）"),
+)
+
+ASSET_USAGE.setdefault(
+    "chapter-21-qbot-factor-pipeline.png",
+    ("21-", "Qbot 因子流水线", "Qbot 因子流水线（补充素材）"),
+)

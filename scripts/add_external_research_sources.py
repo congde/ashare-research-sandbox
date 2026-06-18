@@ -63,21 +63,7 @@ def part(chapter: int) -> int:
 
 
 def build_section(chapter: int) -> str:
-    keys = OVERRIDES.get(chapter, DEFAULTS[part(chapter)][:3])
-    rows = [
-        f"- 第 {chapter} 章使用 [{SOURCES[k][0]}]({SOURCES[k][1]}) 作为方法依据："
-        f"{SOURCES[k][2]}"
-        for k in keys
-    ]
-    return (
-        f"\n\n{MARKER}\n## {chapter}.13 外部研究依据与阅读边界\n\n"
-        f"对第 {chapter} 章而言，仓库实验负责证明“这套配套实现实际做了什么”，外部资料负责说明方法从何而来、"
-        "已有研究识别了哪些风险。两类证据不能互相替代。阅读下列资料时，应检查研究对象、"
-        "样本期、资产类别和评价指标是否与本章一致；不一致处必须记录为迁移假设。\n\n"
-        + "\n".join(rows)
-        + "\n\n全书统一引用原则、来源分级与完整书目见"
-        "[《参考文献与资料来源》](../参考文献与资料来源.md)。\n"
-    )
+    return ""
 
 
 def main() -> None:
@@ -89,7 +75,7 @@ def main() -> None:
         text = path.read_text(encoding="utf-8").split(MARKER, 1)[0].rstrip()
         path.write_text(text + build_section(int(prefix)), encoding="utf-8")
         changed += 1
-    print(f"added external research notes to {changed} chapters")
+    print(f"removed inline external research notes from {changed} chapters")
 
 
 if __name__ == "__main__":

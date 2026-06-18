@@ -71,6 +71,11 @@ def save_offline_data() -> None:
     python_task("scripts/build_dashboard_fixtures.py", "--sync-all")
 
 
+def courseware_headings() -> None:
+    python_task("scripts/restructure_chapter_headings.py")
+    python_task("scripts/add_chapter_heading_transitions.py")
+
+
 TASKS = {
     "setup": setup,
     "verify": lambda: python_task("verify.py"),
@@ -79,6 +84,7 @@ TASKS = {
     "sync-fixtures": lambda: python_task("scripts/build_dashboard_fixtures.py", "--sync-all"),
     "save-offline-data": save_offline_data,
     "courseware-check": lambda: python_task("scripts/verify_courseware.py"),
+    "courseware-headings": courseware_headings,
     "asset-audit": lambda: python_task("scripts/audit_assets.py"),
     "teaching-plots": lambda: python_task("scripts/generate_qbot_teaching_plots.py"),
     "lab-10": lambda: python_task("verify.py"),
