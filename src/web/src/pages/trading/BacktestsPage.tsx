@@ -3,13 +3,13 @@ import { Alert, Button, Checkbox, InputNumber, Select, Space, Table, message } f
 import type { ColumnsType } from "antd/es/table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchBacktestCompare, fetchBacktestPortfolio, fetchBacktestStrategies, fetchBacktestWalkForward, fetchBacktestWindows, fetchFactorMine, runMinedFactorBacktest, runRollingBacktest } from "../../api";
+import { fetchBacktestCompare, fetchBacktestCpcv, fetchBacktestPortfolio, fetchBacktestRobustness, fetchBacktestStrategies, fetchBacktestWalkForward, fetchBacktestWindows, fetchFactorMine, runMinedFactorBacktest, runRollingBacktest } from "../../api";
 import BacktestComboChart from "../../components/charts/BacktestComboChart";
 import TradingChart from "../../components/charts/TradingChart";
 import { mergeTradeTimesIntoCurve } from "../../components/charts/series";
 import { tsToChartDay } from "../../components/charts/chartTime";
 import { MonoNumber } from "../../quant-atelier";
-import type { BacktestComparePayload, BacktestPortfolioPayload, BacktestWalkForwardPayload, BacktestWindowsPayload, CurvePoint, FactorMiningPayload, RollingBacktestPayload, RollingTrade, Trade } from "../../types";
+import type { BacktestComparePayload, BacktestCpcvPayload, BacktestPortfolioPayload, BacktestRobustnessPayload, BacktestWalkForwardPayload, BacktestWindowsPayload, CurvePoint, FactorMiningPayload, RollingBacktestPayload, RollingTrade, Trade } from "../../types";
 import {
   MetricTile,
   QuantGlowCard,
@@ -28,6 +28,12 @@ const LIMIT_OPTIONS = [
   { label: "60 根", value: 60 },
   { label: "120 根", value: 120 },
   { label: "300 根", value: 300 },
+];
+
+const COST_PRESET_OPTIONS = [
+  { label: "教学（零滑点）", value: "teaching" },
+  { label: "现实（5bps+动态滑点）", value: "realistic" },
+  { label: "永续（+资金费率）", value: "perp" },
 ];
 
 function tsToDate(ts: number): string {
@@ -109,8 +115,12 @@ export default function BacktestsPage() {
   const [compare, setCompare] = useState<BacktestComparePayload | null>(null);
   const [windows, setWindows] = useState<BacktestWindowsPayload | null>(null);
   const [walkForward, setWalkForward] = useState<BacktestWalkForwardPayload | null>(null);
+  const [robustness, setRobustness] = useState<BacktestRobustnessPayload | null>(null);
+  const [cpcv, setCpcv] = useState<BacktestCpcvPayload | null>(null);
   const [portfolio, setPortfolio] = useState<BacktestPortfolioPayload | null>(null);
+  const [costPreset, setCostPreset] = useState<"teaching" | "realistic" | "perp">("teaching");
   const [wfoLoading, setWfoLoading] = useState(false);
+  const [auditLoading, setAuditLoading] = useState(false);
   const [portfolioLoading, setPortfolioLoading] = useState(false);
   const [wfoWindows, setWfoWindows] = useState(3);
   const [loading, setLoading] = useState(false);
@@ -149,6 +159,7 @@ export default function BacktestsPage() {
         trailingStop,
         maxHoldBars,
         limit: barLimit,
+        costPreset,
         refresh: refreshLive && symbol !== "WEB3-DEMO/USDT",
       });
       const [comparePayload, windowPayload] = await Promise.all([
@@ -159,6 +170,7 @@ export default function BacktestsPage() {
           trailingStop,
           maxHoldBars,
           limit: barLimit,
+          costPreset,
         }),
         fetchBacktestWindows({
           strategy,
@@ -167,6 +179,7 @@ export default function BacktestsPage() {
           takeProfit,
           windows: 3,
           limit: barLimit,
+          costPreset,
         }),
       ]);
       setResult(payload);
@@ -182,7 +195,7 @@ export default function BacktestsPage() {
     } finally {
       setLoading(false);
     }
-  }, [barLimit, maxHoldBars, refreshLive, stopLoss, strategy, symbol, takeProfit, trailingStop]);
+  }, [barLimit, costPreset, maxHoldBars, refreshLive, stopLoss, strategy, symbol, takeProfit, trailingStop]);
 
   const runWalkForward = useCallback(async () => {
     setWfoLoading(true);
@@ -194,17 +207,51 @@ export default function BacktestsPage() {
         takeProfit,
         limit: barLimit,
         windows: wfoWindows,
+        costPreset,
       });
       setWalkForward(payload);
       message.success(
-        `Walk-forward 完成 · OOS Sharpe ${payload.out_of_sample_sharpe.toFixed(2)}${payload.overfit_warning ? " · 过拟合警告" : ""}`,
+        `Walk-forward 完成 · OOS Sharpe ${payload.out_of_sample_sharpe.toFixed(2)} · DSR ${(payload.dsr ?? 0).toFixed(2)}${payload.overfit_warning ? " · 过拟合警告" : ""}`,
       );
     } catch (err) {
       message.error(err instanceof Error ? err.message : "Walk-forward 失败");
     } finally {
       setWfoLoading(false);
     }
-  }, [barLimit, stopLoss, strategy, symbol, takeProfit, wfoWindows]);
+  }, [barLimit, costPreset, stopLoss, strategy, symbol, takeProfit, wfoWindows]);
+
+  const runAuditSuite = useCallback(async () => {
+    setAuditLoading(true);
+    try {
+      const [robustnessPayload, cpcvPayload] = await Promise.all([
+        fetchBacktestRobustness({
+          strategy,
+          symbol,
+          stopLoss,
+          takeProfit,
+          limit: barLimit,
+          costPreset,
+        }),
+        fetchBacktestCpcv({
+          strategy,
+          symbol,
+          stopLoss,
+          takeProfit,
+          limit: barLimit,
+          costPreset,
+        }),
+      ]);
+      setRobustness(robustnessPayload);
+      setCpcv(cpcvPayload);
+      message.success(
+        `审计完成 · 稳定性 ${(robustnessPayload.parameter_sensitivity.stability_score * 100).toFixed(0)}% · PBO ${(robustnessPayload.pbo.pbo * 100).toFixed(0)}%`,
+      );
+    } catch (err) {
+      message.error(err instanceof Error ? err.message : "稳健性审计失败");
+    } finally {
+      setAuditLoading(false);
+    }
+  }, [barLimit, costPreset, stopLoss, strategy, symbol, takeProfit]);
 
   const runPortfolio = useCallback(async () => {
     setPortfolioLoading(true);
@@ -366,6 +413,13 @@ export default function BacktestsPage() {
             options={LIMIT_OPTIONS}
             disabled={loading}
           />
+          <Select
+            value={costPreset}
+            onChange={(value) => setCostPreset(value as "teaching" | "realistic" | "perp")}
+            style={{ minWidth: 180 }}
+            options={COST_PRESET_OPTIONS}
+            disabled={loading}
+          />
           <Space>
             <span style={{ color: "var(--qa-text-2)", fontSize: 12 }}>止损%</span>
             <InputNumber min={0.5} max={20} step={0.5} value={stopLoss} onChange={(v) => setStopLoss(Number(v ?? 3))} />
@@ -398,6 +452,9 @@ export default function BacktestsPage() {
           </Space>
           <Button loading={wfoLoading} onClick={() => void runWalkForward()}>
             Walk-forward
+          </Button>
+          <Button loading={auditLoading} onClick={() => void runAuditSuite()}>
+            稳健性审计
           </Button>
           <Button loading={portfolioLoading} onClick={() => void runPortfolio()}>
             组合回测
@@ -738,7 +795,7 @@ export default function BacktestsPage() {
               title="Walk-forward 参数优化"
               description={
                 walkForward
-                  ? `样本内 Sharpe ${walkForward.in_sample_sharpe.toFixed(2)} · 样本外 ${walkForward.out_of_sample_sharpe.toFixed(2)} · 差距 ${walkForward.is_oos_sharpe_gap.toFixed(2)}`
+                  ? `样本内 Sharpe ${walkForward.in_sample_sharpe.toFixed(2)} · 样本外 ${walkForward.out_of_sample_sharpe.toFixed(2)} · DSR ${(walkForward.dsr ?? 0).toFixed(2)} · 试验 ${walkForward.num_trials ?? 0} 次`
                   : "训练窗网格搜参 → 样本外验证 · 点击顶部 Walk-forward 运行"
               }
             />
@@ -784,6 +841,50 @@ export default function BacktestsPage() {
             </>
           ) : (
             <Alert type="info" showIcon message="尚未运行 Walk-forward" description="与窗口稳定性不同：此处会在训练段搜索 param_grid 最优 Sharpe，再在样本外段检验。" />
+          )}
+        </QuantGlowCard>
+
+        <QuantGlowCard
+          className="trading-span-12"
+          title={
+            <SectionHeader
+              title="稳健性审计（PBO + 参数敏感性 + CPCV）"
+              description={
+                robustness
+                  ? `稳定性 ${(robustness.parameter_sensitivity.stability_score * 100).toFixed(0)}% · PBO ${(robustness.pbo.pbo * 100).toFixed(0)}% · CPCV 盈利路径 ${(cpcv?.cpcv.profitable_paths_pct ?? 0).toFixed(0)}%`
+                  : "点击顶部「稳健性审计」运行参数扰动、过拟合概率与组合 OOS 路径"
+              }
+            />
+          }
+          badge={
+            robustness?.verdict === "pass" ? (
+              <StatusPill tone="profit">PASS</StatusPill>
+            ) : robustness ? (
+              <StatusPill tone="loss">WARN</StatusPill>
+            ) : undefined
+          }
+        >
+          {robustness ? (
+            <div className="trading-kv" style={{ fontSize: 12 }}>
+              <div>
+                <span>参数稳定性</span>
+                <strong>{(robustness.parameter_sensitivity.stability_score * 100).toFixed(1)}%</strong>
+              </div>
+              <div>
+                <span>PBO</span>
+                <strong>{(robustness.pbo.pbo * 100).toFixed(1)}%</strong>
+              </div>
+              <div>
+                <span>CPCV 中位 Sharpe</span>
+                <strong>{(cpcv?.cpcv.sharpe_p50 ?? 0).toFixed(2)}</strong>
+              </div>
+              <div>
+                <span>成本预设</span>
+                <strong>{robustness.cost_preset ?? costPreset}</strong>
+              </div>
+            </div>
+          ) : (
+            <Alert type="info" showIcon message="尚未运行稳健性审计" description="包含 ±20% 参数扰动、块级 PBO 与教学版 CPCV 分布。" />
           )}
         </QuantGlowCard>
 

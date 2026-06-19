@@ -409,6 +409,11 @@ export interface RollingBacktestPayload {
   take_profit_pct?: number;
   trailing_stop_pct?: number;
   max_hold_bars?: number;
+  cost_preset?: string;
+  slippage_pct?: number;
+  dynamic_slippage?: boolean;
+  funding_rate_pct?: number;
+  commission_pct?: number;
   equity_curve: RollingEquityPoint[];
   chart_candles?: RollingChartCandle[];
   warmup_bars?: number;
@@ -499,7 +504,78 @@ export interface BacktestWalkForwardPayload {
   is_oos_sharpe_gap: number;
   overfit_warning: boolean;
   num_windows: number;
+  num_trials?: number;
+  dsr?: number;
+  psr?: number;
+  dsr_significant?: boolean;
+  expected_max_sharpe?: number;
+  cost_preset?: string;
   windows: BacktestWalkForwardWindowRow[];
+  assumptions?: string[];
+  message?: string;
+}
+
+export interface BacktestTrialAuditPayload {
+  ok: boolean;
+  num_trials: number;
+  best_sharpe: number;
+  sharpe_variance: number;
+  sources: Record<string, number>;
+}
+
+export interface BacktestRobustnessPayload {
+  ok: boolean;
+  strategy_key: string;
+  strategy: string;
+  symbol: string;
+  kline_type: string;
+  cost_preset?: string;
+  verdict: string;
+  parameter_sensitivity: {
+    baseline_return_pct: number;
+    baseline_sharpe: number;
+    stability_score: number;
+    stable: boolean;
+    tested: number;
+    perturbations: Array<{
+      param: string;
+      direction: string;
+      value: number | string;
+      total_return_pct: number;
+      return_drift_pct: number;
+      stable: boolean;
+    }>;
+  };
+  pbo: {
+    pbo: number;
+    num_splits: number;
+    failures: number;
+    verdict: string;
+    overfit_risk: boolean;
+  };
+  assumptions?: string[];
+  message?: string;
+}
+
+export interface BacktestCpcvPayload {
+  ok: boolean;
+  strategy_key: string;
+  strategy: string;
+  symbol: string;
+  kline_type: string;
+  cost_preset?: string;
+  cpcv: {
+    num_paths: number;
+    profitable_paths_pct: number;
+    return_p5: number;
+    return_p50: number;
+    return_p95: number;
+    sharpe_p5: number;
+    sharpe_p50: number;
+    sharpe_p95: number;
+    verdict: string;
+    paths?: Array<{ return_pct: number; sharpe: number }>;
+  };
   assumptions?: string[];
   message?: string;
 }

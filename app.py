@@ -19,9 +19,14 @@ from backtest.rolling.service import (  # noqa: E402
     compare_strategies,
     compare_windows,
     execute_backtest,
+    get_trial_audit,
     list_backtest_strategies,
+    list_cost_presets,
+    run_cpcv_service,
+    run_robustness_audit,
     run_walk_forward,
 )
+from data.pit import pit_teaching_summary  # noqa: E402
 from backtest.rolling.portfolio import compare_portfolio  # noqa: E402
 from factor_mining.service import run_factor_mining, run_mined_factor_backtest  # noqa: E402
 from config.env import load_env  # noqa: E402
@@ -174,6 +179,29 @@ class Handler(BaseHTTPRequestHandler):
         def qb(name: str, default: bool = False) -> bool:
             return q(name, "true" if default else "false").lower() in {"1", "true", "yes"}
 
+        def q_cost_preset() -> str | None:
+            value = q("costPreset", "")
+            return value or None
+
+        def q_slippage_bps() -> float | None:
+            raw = q("slippageBps", "")
+            if not raw:
+                return None
+            try:
+                return float(raw)
+            except ValueError:
+                return None
+
+        def q_optional_bool(name: str) -> bool | None:
+            if name not in params:
+                return None
+            return qb(name)
+
+        def q_optional_float(name: str) -> float | None:
+            if name not in params:
+                return None
+            return qf(name, 0.0)
+
         routes = {
             "/api/dashboard/config": lambda: dashboard_api.runtime_config(),
             "/api/dashboard/sources/status": lambda: dashboard_api.sources_status(),
@@ -235,6 +263,36 @@ class Handler(BaseHTTPRequestHandler):
                 "ok": True,
                 "strategies": list_backtest_strategies(),
             },
+            "/api/dashboard/backtest/cost-presets": lambda: {
+                "ok": True,
+                "presets": list_cost_presets(),
+            },
+            "/api/dashboard/backtest/audit": lambda: get_trial_audit(
+                strategy_key=q("strategy", "") or None,
+            ),
+            "/api/dashboard/backtest/robustness": lambda: run_robustness_audit(
+                strategy_name=q("strategy", "ma_crossover"),
+                symbol=q("symbol", "") or None,
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+                cost_preset=q_cost_preset(),
+                slippage_bps=q_slippage_bps(),
+                dynamic_slippage=q_optional_bool("dynamicSlippage"),
+                funding_rate_pct=q_optional_float("fundingRatePct"),
+            ),
+            "/api/dashboard/backtest/cpcv": lambda: run_cpcv_service(
+                strategy_name=q("strategy", "ma_crossover"),
+                symbol=q("symbol", "") or None,
+                limit=qi("limit", 120),
+                stop_loss_pct=qf("stopLoss", 3.0),
+                take_profit_pct=qf("takeProfit", 5.0),
+                cost_preset=q_cost_preset(),
+                slippage_bps=q_slippage_bps(),
+                dynamic_slippage=q_optional_bool("dynamicSlippage"),
+                funding_rate_pct=q_optional_float("fundingRatePct"),
+            ),
+            "/api/dashboard/backtest/pit": lambda: pit_teaching_summary(),
             "/api/dashboard/backtest": lambda: execute_backtest(
                 strategy_name=q("strategy", "technical_signal"),
                 symbol=q("symbol", "") or None,
@@ -245,26 +303,32 @@ class Handler(BaseHTTPRequestHandler):
                 trailing_stop_pct=qf("trailingStop", 0.0),
                 max_hold_bars=qi("maxHoldBars", 0),
                 refresh=qb("refresh"),
+                cost_preset=q_cost_preset(),
+                slippage_bps=q_slippage_bps(),
+                dynamic_slippage=q_optional_bool("dynamicSlippage"),
+                funding_rate_pct=q_optional_float("fundingRatePct"),
             ),
             "/api/dashboard/backtest/compare": lambda: compare_strategies(
                 symbol=q("symbol", "") or None,
-                kline_type=q("type", "") or None,
                 limit=qi("limit", 120),
                 stop_loss_pct=qf("stopLoss", 3.0),
                 take_profit_pct=qf("takeProfit", 5.0),
-                trailing_stop_pct=qf("trailingStop", 0.0),
-                max_hold_bars=qi("maxHoldBars", 0),
+                cost_preset=q_cost_preset(),
+                slippage_bps=q_slippage_bps(),
+                dynamic_slippage=q_optional_bool("dynamicSlippage"),
+                funding_rate_pct=q_optional_float("fundingRatePct"),
             ),
             "/api/dashboard/backtest/windows": lambda: compare_windows(
                 strategy_name=q("strategy", "ma_crossover"),
                 num_windows=qi("windows", 3),
                 symbol=q("symbol", "") or None,
-                kline_type=q("type", "") or None,
                 limit=qi("limit", 120),
                 stop_loss_pct=qf("stopLoss", 3.0),
                 take_profit_pct=qf("takeProfit", 5.0),
-                trailing_stop_pct=qf("trailingStop", 0.0),
-                max_hold_bars=qi("maxHoldBars", 0),
+                cost_preset=q_cost_preset(),
+                slippage_bps=q_slippage_bps(),
+                dynamic_slippage=q_optional_bool("dynamicSlippage"),
+                funding_rate_pct=q_optional_float("fundingRatePct"),
             ),
             "/api/dashboard/backtest/walk-forward": lambda: run_walk_forward(
                 strategy_name=q("strategy", "ma_crossover"),
@@ -273,6 +337,10 @@ class Handler(BaseHTTPRequestHandler):
                 limit=qi("limit", 120),
                 stop_loss_pct=qf("stopLoss", 3.0),
                 take_profit_pct=qf("takeProfit", 5.0),
+                cost_preset=q_cost_preset(),
+                slippage_bps=q_slippage_bps(),
+                dynamic_slippage=q_optional_bool("dynamicSlippage"),
+                funding_rate_pct=q_optional_float("fundingRatePct"),
             ),
             "/api/dashboard/backtest/portfolio": lambda: compare_portfolio(
                 strategy_name=q("strategy", "ma_crossover"),

@@ -148,3 +148,4 @@ class WalkForwardResult:
     out_of_sample_return: float
     num_windows: int
     window_results: List[Dict[str, Any]]
+    num_trials: int = 0

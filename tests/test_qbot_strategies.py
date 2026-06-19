@@ -34,6 +34,7 @@ def test_qbot_strategies_are_registered() -> None:
     assert "boll_mean_reversion" in names
     assert "macd_crossover" in names
     assert "adx_macd_trend" in names
+    assert "funding_rate" in names
 
 
 def test_ma_crossover_runs_on_teaching_sample() -> None:

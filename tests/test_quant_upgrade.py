@@ -16,6 +16,7 @@ def test_walk_forward_returns_best_params() -> None:
     assert isinstance(payload["best_params"], dict)
     assert "in_sample_sharpe" in payload
     assert "out_of_sample_sharpe" in payload
+    assert "dsr" in payload
 
 
 def test_portfolio_compare_three_legs() -> None:
@@ -64,8 +65,9 @@ def test_bridge_aligns_legacy_and_rolling() -> None:
 
 
 def test_research_path_includes_unified_metrics() -> None:
-    payload = run_research_path()
+    payload = run_research_path(include_audit=False)
     assert payload["ok"] is True
     assert "unified_metrics" in payload
     assert "legacy" in payload["unified_metrics"]
     assert "rolling" in payload["unified_metrics"]
+    assert "realistic_cost_summary" in payload

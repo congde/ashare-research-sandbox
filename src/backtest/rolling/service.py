@@ -6,12 +6,18 @@ from dataclasses import asdict
 from datetime import datetime, timezone
 from typing import Any
 
+from backtest.audit.cpcv import run_cpcv_audit
+from backtest.audit.dsr import audit_sharpe
+from backtest.audit.pbo import probability_of_backtest_overfitting
+from backtest.audit.robustness import run_parameter_sensitivity
+from backtest.cost_presets import PRESETS, cost_assumptions, infer_funding_rate_pct, resolve_cost_options
 from backtest.runner import load_prices
 from backtest.rolling.engine import run_backtest
 from backtest.rolling.hooks import build_risk_hook_manager
 from backtest.rolling.metrics import compute_metrics
 from backtest.rolling.models import BacktestConfig
 from backtest.rolling.registry import get_strategy, list_strategies
+from backtest.trials import get_ledger
 from config.web3_trading import primary_market_symbol
 from dashboard.fixtures import load_offline
 from paths import DATA_DIR
@@ -23,6 +29,65 @@ MIN_CONTEXT = 20
 
 def list_backtest_strategies() -> list[dict[str, str]]:
     return list_strategies()
+
+
+def list_cost_presets() -> list[dict[str, str]]:
+    return [{"name": key, "label": value["label"]} for key, value in PRESETS.items()]
+
+
+def _resolve_cost(
+    *,
+    preset: str | None = None,
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
+    commission_pct: float | None = None,
+    meta: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    inferred = infer_funding_rate_pct(meta)
+    effective_funding = funding_rate_pct if funding_rate_pct is not None else inferred
+    return resolve_cost_options(
+        preset=preset,
+        slippage_bps=slippage_bps,
+        dynamic_slippage=dynamic_slippage,
+        funding_rate_pct=effective_funding,
+        commission_pct=commission_pct,
+    )
+
+
+def _build_config(
+    *,
+    stop_loss_pct: float,
+    take_profit_pct: float,
+    trailing_stop_pct: float = 0.0,
+    max_hold_bars: int = 0,
+    kline_type: str,
+    cost: dict[str, Any],
+    start_from: int = 0,
+) -> BacktestConfig:
+    return BacktestConfig(
+        min_context=MIN_CONTEXT,
+        stop_loss_pct=max(0.5, min(20.0, stop_loss_pct)),
+        take_profit_pct=max(0.5, min(50.0, take_profit_pct)),
+        trailing_stop_pct=max(0.0, min(20.0, trailing_stop_pct)),
+        max_hold_bars=max(0, min(500, max_hold_bars)),
+        commission_pct=float(cost.get("commission_pct", 0.1)),
+        slippage_pct=float(cost.get("slippage_pct", 0.0)),
+        dynamic_slippage=bool(cost.get("dynamic_slippage", False)),
+        dynamic_slippage_factor=float(cost.get("dynamic_slippage_factor", 0.5)),
+        funding_rate_pct=float(cost.get("funding_rate_pct", 0.0)),
+        start_from=start_from,
+        kline_type=kline_type,
+    )
+
+
+def _base_assumptions(cost: dict[str, Any]) -> list[str]:
+    return [
+        "Rolling-window engine adapted from vendor/web3-trading/src/backtest/.",
+        "Uses fixed teaching sample or offline dashboard candles — no live orders.",
+        *cost_assumptions(cost),
+        "Historical sample performance cannot predict future returns.",
+    ]
 
 
 def _prices_to_candles(prices: list[Any]) -> list[dict[str, Any]]:
@@ -119,8 +184,13 @@ def execute_backtest(
     max_hold_bars: int = 0,
     refresh: bool = False,
     strategy_params: dict[str, Any] | None = None,
+    cost_preset: str | None = "teaching",
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
+    commission_pct: float | None = None,
 ) -> dict[str, Any]:
-    pair, resolved_kline, candles, _meta = load_candles(
+    pair, resolved_kline, candles, meta = load_candles(
         symbol=symbol,
         limit=max(60, min(1500, limit)),
         refresh=refresh,
@@ -136,14 +206,21 @@ def execute_backtest(
         params.update(strategy_params)
     overrides = strategy.backtest_config_overrides(params)
     effective_max_hold = int(overrides.get("max_hold_bars", max_hold_bars))
-    config = BacktestConfig(
-        min_context=MIN_CONTEXT,
-        stop_loss_pct=max(0.5, min(20.0, stop_loss_pct)),
-        take_profit_pct=max(0.5, min(50.0, take_profit_pct)),
-        trailing_stop_pct=max(0.0, min(20.0, trailing_stop_pct)),
-        max_hold_bars=max(0, min(500, effective_max_hold)),
-        commission_pct=0.1,
+    cost = _resolve_cost(
+        preset=cost_preset,
+        slippage_bps=slippage_bps,
+        dynamic_slippage=dynamic_slippage,
+        funding_rate_pct=funding_rate_pct,
+        commission_pct=commission_pct,
+        meta=meta,
+    )
+    config = _build_config(
+        stop_loss_pct=stop_loss_pct,
+        take_profit_pct=take_profit_pct,
+        trailing_stop_pct=trailing_stop_pct,
+        max_hold_bars=effective_max_hold,
         kline_type=kline_type or resolved_kline,
+        cost=cost,
     )
 
     hook_manager = None
@@ -174,14 +251,23 @@ def execute_backtest(
     payload["trailing_stop_pct"] = config.trailing_stop_pct
     payload["max_hold_bars"] = config.max_hold_bars
     payload["strategy_key"] = strategy.name
+    payload["cost_preset"] = cost.get("preset", "teaching")
+    payload["slippage_pct"] = config.slippage_pct
+    payload["dynamic_slippage"] = config.dynamic_slippage
+    payload["funding_rate_pct"] = config.funding_rate_pct
+    payload["commission_pct"] = config.commission_pct
     payload["equity_curve"] = _thin_series(payload.get("equity_curve") or [])
     payload["candle_signals"] = _thin_series(payload.get("candle_signals") or [])
-    payload["assumptions"] = [
-        "Rolling-window engine adapted from vendor/web3-trading/src/backtest/.",
-        "Uses fixed teaching sample or offline dashboard candles — no live orders.",
-        "Default commission 0.1% per side; slippage disabled in teaching mode.",
-        "Historical sample performance cannot predict future returns.",
-    ]
+    payload["assumptions"] = _base_assumptions(cost)
+
+    get_ledger().record(
+        source="execute_backtest",
+        strategy_key=strategy.name,
+        sharpe_ratio=float(payload.get("sharpe_ratio", 0.0)),
+        total_return_pct=float(payload.get("total_return_pct", 0.0)),
+        params=params,
+        total_trades=int(payload.get("total_trades", 0)),
+    )
     return payload
 
 
@@ -200,6 +286,10 @@ def compare_strategies(
     limit: int = 120,
     stop_loss_pct: float = 3.0,
     take_profit_pct: float = 5.0,
+    cost_preset: str | None = "teaching",
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
 ) -> dict[str, Any]:
     """Run a fixed teaching set of strategies on the same candle window."""
     pair, kline_type, candles, _meta = load_candles(symbol=symbol, limit=max(60, min(1500, limit)))
@@ -217,6 +307,10 @@ def compare_strategies(
             limit=limit,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
+            cost_preset=cost_preset,
+            slippage_bps=slippage_bps,
+            dynamic_slippage=dynamic_slippage,
+            funding_rate_pct=funding_rate_pct,
         )
         rows.append(
             {
@@ -259,9 +353,13 @@ def compare_windows(
     limit: int = 120,
     stop_loss_pct: float = 3.0,
     take_profit_pct: float = 5.0,
+    cost_preset: str | None = "teaching",
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
 ) -> dict[str, Any]:
     """Split the sample into consecutive windows and rerun one strategy."""
-    pair, kline_type, candles, _meta = load_candles(symbol=symbol, limit=max(60, min(1500, limit)))
+    pair, kline_type, candles, meta = load_candles(symbol=symbol, limit=max(60, min(1500, limit)))
     if len(candles) < MIN_CONTEXT + 5:
         raise ValueError(
             f"K线数据不足: 需要至少 {MIN_CONTEXT + 5} 根, 当前 {len(candles)} 根"
@@ -271,12 +369,18 @@ def compare_windows(
     chunk = max(MIN_CONTEXT + 5, len(candles) // windows_count)
     strategy = get_strategy(strategy_name)
     params = dict(strategy.default_params())
-    config = BacktestConfig(
-        min_context=MIN_CONTEXT,
-        stop_loss_pct=max(0.5, min(20.0, stop_loss_pct)),
-        take_profit_pct=max(0.5, min(50.0, take_profit_pct)),
-        commission_pct=0.1,
+    cost = _resolve_cost(
+        preset=cost_preset,
+        slippage_bps=slippage_bps,
+        dynamic_slippage=dynamic_slippage,
+        funding_rate_pct=funding_rate_pct,
+        meta=meta,
+    )
+    config = _build_config(
+        stop_loss_pct=stop_loss_pct,
+        take_profit_pct=take_profit_pct,
         kline_type=kline_type,
+        cost=cost,
     )
 
     window_rows: list[dict[str, Any]] = []
@@ -347,6 +451,10 @@ def run_walk_forward(
     limit: int = 120,
     stop_loss_pct: float = 3.0,
     take_profit_pct: float = 5.0,
+    cost_preset: str | None = "teaching",
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
 ) -> dict[str, Any]:
     """Walk-forward param search: fit on train, score on OOS per window."""
     from backtest.rolling.optimization.walk_forward import walk_forward_optimize
@@ -358,34 +466,171 @@ def run_walk_forward(
         )
 
     strategy = get_strategy(strategy_name)
+    cost = _resolve_cost(
+        preset=cost_preset,
+        slippage_bps=slippage_bps,
+        dynamic_slippage=dynamic_slippage,
+        funding_rate_pct=funding_rate_pct,
+        meta=meta,
+    )
     result = walk_forward_optimize(
         candles,
         strategy,
         num_windows=max(2, min(5, num_windows)),
         stop_loss_pct=stop_loss_pct,
         take_profit_pct=take_profit_pct,
+        commission_pct=float(cost.get("commission_pct", 0.1)),
+        slippage_pct=float(cost.get("slippage_pct", 0.0)),
+        dynamic_slippage=bool(cost.get("dynamic_slippage", False)),
+        dynamic_slippage_factor=float(cost.get("dynamic_slippage_factor", 0.5)),
+        funding_rate_pct=float(cost.get("funding_rate_pct", 0.0)),
         kline_type=kline_type,
         min_context=MIN_CONTEXT,
     )
 
+    ledger = get_ledger()
+    trial_summary = ledger.summary(strategy_key=strategy_name)
+    num_trials = max(result.num_trials, trial_summary["num_trials"])
+    dsr_payload = audit_sharpe(
+        [],
+        result.out_of_sample_sharpe,
+        num_trials=num_trials,
+        sharpe_variance=float(trial_summary.get("sharpe_variance", 1.0)),
+        kline_type=kline_type,
+    )
+
     is_oos_gap = round(result.in_sample_sharpe - result.out_of_sample_sharpe, 2)
+    overfit_warning = is_oos_gap > 1.0 or not dsr_payload.get("is_significant", False)
     return {
         "ok": True,
         "strategy_key": strategy_name,
         "symbol": pair,
         "kline_type": kline_type,
         "source": meta.get("source"),
+        "cost_preset": cost.get("preset", "teaching"),
         "best_params": result.best_params,
         "in_sample_sharpe": result.in_sample_sharpe,
         "out_of_sample_sharpe": result.out_of_sample_sharpe,
         "out_of_sample_return_pct": result.out_of_sample_return,
         "is_oos_sharpe_gap": is_oos_gap,
         "num_windows": result.num_windows,
+        "num_trials": num_trials,
+        "dsr": dsr_payload.get("dsr", 0.0),
+        "psr": dsr_payload.get("psr", 0.0),
+        "dsr_significant": bool(dsr_payload.get("is_significant", False)),
+        "expected_max_sharpe": dsr_payload.get("expected_max_sharpe", 0.0),
         "windows": result.window_results,
-        "overfit_warning": is_oos_gap > 1.0,
+        "overfit_warning": overfit_warning,
         "assumptions": [
             "Params chosen by max in-sample Sharpe per window; OOS uses start_from train_end.",
             "Grid search capped at 500 combos with early-stop on weak half-train Sharpe.",
-            "Teaching sample only — gap large does not auto-stop research, only flags overfit risk.",
+            *cost_assumptions(cost),
+            "DSR corrects OOS Sharpe for number of trials recorded in the ledger.",
+        ],
+    }
+
+
+def get_trial_audit(*, strategy_key: str | None = None) -> dict[str, Any]:
+    ledger = get_ledger()
+    ledger.load_disk()
+    summary = ledger.summary(strategy_key=strategy_key)
+    return {"ok": True, **summary}
+
+
+def run_robustness_audit(
+    *,
+    strategy_name: str = "ma_crossover",
+    symbol: str | None = None,
+    limit: int = 120,
+    stop_loss_pct: float = 3.0,
+    take_profit_pct: float = 5.0,
+    cost_preset: str | None = "teaching",
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
+) -> dict[str, Any]:
+    pair, kline_type, candles, meta = load_candles(symbol=symbol, limit=max(60, min(1500, limit)))
+    if len(candles) < MIN_CONTEXT + 5:
+        raise ValueError(
+            f"K线数据不足: 需要至少 {MIN_CONTEXT + 5} 根, 当前 {len(candles)} 根"
+        )
+    strategy = get_strategy(strategy_name)
+    cost = _resolve_cost(
+        preset=cost_preset,
+        slippage_bps=slippage_bps,
+        dynamic_slippage=dynamic_slippage,
+        funding_rate_pct=funding_rate_pct,
+        meta=meta,
+    )
+    config = _build_config(
+        stop_loss_pct=stop_loss_pct,
+        take_profit_pct=take_profit_pct,
+        kline_type=kline_type,
+        cost=cost,
+    )
+    sensitivity = run_parameter_sensitivity(candles, strategy, config=config)
+    pbo = probability_of_backtest_overfitting(candles, strategy, config=config)
+    return {
+        "ok": True,
+        "strategy_key": strategy_name,
+        "strategy": strategy.display_name,
+        "symbol": pair,
+        "kline_type": kline_type,
+        "cost_preset": cost.get("preset", "teaching"),
+        "parameter_sensitivity": sensitivity,
+        "pbo": pbo,
+        "verdict": "pass" if sensitivity["stable"] and not pbo["overfit_risk"] else "warn",
+        "assumptions": [
+            "Parameter sensitivity perturbs numeric defaults by ±20%.",
+            "PBO uses block CSCV with capped candidate grid.",
+            *cost_assumptions(cost),
+        ],
+    }
+
+
+def run_cpcv_service(
+    *,
+    strategy_name: str = "ma_crossover",
+    symbol: str | None = None,
+    limit: int = 120,
+    stop_loss_pct: float = 3.0,
+    take_profit_pct: float = 5.0,
+    cost_preset: str | None = "teaching",
+    slippage_bps: float | None = None,
+    dynamic_slippage: bool | None = None,
+    funding_rate_pct: float | None = None,
+) -> dict[str, Any]:
+    pair, kline_type, candles, meta = load_candles(symbol=symbol, limit=max(80, min(1500, limit)))
+    if len(candles) < MIN_CONTEXT + 30:
+        raise ValueError(
+            f"K线数据不足: CPCV 需要至少 {MIN_CONTEXT + 30} 根, 当前 {len(candles)} 根"
+        )
+    strategy = get_strategy(strategy_name)
+    cost = _resolve_cost(
+        preset=cost_preset,
+        slippage_bps=slippage_bps,
+        dynamic_slippage=dynamic_slippage,
+        funding_rate_pct=funding_rate_pct,
+        meta=meta,
+    )
+    config = _build_config(
+        stop_loss_pct=stop_loss_pct,
+        take_profit_pct=take_profit_pct,
+        kline_type=kline_type,
+        cost=cost,
+    )
+    cpcv = run_cpcv_audit(candles, strategy, config=config)
+    return {
+        "ok": True,
+        "strategy_key": strategy_name,
+        "strategy": strategy.display_name,
+        "symbol": pair,
+        "kline_type": kline_type,
+        "cost_preset": cost.get("preset", "teaching"),
+        "cpcv": cpcv,
+        "assumptions": [
+            "Teaching-scale CPCV with embargo bars between OOS groups.",
+            "Not a full purged label overlap removal — bar-level signals only.",
+            *cost_assumptions(cost),
         ],
     }

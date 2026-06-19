@@ -13,7 +13,10 @@ import type {
   RollingBacktestPayload,
   RollingBacktestStrategy,
   BacktestComparePayload,
+  BacktestCpcvPayload,
   BacktestPortfolioPayload,
+  BacktestRobustnessPayload,
+  BacktestTrialAuditPayload,
   BacktestWalkForwardPayload,
   BacktestWindowsPayload,
   FactorBacktestSpec,
@@ -211,6 +214,25 @@ export interface RunRollingBacktestOptions {
   trailingStop?: number;
   maxHoldBars?: number;
   refresh?: boolean;
+  costPreset?: "teaching" | "realistic" | "perp";
+  slippageBps?: number;
+  dynamicSlippage?: boolean;
+  fundingRatePct?: number;
+}
+
+function appendCostParams(params: URLSearchParams, options: RunRollingBacktestOptions): void {
+  if (options.costPreset) {
+    params.set("costPreset", options.costPreset);
+  }
+  if (options.slippageBps != null) {
+    params.set("slippageBps", String(options.slippageBps));
+  }
+  if (options.dynamicSlippage != null) {
+    params.set("dynamicSlippage", options.dynamicSlippage ? "1" : "0");
+  }
+  if (options.fundingRatePct != null) {
+    params.set("fundingRatePct", String(options.fundingRatePct));
+  }
 }
 
 export async function runRollingBacktest(
@@ -233,6 +255,7 @@ export async function runRollingBacktest(
   if (options.refresh) {
     params.set("refresh", "1");
   }
+  appendCostParams(params, options);
   const response = await fetch(`/api/dashboard/backtest?${params}`);
   const payload = (await response.json()) as RollingBacktestPayload;
   if (!response.ok || !payload.ok) {
@@ -257,6 +280,7 @@ export async function fetchBacktestCompare(
   if (options.type) {
     params.set("type", options.type);
   }
+  appendCostParams(params, options);
   const response = await fetch(`/api/dashboard/backtest/compare?${params}`);
   const payload = (await response.json()) as BacktestComparePayload;
   if (!response.ok || !payload.ok) {
@@ -278,6 +302,7 @@ export async function fetchBacktestWindows(
   if (options.symbol) {
     params.set("symbol", options.symbol);
   }
+  appendCostParams(params, options);
   const response = await fetch(`/api/dashboard/backtest/windows?${params}`);
   const payload = (await response.json()) as BacktestWindowsPayload;
   if (!response.ok || !payload.ok) {
@@ -299,6 +324,7 @@ export async function fetchBacktestWalkForward(
   if (options.symbol) {
     params.set("symbol", options.symbol);
   }
+  appendCostParams(params, options);
   const response = await fetch(`/api/dashboard/backtest/walk-forward?${params}`);
   const payload = (await response.json()) as BacktestWalkForwardPayload;
   if (!response.ok || !payload.ok) {
@@ -320,6 +346,63 @@ export async function fetchBacktestPortfolio(
   const payload = (await response.json()) as BacktestPortfolioPayload;
   if (!response.ok || !payload.ok) {
     throw new Error(payload.message ?? "组合回测失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestRobustness(
+  options: RunRollingBacktestOptions = {},
+): Promise<BacktestRobustnessPayload> {
+  const params = new URLSearchParams({
+    strategy: options.strategy ?? "ma_crossover",
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  appendCostParams(params, options);
+  const response = await fetch(`/api/dashboard/backtest/robustness?${params}`);
+  const payload = (await response.json()) as BacktestRobustnessPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "稳健性审计失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestCpcv(
+  options: RunRollingBacktestOptions = {},
+): Promise<BacktestCpcvPayload> {
+  const params = new URLSearchParams({
+    strategy: options.strategy ?? "ma_crossover",
+    limit: String(options.limit ?? 120),
+    stopLoss: String(options.stopLoss ?? 3),
+    takeProfit: String(options.takeProfit ?? 5),
+  });
+  if (options.symbol) {
+    params.set("symbol", options.symbol);
+  }
+  appendCostParams(params, options);
+  const response = await fetch(`/api/dashboard/backtest/cpcv?${params}`);
+  const payload = (await response.json()) as BacktestCpcvPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.message ?? "CPCV 审计失败");
+  }
+  return payload;
+}
+
+export async function fetchBacktestAudit(
+  strategy?: string,
+): Promise<BacktestTrialAuditPayload> {
+  const params = new URLSearchParams();
+  if (strategy) {
+    params.set("strategy", strategy);
+  }
+  const response = await fetch(`/api/dashboard/backtest/audit?${params}`);
+  const payload = (await response.json()) as BacktestTrialAuditPayload;
+  if (!response.ok || !payload.ok) {
+    throw new Error("试验日志加载失败");
   }
   return payload;
 }

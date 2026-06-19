@@ -59,8 +59,10 @@ def test_pollution_checks_cover_three_cases() -> None:
 
 
 def test_research_path_chains_modules() -> None:
-    payload = run_research_path()
+    payload = run_research_path(include_audit=True)
     assert payload["ok"] is True
-    assert len(payload["path"]) == 5
+    assert len(payload["path"]) == 10
     assert payload["report_summary"]["trade_count"] > 0
     assert payload["rolling_summary"]["total_trades"] >= 0
+    assert "audit_summary" in payload
+    assert "realistic_cost_summary" in payload

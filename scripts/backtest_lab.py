@@ -16,7 +16,14 @@ from backtest.trace import run_ma_crossover_trace, run_teaching_scenario  # noqa
 from backtest.metrics_explain import explain_metrics  # noqa: E402
 from backtest.pollution import run_pollution_checks  # noqa: E402
 from backtest.research_path import run_research_path  # noqa: E402
-from backtest.rolling.service import compare_strategies, compare_windows, run_walk_forward
+from backtest.rolling.service import (
+    compare_strategies,
+    compare_windows,
+    get_trial_audit,
+    run_cpcv_service,
+    run_robustness_audit,
+    run_walk_forward,
+)
 from backtest.rolling.portfolio import compare_portfolio  # noqa: E402
 from factor_mining.service import run_factor_mining  # noqa: E402
 
@@ -66,8 +73,39 @@ def cmd_walk_forward(args: argparse.Namespace) -> None:
             limit=args.limit,
             stop_loss_pct=args.stop_loss,
             take_profit_pct=args.take_profit,
+            cost_preset=args.cost_preset,
         )
     )
+
+
+def cmd_robustness(args: argparse.Namespace) -> None:
+    _print_json(
+        run_robustness_audit(
+            strategy_name=args.strategy,
+            symbol=args.symbol,
+            limit=args.limit,
+            stop_loss_pct=args.stop_loss,
+            take_profit_pct=args.take_profit,
+            cost_preset=args.cost_preset,
+        )
+    )
+
+
+def cmd_cpcv(args: argparse.Namespace) -> None:
+    _print_json(
+        run_cpcv_service(
+            strategy_name=args.strategy,
+            symbol=args.symbol,
+            limit=args.limit,
+            stop_loss_pct=args.stop_loss,
+            take_profit_pct=args.take_profit,
+            cost_preset=args.cost_preset,
+        )
+    )
+
+
+def cmd_audit(args: argparse.Namespace) -> None:
+    _print_json(get_trial_audit(strategy_key=args.strategy or None))
 
 
 def cmd_portfolio(args: argparse.Namespace) -> None:
@@ -155,7 +193,30 @@ def build_parser() -> argparse.ArgumentParser:
     wfo.add_argument("--limit", type=int, default=120)
     wfo.add_argument("--stop-loss", type=float, default=3.0)
     wfo.add_argument("--take-profit", type=float, default=5.0)
+    wfo.add_argument("--cost-preset", default="teaching", choices=("teaching", "realistic", "perp"))
     wfo.set_defaults(func=cmd_walk_forward)
+
+    robustness = sub.add_parser("robustness", help="Parameter sensitivity + PBO audit")
+    robustness.add_argument("--strategy", default="ma_crossover")
+    robustness.add_argument("--symbol", default="WEB3-DEMO/USDT")
+    robustness.add_argument("--limit", type=int, default=120)
+    robustness.add_argument("--stop-loss", type=float, default=3.0)
+    robustness.add_argument("--take-profit", type=float, default=5.0)
+    robustness.add_argument("--cost-preset", default="teaching", choices=("teaching", "realistic", "perp"))
+    robustness.set_defaults(func=cmd_robustness)
+
+    cpcv = sub.add_parser("cpcv", help="Teaching-scale CPCV path distribution")
+    cpcv.add_argument("--strategy", default="ma_crossover")
+    cpcv.add_argument("--symbol", default="WEB3-DEMO/USDT")
+    cpcv.add_argument("--limit", type=int, default=120)
+    cpcv.add_argument("--stop-loss", type=float, default=3.0)
+    cpcv.add_argument("--take-profit", type=float, default=5.0)
+    cpcv.add_argument("--cost-preset", default="teaching", choices=("teaching", "realistic", "perp"))
+    cpcv.set_defaults(func=cmd_cpcv)
+
+    audit = sub.add_parser("audit", help="Trial ledger summary")
+    audit.add_argument("--strategy", default="")
+    audit.set_defaults(func=cmd_audit)
 
     portfolio = sub.add_parser("portfolio", help="Chapter 22: equal-weight multi-leg compare")
     portfolio.add_argument("--strategy", default="ma_crossover")

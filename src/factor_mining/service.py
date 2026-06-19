@@ -14,6 +14,7 @@ from factor_mining.expressions import eval_series
 from factor_mining.features import MiningTarget, RiskKind, build_feature_matrix
 from factor_mining.gp import GPConfig, run_gp_search
 from factor_mining.ml import run_ml_search
+from backtest.trials import get_ledger
 from factor_mining.risk_apply import preview_position_scales
 from factor_mining.serialize import expr_to_dict
 
@@ -182,6 +183,22 @@ def run_factor_mining(
             candles=candles,
             horizon=horizon,
         )
+
+    ledger = get_ledger()
+    for label, result in (("gp", gp_result), ("ml", ml_result)):
+        if not result:
+            continue
+        train_ic = float((result.get("train") or {}).get("ic_mean", 0.0))
+        test_ic = float((result.get("test") or {}).get("ic_mean", 0.0))
+        ledger.record(
+            source=f"factor_mining_{label}",
+            strategy_key="mined_factor",
+            sharpe_ratio=test_ic,
+            total_return_pct=train_ic * 100,
+            params={"mode": mode, "target": target, "horizon": horizon},
+            total_trades=int((result.get("train") or {}).get("sample_count", 0)),
+        )
+    payload["trial_summary"] = ledger.summary(strategy_key="mined_factor")
     return payload
 
 

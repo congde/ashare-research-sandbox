@@ -12,6 +12,7 @@ from backtest.rolling.engine import run_backtest
 from backtest.rolling.metrics import compute_metrics, compute_sharpe
 from backtest.rolling.models import BacktestConfig, WalkForwardResult
 from backtest.rolling.strategies.base import Strategy
+from backtest.trials import get_ledger
 
 
 def walk_forward_optimize(
@@ -22,6 +23,10 @@ def walk_forward_optimize(
     stop_loss_pct: float = 3.0,
     take_profit_pct: float = 5.0,
     commission_pct: float = 0.1,
+    slippage_pct: float = 0.0,
+    dynamic_slippage: bool = False,
+    dynamic_slippage_factor: float = 0.5,
+    funding_rate_pct: float = 0.0,
     kline_type: str = "1day",
     min_context: int = 20,
     early_stop_threshold: float = -2.0,
@@ -60,6 +65,8 @@ def walk_forward_optimize(
     if len(combinations) > max_combos:
         combinations = random.Random(42).sample(combinations, max_combos)
     param_dicts = [dict(zip(keys, combo)) for combo in combinations]
+    ledger = get_ledger()
+    trial_count = 0
 
     window_results: List[Dict[str, Any]] = []
     oos_sharpes: List[float] = []
@@ -88,6 +95,10 @@ def walk_forward_optimize(
                     stop_loss_pct=stop_loss_pct,
                     take_profit_pct=take_profit_pct,
                     commission_pct=commission_pct,
+                    slippage_pct=slippage_pct,
+                    dynamic_slippage=dynamic_slippage,
+                    dynamic_slippage_factor=dynamic_slippage_factor,
+                    funding_rate_pct=funding_rate_pct,
                     kline_type=kline_type,
                 )
                 trades_half, _, _ = run_backtest(
@@ -103,6 +114,10 @@ def walk_forward_optimize(
                 stop_loss_pct=stop_loss_pct,
                 take_profit_pct=take_profit_pct,
                 commission_pct=commission_pct,
+                slippage_pct=slippage_pct,
+                dynamic_slippage=dynamic_slippage,
+                dynamic_slippage_factor=dynamic_slippage_factor,
+                funding_rate_pct=funding_rate_pct,
                 kline_type=kline_type,
             )
             trades, equity, _ = run_backtest(train_candles, strategy, merged, config_train)
@@ -116,6 +131,15 @@ def walk_forward_optimize(
                 kline_type=kline_type,
                 strategy_name=strategy.display_name,
             )
+            ledger.record(
+                source="walk_forward",
+                strategy_key=strategy.name,
+                sharpe_ratio=result.sharpe_ratio,
+                total_return_pct=result.total_return_pct,
+                params=merged,
+                total_trades=result.total_trades,
+            )
+            trial_count += 1
             if result.sharpe_ratio > best_sharpe:
                 best_sharpe = result.sharpe_ratio
                 best_p = merged
@@ -125,6 +149,10 @@ def walk_forward_optimize(
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             commission_pct=commission_pct,
+            slippage_pct=slippage_pct,
+            dynamic_slippage=dynamic_slippage,
+            dynamic_slippage_factor=dynamic_slippage_factor,
+            funding_rate_pct=funding_rate_pct,
             start_from=train_end,
             kline_type=kline_type,
         )
@@ -176,4 +204,5 @@ def walk_forward_optimize(
         out_of_sample_return=round(avg_oos_return, 2),
         num_windows=len(window_results),
         window_results=window_results,
+        num_trials=trial_count,
     )

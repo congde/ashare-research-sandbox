@@ -43,6 +43,7 @@ def _ensure_loaded() -> None:
     from backtest.rolling.strategies.ma_crossover import MACrossoverStrategy
     from backtest.rolling.strategies.macd import MACDStrategy
     from backtest.rolling.strategies.macd_crossover import MACDCrossoverStrategy
+    from backtest.rolling.strategies.funding_rate import FundingRateStrategy
     from backtest.rolling.strategies.mined_factor import MinedFactorStrategy
     from backtest.rolling.strategies.rsi_mean_reversion import RSIMeanReversionStrategy
     from backtest.rolling.strategies.technical_signal import TechnicalSignalStrategy
@@ -58,5 +59,6 @@ def _ensure_loaded() -> None:
         BollingerSqueezeStrategy,
         BuyAndHoldStrategy,
         MinedFactorStrategy,
+        FundingRateStrategy,
     ]:
         register(cls)
