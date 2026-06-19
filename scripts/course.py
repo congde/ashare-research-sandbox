@@ -76,6 +76,13 @@ def courseware_headings() -> None:
     python_task("scripts/add_chapter_heading_transitions.py")
 
 
+def print_figures() -> None:
+    python_task("scripts/generate_qbot_teaching_plots.py")
+    python_task("scripts/generate_chapter01_figures.py")
+    python_task("scripts/generate_chapter03_figures.py")
+    python_task("scripts/generate_supplementary_diagrams.py")
+
+
 TASKS = {
     "setup": setup,
     "verify": lambda: python_task("verify.py"),
@@ -88,6 +95,7 @@ TASKS = {
     "asset-audit": lambda: python_task("scripts/audit_assets.py"),
     "vendor-drift": lambda: python_task("scripts/check_vendor_drift.py"),
     "teaching-plots": lambda: python_task("scripts/generate_qbot_teaching_plots.py"),
+    "print-figures": print_figures,
     "lab-10": lambda: python_task("verify.py"),
 }
 

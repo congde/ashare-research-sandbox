@@ -2,7 +2,7 @@
 """Generate HD teaching plots inspired by vendor/Qbot/docs/notebook/ (MIT).
 
 Uses fixed offline sample data/prices.csv only — no live market APIs.
-Outputs PNGs under docs/v2/assets/generated/ at 200 DPI for course chapters.
+Outputs PNGs under docs/v2/assets/generated/ at 300 DPI for print-ready course chapters.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "src"))
 OUT = ROOT / "docs" / "v2" / "assets" / "generated"
 PRICES_CSV = ROOT / "data" / "prices.csv"
 
-DPI = 200
+from print_figure_config import PRINT_DPI as DPI
 FOOTER = (
     "教学样本 WEB3-DEMO · data/prices.csv · 不构成投资建议 · "
     "参考 vendor/Qbot/docs/notebook/01-strategy.ipynb 出图模式"

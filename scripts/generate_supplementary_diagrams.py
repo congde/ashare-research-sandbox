@@ -10,6 +10,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
+from print_figure_config import PRINT_DPI, scale
+
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "docs" / "v2" / "assets"
 DRAWIO_OUT = ASSETS / "chapters-03-20-supplementary.drawio"
@@ -64,8 +66,33 @@ def _load_font(size: int):
     return ImageFont.load_default()
 
 
+def scale_diagram_spec(source: dict) -> dict:
+    spec = copy.deepcopy(source)
+    if canvas := spec.get("canvas"):
+        spec["canvas"] = (scale(canvas[0]), scale(canvas[1]))
+    if title_xy := spec.get("title_xy"):
+        spec["title_xy"] = (scale(title_xy[0]), scale(title_xy[1]))
+    if subtitle_xy := spec.get("subtitle_xy"):
+        spec["subtitle_xy"] = (scale(subtitle_xy[0]), scale(subtitle_xy[1]))
+    if footer_box := spec.get("footer_box"):
+        spec["footer_box"] = tuple(scale(value) for value in footer_box)
+    if footer_text_xy := spec.get("footer_text_xy"):
+        spec["footer_text_xy"] = (scale(footer_text_xy[0]), scale(footer_text_xy[1]))
+    for node in spec.get("nodes", []):
+        x, y, w, h = node["box"]
+        node["box"] = (scale(x), scale(y), scale(w), scale(h))
+    for edge in spec.get("edges", []):
+        if edge["kind"] == "h":
+            x1, y, x2 = edge["coords"]
+            edge["coords"] = (scale(x1), scale(y), scale(x2))
+        else:
+            x, y1, y2 = edge["coords"]
+            edge["coords"] = (scale(x), scale(y1), scale(y2))
+    return spec
+
+
 def load_fonts() -> tuple:
-    return _load_font(34), _load_font(20), _load_font(22), _load_font(18)
+    return _load_font(scale(34)), _load_font(scale(20)), _load_font(scale(22)), _load_font(scale(18))
 
 
 def compact_spec(source: dict) -> dict:
@@ -157,7 +184,7 @@ def arrow_v(draw, x, y1, y2, label: str | None = None, font=None) -> None:
 
 
 def render_diagram(spec: dict, output: Path) -> None:
-    spec = compact_spec(spec)
+    spec = scale_diagram_spec(compact_spec(spec))
     title_font, sub_font, body_font, small_font = load_fonts()
     width, height = spec.get("canvas", (WIDTH, HEIGHT))
     img = Image.new("RGB", (width, height), BG)
@@ -184,7 +211,7 @@ def render_diagram(spec: dict, output: Path) -> None:
         draw.text(footer_text_xy, foot, fill="#FFFFFF", font=body_font)
 
     output.parent.mkdir(parents=True, exist_ok=True)
-    img.save(output)
+    img.save(output, dpi=(PRINT_DPI, PRINT_DPI))
 
 
 def h_edges(*pairs: tuple[int, int, int], labels: dict[int, str] | None = None) -> list[dict]:
