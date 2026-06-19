@@ -1,4 +1,4 @@
-﻿"""Generate the 35-chapter Codex + LLM quantitative trading course drafts."""
+"""Generate the 35-chapter Codex + LLM quantitative trading course drafts."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ CHAPTERS = [
       "把 LLM 的肯定语气当成统计优势", "python scripts/course.py verify", "把交易想法改写成可证伪假设"),
     c(2, 1, "从交易想法到可验证的研究假设", "从交易想法到可验证的研究假设",
       "怎样把“这个指标应该有效”改写成可以被数据否定的问题", "研究假设卡",
-      "`research-brief.md`、`data/prices.csv`",
+      "`docs/samples/research-hypothesis-card.md`、`data/prices.csv`、`report_cli.py`",
       "明确对象、条件、观察窗口、对照组、指标和否定条件",
       "把双均线上穿后的模糊预期改写成带对照组的研究假设",
       "只写成功条件，不允许研究结果为不成立", "python report_cli.py --format summary", "搭建可复现研究工作区"),

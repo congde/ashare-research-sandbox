@@ -1,32 +1,47 @@
-# First-version PRD
+# 第一版产品需求（PRD）
 
-## Problem
+## 问题
 
-Learners can find many Web3 market opinions but struggle to separate sourced
-facts, interpretation, historical simulation, and future uncertainty.
+学习者能找到大量 Web3 市场观点，却难以区分有来源的事实、解释、历史模拟与未来不确定性。
 
-## Core user path
+第一版必须让这种区分可见且可复现。它应帮助学习者回答「样本与规则显示了什么？」，而不是「我现在该买什么？」。
 
-1. Open the fictional Web3 asset page.
-2. Read the sourced fixed-snapshot summary.
-3. Choose short and long moving-average windows.
-4. Run the deterministic historical backtest.
-5. Inspect return, drawdown, trades, assumptions, and limitations.
+## 核心用户路径
 
-## In scope
+1. 打开虚构 Web3 资产页面。
+2. 阅读带来源的固定快照摘要。
+3. 选择短期与长期均线窗口。
+4. 运行确定性的历史回测。
+5. 查看收益、回撤、成交记录、假设、警告与风险检查。
 
-- Fixed offline Web3 sample data.
-- Source-backed research cards.
-- Moving-average crossover and buy-and-hold comparison.
-- Browser interface and deterministic JSON API.
+## 范围内（In scope）
 
-## Out of scope
+- 固定离线 Web3 样本数据。
+- 带来源的研究卡片。
+- 双均线交叉策略与买入持有对比。
+- 浏览器界面与确定性 JSON API。
+- 将研究输出与交易建议分离的风险检查与警告。
 
-- Live markets, real tokens, wallets, exchange accounts, orders, portfolio
-  advice, and predicted returns.
+## 范围外（Out of scope）
 
-## Acceptance
+- 实时行情、真实代币、钱包、交易所账户、订单、组合建议、个性化仓位与收益预测。
+- 任何让研究信号变成真实下单的流程。
+- 任何将 `BUY`、`SELL` 或置信度分数呈现为行动指令的界面文案。
 
-- `py scripts/course.py lab-10` passes.
-- `/api/report` returns research, metrics, trades, and warnings.
-- The page visibly states that results are educational and cannot execute trades.
+## 安全边界
+
+本系统是研究沙盒。它可以读取固定样本、计算指标、展示模拟成交并解释风险检查。它不得连接真实账户、存储钱包授权、提交订单或提供个性化投资建议。
+
+若模型生成文本与确定性风险检查冲突，系统必须保留规则结果，并将模型输出降级为待审阅文本。
+
+## 验收条件
+
+- `py scripts/course.py verify` 是文档化的仓库验收入口。
+- `/api/report` 返回研究摘要、指标、成交、假设、警告与风险检查。
+- `report_cli.py --format summary` 返回固定样本警告与核心指标。
+- 页面明确声明：结果仅供教学，不构成投资建议，且不能执行交易。
+- 评审人无需阅读聊天记录，即可说明系统证明了什么、未证明什么。
+
+## 停止条件
+
+若某项变更引入真实凭证、钱包流程、下单能力、削弱的安全警告、未经评审的实时数据，或将研究信号写成个性化推荐，则应停止实现或停止评审。

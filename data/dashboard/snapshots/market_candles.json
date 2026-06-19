@@ -5,15 +5,6 @@
   "type": "1day",
   "candles": [
     {
-      "tsSec": 1773187200,
-      "date": "2026-03-11",
-      "open": 69951.5,
-      "close": 70191.9,
-      "high": 71316.3,
-      "low": 68982.0,
-      "volume": 4646.06437369
-    },
-    {
       "tsSec": 1773273600,
       "date": "2026-03-12",
       "open": 70201.0,
@@ -899,20 +890,22 @@
       "tsSec": 1781740800,
       "date": "2026-06-18",
       "open": 64508.8,
-      "close": 64327.0,
+      "close": 62956.3,
       "high": 64813.0,
-      "low": 64271.0,
-      "volume": 246.87639403
+      "low": 62271.3,
+      "volume": 2141.3571052
+    },
+    {
+      "tsSec": 1781827200,
+      "date": "2026-06-19",
+      "open": 62956.4,
+      "close": 62939.2,
+      "high": 63107.8,
+      "low": 62843.3,
+      "volume": 63.19928257
     }
   ],
   "curve": [
-    {
-      "date": "2026-03-11",
-      "close": 70191.9,
-      "equity": 70191.9,
-      "short_ma": null,
-      "long_ma": null
-    },
     {
       "date": "2026-03-12",
       "close": 70522.8,
@@ -924,7 +917,7 @@
       "date": "2026-03-13",
       "close": 70936.2,
       "equity": 70936.2,
-      "short_ma": 70550.3,
+      "short_ma": null,
       "long_ma": null
     },
     {
@@ -953,7 +946,7 @@
       "close": 73899.8,
       "equity": 73899.8,
       "short_ma": 73866.3,
-      "long_ma": 72065.44285714286
+      "long_ma": null
     },
     {
       "date": "2026-03-18",
@@ -1601,17 +1594,24 @@
     },
     {
       "date": "2026-06-18",
-      "close": 64327.0,
-      "equity": 64327.0,
-      "short_ma": 64839.96666666667,
-      "long_ma": 64947.08571428571
+      "close": 62956.3,
+      "equity": 62956.3,
+      "short_ma": 64383.06666666667,
+      "long_ma": 64751.271428571425
+    },
+    {
+      "date": "2026-06-19",
+      "close": 62939.2,
+      "equity": 62939.2,
+      "short_ma": 63469.533333333326,
+      "long_ma": 64659.37142857142
     }
   ],
   "snapshot": {
     "name": "market_candles",
-    "saved_at": "2026-06-18T03:45:34.034194+00:00",
+    "saved_at": "2026-06-19T01:30:47.286012+00:00",
     "origin": "live",
-    "history_id": "2026-06-18T03-45-34.034194+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\market_candles\\2026-06-18T03-45-34.034194+00-00.json"
+    "history_id": "2026-06-19T01-30-47.286012+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\market_candles\\2026-06-19T01-30-47.286012+00-00.json"
   }
 }
