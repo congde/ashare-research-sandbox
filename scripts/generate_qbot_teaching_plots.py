@@ -1010,6 +1010,265 @@ def plot_chapter21_compare_windows() -> Path:
     return out
 
 
+def plot_chapter18_cost_presets() -> Path:
+    """第 18 讲：同一策略在三档成本预设下的收益对比."""
+    from backtest.cost_presets import PRESETS
+    from backtest.rolling.service import execute_backtest
+
+    plt = _setup_matplotlib()
+    presets = ("teaching", "realistic", "perp")
+    labels: list[str] = []
+    returns: list[float] = []
+    sharpes: list[float] = []
+
+    for preset in presets:
+        payload = execute_backtest(
+            strategy_name="ma_crossover",
+            limit=35,
+            strategy_params={"short": 3, "long": 7},
+            cost_preset=preset,
+        )
+        labels.append(PRESETS[preset]["label"])
+        returns.append(float(payload.get("total_return_pct") or 0.0))
+        sharpes.append(float(payload.get("sharpe_ratio") or 0.0))
+
+    x_pos = list(range(len(labels)))
+    width = 0.36
+    fig, ax1 = plt.subplots(figsize=(14, 7))
+    ax1.bar(
+        [i - width / 2 for i in x_pos],
+        returns,
+        width=width,
+        color="#2563eb",
+        label="累计收益 %",
+    )
+    ax2 = ax1.twinx()
+    ax2.bar(
+        [i + width / 2 for i in x_pos],
+        sharpes,
+        width=width,
+        color="#7c3aed",
+        alpha=0.88,
+        label="Sharpe",
+    )
+    ax1.set_ylabel("累计收益（%）", color="#1e40af")
+    ax2.set_ylabel("Sharpe", color="#6d28d9")
+    ax1.set_xticks(x_pos)
+    ax1.set_xticklabels(labels, rotation=12, ha="right")
+    ax1.set_title("第 18 讲 · 成本预设：同一策略在不同成交假设下的落差", fontsize=15, loc="left")
+    ax1.grid(True, axis="y", alpha=0.4)
+    ax1.axhline(0, color="#94a3b8", linewidth=1)
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
+    fig.text(
+        0.5,
+        0.01,
+        "ma_crossover · execute_backtest(cost_preset=…) · data/prices.csv · 不构成投资建议",
+        ha="center",
+        fontsize=9,
+        color="#64748b",
+    )
+    out = OUT / "chapter-18-cost-presets.png"
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(out, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    return out
+
+
+def plot_chapter19_dsr_vs_trials() -> Path:
+    """第 19 讲：试验次数上升时 DSR 如何变保守."""
+    from backtest.audit.dsr import deflated_sharpe_ratio
+
+    plt = _setup_matplotlib()
+    observed_sr = 1.2
+    sample_length = 120
+    trial_counts = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233]
+    dsrs = [
+        float(deflated_sharpe_ratio(observed_sr, sample_length, n)["dsr"])
+        for n in trial_counts
+    ]
+    psrs = [
+        float(deflated_sharpe_ratio(observed_sr, sample_length, n)["psr"])
+        for n in trial_counts
+    ]
+
+    fig, ax = plt.subplots(figsize=(14, 6))
+    ax.plot(trial_counts, dsrs, color="#dc2626", linewidth=2.4, marker="o", label="DSR")
+    ax.plot(trial_counts, psrs, color="#2563eb", linewidth=2.0, linestyle="--", marker="s", label="PSR")
+    ax.axhline(0.95, color="#16a34a", linewidth=1.2, linestyle=":", label="显著性阈值 0.95")
+    ax.set_xscale("log")
+    ax.set_xlabel("试验次数 num_trials（对数刻度）")
+    ax.set_ylabel("概率值")
+    ax.set_title(
+        f"第 19 讲 · 固定样本内 Sharpe={observed_sr} 时，试验越多 DSR 越保守",
+        fontsize=15,
+        loc="left",
+    )
+    ax.grid(True, alpha=0.4)
+    ax.legend(loc="upper right")
+    fig.text(
+        0.5,
+        0.01,
+        "audit/dsr.py · deflated_sharpe_ratio · 不构成投资建议",
+        ha="center",
+        fontsize=9,
+        color="#64748b",
+    )
+    out = OUT / "chapter-19-dsr-vs-trials.png"
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(out, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    return out
+
+
+def plot_chapter21_cpcv_sharpe_distribution() -> Path:
+    """第 21 讲：CPCV 多条 OOS 路径的 Sharpe 分布."""
+    from backtest.rolling.service import run_cpcv_service
+
+    plt = _setup_matplotlib()
+    payload = run_cpcv_service(strategy_name="ma_crossover", limit=35)
+    cpcv = payload.get("cpcv") or {}
+    path_rows = cpcv.get("paths") or []
+    paths = [float(row["sharpe"]) for row in path_rows]
+    if not paths:
+        raise RuntimeError("CPCV returned no path_sharpes")
+
+    p5 = float(cpcv.get("sharpe_p5") or 0.0)
+    p50 = float(cpcv.get("sharpe_p50") or 0.0)
+    p95 = float(cpcv.get("sharpe_p95") or 0.0)
+    profitable = float(cpcv.get("profitable_paths_pct") or 0.0)
+
+    fig, ax = plt.subplots(figsize=(14, 6))
+    ax.hist(paths, bins=min(12, max(5, len(paths) // 2)), color="#60a5fa", edgecolor="#1e40af", alpha=0.85)
+    for value, color, label in (
+        (p5, "#f97316", "p5"),
+        (p50, "#dc2626", "p50"),
+        (p95, "#16a34a", "p95"),
+    ):
+        ax.axvline(value, color=color, linewidth=2, linestyle="--", label=f"Sharpe {label} = {value:.2f}")
+    ax.set_xlabel("OOS Sharpe")
+    ax.set_ylabel("路径数量")
+    ax.set_title(
+        f"第 21 讲 · CPCV Sharpe 分布 · 盈利路径 {profitable:.0f}%",
+        fontsize=15,
+        loc="left",
+    )
+    ax.grid(True, axis="y", alpha=0.35)
+    ax.legend(loc="upper right")
+    fig.text(
+        0.5,
+        0.01,
+        "run_cpcv_service · py scripts/backtest_lab.py cpcv · 不构成投资建议",
+        ha="center",
+        fontsize=9,
+        color="#64748b",
+    )
+    out = OUT / "chapter-21-cpcv-sharpe-dist.png"
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(out, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    return out
+
+
+def plot_chapter21_parameter_sensitivity() -> Path:
+    """第 21 讲：参数 ±20% 扰动后的收益漂移."""
+    from backtest.rolling.service import run_robustness_audit
+
+    plt = _setup_matplotlib()
+    payload = run_robustness_audit(strategy_name="ma_crossover", limit=35)
+    sensitivity = payload.get("parameter_sensitivity") or {}
+    rows = sensitivity.get("perturbations") or []
+    if not rows:
+        raise RuntimeError("robustness audit returned no perturbations")
+
+    labels = [f"{row['param']} {row['direction']}" for row in rows]
+    drifts = [float(row["return_drift_pct"]) for row in rows]
+    colors = ["#16a34a" if row["stable"] else "#dc2626" for row in rows]
+    stability = float(sensitivity.get("stability_score") or 0.0)
+    pbo = float((payload.get("pbo") or {}).get("pbo") or 0.0)
+
+    y_pos = list(range(len(labels)))
+    fig, ax = plt.subplots(figsize=(14, max(5, len(labels) * 0.55 + 2)))
+    ax.barh(y_pos, drifts, color=colors, alpha=0.9)
+    ax.axvline(30, color="#94a3b8", linewidth=1.5, linestyle="--", label="漂移阈值 30%")
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("收益漂移（%）")
+    ax.set_title(
+        f"第 21 讲 · 参数敏感性 · 稳定性 {stability * 100:.0f}% · PBO {pbo * 100:.0f}%",
+        fontsize=15,
+        loc="left",
+    )
+    ax.grid(True, axis="x", alpha=0.35)
+    ax.legend(loc="lower right")
+    fig.text(
+        0.5,
+        0.01,
+        "run_robustness_audit · 绿色=稳定 · 红色=超阈值 · 不构成投资建议",
+        ha="center",
+        fontsize=9,
+        color="#64748b",
+    )
+    out = OUT / "chapter-21-parameter-sensitivity.png"
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(out, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    return out
+
+
+def plot_chapter21_walkforward_sharpe() -> Path:
+    """第 21 讲：Walk-forward 样本内/外 Sharpe 与 DSR."""
+    from backtest.rolling.service import run_walk_forward
+
+    plt = _setup_matplotlib()
+    payload = run_walk_forward(strategy_name="ma_crossover", limit=35, num_windows=3)
+    is_sharpe = float(payload.get("in_sample_sharpe") or 0.0)
+    oos_sharpe = float(payload.get("out_of_sample_sharpe") or 0.0)
+    dsr = float(payload.get("dsr") or 0.0)
+    num_trials = int(payload.get("num_trials") or 0)
+    warning = bool(payload.get("overfit_warning"))
+
+    labels = ["样本内 Sharpe", "样本外 Sharpe"]
+    values = [is_sharpe, oos_sharpe]
+    colors = ["#2563eb", "#f97316" if warning else "#16a34a"]
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    bars = ax.bar(labels, values, color=colors, width=0.55)
+    for bar, value in zip(bars, values):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.05,
+            f"{value:.2f}",
+            ha="center",
+            va="bottom",
+            fontsize=12,
+            color="#0f172a",
+        )
+    ax.axhline(0, color="#94a3b8", linewidth=1)
+    ax.set_ylabel("Sharpe")
+    status = "过拟合警告" if warning else "未触发警告"
+    ax.set_title(
+        f"第 21 讲 · Walk-forward · DSR={dsr:.2f} · 试验 {num_trials} 次 · {status}",
+        fontsize=15,
+        loc="left",
+    )
+    ax.grid(True, axis="y", alpha=0.35)
+    fig.text(
+        0.5,
+        0.01,
+        "run_walk_forward · py scripts/backtest_lab.py walk-forward · 不构成投资建议",
+        ha="center",
+        fontsize=9,
+        color="#64748b",
+    )
+    out = OUT / "chapter-21-walkforward-sharpe.png"
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(out, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    return out
+
+
 def _run_pil_chapter18_flow() -> Path:
     scripts_dir = ROOT / "scripts"
     if str(scripts_dir) not in sys.path:
@@ -1028,12 +1287,17 @@ def main() -> int:
         plot_chapter17_ma_crossover_trades(),
         plot_chapter18_event_backtest_combo(),
         plot_chapter18_macd_trailing_backtest(),
+        plot_chapter18_cost_presets(),
         _run_pil_chapter18_flow(),
         plot_chapter19_metrics_comparison(),
         plot_chapter19_equity_drawdown(),
+        plot_chapter19_dsr_vs_trials(),
         plot_chapter21_factor_ic_panel(),
         plot_chapter21_rolling_sharpe(),
         plot_chapter21_compare_windows(),
+        plot_chapter21_cpcv_sharpe_distribution(),
+        plot_chapter21_parameter_sensitivity(),
+        plot_chapter21_walkforward_sharpe(),
     ]
     for path in outputs:
         print(path.relative_to(ROOT))
