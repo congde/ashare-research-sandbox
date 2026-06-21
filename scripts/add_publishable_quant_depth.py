@@ -1,4 +1,4 @@
-"""Turn the 35 course drafts into evidence-led LLM + quant teaching chapters."""
+﻿"""Turn the 35 course drafts into evidence-led LLM + quant teaching chapters."""
 
 from __future__ import annotations
 
@@ -225,7 +225,7 @@ JSON 比例、必需字段完整率、证据引用率和关键失败数。不同
 本章最终交付物是“{artifact}”。发布决定至少有三种：通过、修改后复测、拒绝。通过表示
 在当前合同和样本内达标，不代表未来市场有效；修改后复测表示问题可定位且没有越过关键
 安全门；拒绝表示出现未来信息污染、越权执行、不可追溯数据或无法解释的结果。任何时候，
-真实账户、钱包授权、订单执行和个性化投资建议都不属于本书的允许范围。
+真实账户、钱包授权、订单执行和个性化实盘执行都不属于本书的允许范围。
 
 为了让读者真正学会，完成本章后应能不依赖原文回答四个问题：输入如何形成，LLM 在哪里
 参与，量化验证如何否定它，风险控制在哪里停止它。如果只能复述提示词或命令，而不能

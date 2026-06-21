@@ -27,7 +27,7 @@ def build_report(short: int = 3, long: int = 7) -> dict:
             "risk_rules": list(DEFAULT_RULE_IDS),
         },
         "warnings": [
-            "教学项目，不构成投资建议。",
+            "研究与模拟项目，不进入实盘执行。",
             "仅使用虚构 Web3 资产与固定离线历史样本。",
             "项目不连接交易所账户，也不能执行交易。",
         ],

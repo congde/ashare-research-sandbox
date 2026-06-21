@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-18T02:02:21Z",
+  "totalScanned": 5,
+  "topK": 3,
+  "opportunities": [
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 13.5,
+      "confidence": 48.094,
+      "change24h": 0.0349,
+      "volume24h": 3385446.548424,
+      "last": 3.9046,
+      "keyReasons": [
+        "24h 涨幅 3.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "BONK",
+      "pair": "BONK-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -9.4,
+      "confidence": 45.64,
+      "change24h": -0.034,
+      "volume24h": 1396432.209401076,
+      "last": 4.68e-06,
+      "keyReasons": [
+        "24h 跌幅 -3.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -6.6,
+      "confidence": 43.972,
+      "change24h": -0.0362,
+      "volume24h": 5559863.6187,
+      "last": 0.05824,
+      "keyReasons": [
+        "24h 跌幅 -3.6%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 3
+    }
+  ],
+  "marketOverview": "扫描 5 个币种，市场方向分化。多头 1、空头 2、中性 0。综合靠前：ADI(温和上涨)、BONK(温和走弱)、BLEND(温和走弱)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-18T02:02:21.941428+00:00",
+    "origin": "live",
+    "history_id": "2026-06-18T02-02-21.941428+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-18T02-02-21.941428+00-00.json"
+  }
+}

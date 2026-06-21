@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 import pytest
 
@@ -18,7 +18,7 @@ def test_report_has_traceable_research_and_safety_boundary() -> None:
     report = build_report()
     assert report["research"]["facts"][0]["source_id"] == "S1"
     assert len(report["research"]["sources"]) >= 3
-    assert any("不构成投资建议" in warning for warning in report["warnings"])
+    assert any("不进入实盘执行" in warning for warning in report["warnings"])
     assert any("不能执行交易" in warning for warning in report["warnings"])
     assert report["research"]["company"] == "示例协议（WEB3-DEMO/USDT）"
 

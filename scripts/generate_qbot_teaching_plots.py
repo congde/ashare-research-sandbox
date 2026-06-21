@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Generate HD teaching plots inspired by vendor/Qbot/docs/notebook/ (MIT).
 
 Uses fixed offline sample data/prices.csv only — no live market APIs.
@@ -20,7 +20,7 @@ PRICES_CSV = ROOT / "data" / "prices.csv"
 
 from print_figure_config import PRINT_DPI as DPI
 FOOTER = (
-    "教学样本 WEB3-DEMO · data/prices.csv · 不构成投资建议 · "
+    "教学样本 WEB3-DEMO · data/prices.csv · 不进入实盘执行 · "
     "参考 vendor/Qbot/docs/notebook/01-strategy.ipynb 出图模式"
 )
 
@@ -393,7 +393,7 @@ def plot_chapter19_metrics_comparison() -> Path:
     fig.text(
         0.5,
         0.01,
-        "data/prices.csv · py scripts/backtest_lab.py compare · 不构成投资建议",
+        "data/prices.csv · py scripts/backtest_lab.py compare · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -558,7 +558,7 @@ def plot_chapter19_equity_drawdown() -> Path:
     fig.text(
         0.5,
         0.01,
-        "参考 vendor/Qbot/docs/notebook/pandas.ipynb · execute_backtest(ma_crossover) · 不构成投资建议",
+        "参考 vendor/Qbot/docs/notebook/pandas.ipynb · execute_backtest(ma_crossover) · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -666,7 +666,7 @@ def plot_chapter21_factor_ic_panel() -> Path:
     fig.text(
         0.5,
         0.01,
-        "参考 vendor/Qbot/docs/notebook/02-alphalens.ipynb · src/factor_mining/ · 不构成投资建议",
+        "参考 vendor/Qbot/docs/notebook/02-alphalens.ipynb · src/factor_mining/ · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -736,7 +736,7 @@ def plot_chapter21_rolling_sharpe() -> Path:
     fig.text(
         0.5,
         0.01,
-        "参考 vendor/Qbot/docs/notebook/quantstats-rolling.ipynb · 不构成投资建议",
+        "参考 vendor/Qbot/docs/notebook/quantstats-rolling.ipynb · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -850,7 +850,7 @@ def plot_chapter18_event_backtest_combo() -> Path:
     fig.text(
         0.5,
         0.01,
-        "参考 vendor/Qbot/docs/notebook/average.ipynb cerebro.plot · execute_backtest · 不构成投资建议",
+        "参考 vendor/Qbot/docs/notebook/average.ipynb cerebro.plot · execute_backtest · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -930,7 +930,7 @@ def plot_chapter18_macd_trailing_backtest() -> Path:
     fig.text(
         0.5,
         0.01,
-        "参考 vendor/Qbot/qbot/engine/backtest/bitcoin_bt_example.py · 无 Amberdata 在线数据 · 不构成投资建议",
+        "参考 vendor/Qbot/qbot/engine/backtest/bitcoin_bt_example.py · 无 Amberdata 在线数据 · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -998,7 +998,7 @@ def plot_chapter21_compare_windows() -> Path:
     fig.text(
         0.5,
         0.01,
-        "py scripts/backtest_lab.py windows ·  chronologic split · 不构成投资建议",
+        "py scripts/backtest_lab.py windows ·  chronologic split · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -1064,7 +1064,7 @@ def plot_chapter18_cost_presets() -> Path:
     fig.text(
         0.5,
         0.01,
-        "ma_crossover · execute_backtest(cost_preset=…) · data/prices.csv · 不构成投资建议",
+        "ma_crossover · execute_backtest(cost_preset=…) · data/prices.csv · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -1110,7 +1110,7 @@ def plot_chapter19_dsr_vs_trials() -> Path:
     fig.text(
         0.5,
         0.01,
-        "audit/dsr.py · deflated_sharpe_ratio · 不构成投资建议",
+        "audit/dsr.py · deflated_sharpe_ratio · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -1159,7 +1159,7 @@ def plot_chapter21_cpcv_sharpe_distribution() -> Path:
     fig.text(
         0.5,
         0.01,
-        "run_cpcv_service · py scripts/backtest_lab.py cpcv · 不构成投资建议",
+        "run_cpcv_service · py scripts/backtest_lab.py cpcv · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -1205,7 +1205,7 @@ def plot_chapter21_parameter_sensitivity() -> Path:
     fig.text(
         0.5,
         0.01,
-        "run_robustness_audit · 绿色=稳定 · 红色=超阈值 · 不构成投资建议",
+        "run_robustness_audit · 绿色=稳定 · 红色=超阈值 · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",
@@ -1257,7 +1257,7 @@ def plot_chapter21_walkforward_sharpe() -> Path:
     fig.text(
         0.5,
         0.01,
-        "run_walk_forward · py scripts/backtest_lab.py walk-forward · 不构成投资建议",
+        "run_walk_forward · py scripts/backtest_lab.py walk-forward · 不进入实盘执行",
         ha="center",
         fontsize=9,
         color="#64748b",

@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "symbol": "BTC",
+  "marketSentiment": {
+    "fearGreed": {
+      "value": 22,
+      "label": "Extreme Fear",
+      "yesterday": 23,
+      "change": -1,
+      "timestamp": "1781654400"
+    }
+  },
+  "valuescanChain": {},
+  "snapshot": {
+    "name": "onchain",
+    "saved_at": "2026-06-17T13:23:34.518442+00:00",
+    "origin": "live",
+    "history_id": "2026-06-17T13-23-34.518442+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\onchain\\2026-06-17T13-23-34.518442+00-00.json"
+  }
+}

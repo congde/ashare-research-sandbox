@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-18T09:13:20Z",
+  "totalScanned": 5,
+  "topK": 3,
+  "opportunities": [
+    {
+      "symbol": "BLUAI",
+      "pair": "BLUAI-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 28.5,
+      "confidence": 57.111999999999995,
+      "change24h": 0.1352,
+      "volume24h": 820608.309858,
+      "last": 0.015911,
+      "keyReasons": [
+        "24h 涨幅 13.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 17.9,
+      "confidence": 50.734,
+      "change24h": 0.0489,
+      "volume24h": 6433909.365322,
+      "last": 0.06004,
+      "keyReasons": [
+        "24h 涨幅 4.9%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 13.4,
+      "confidence": 48.046,
+      "change24h": 0.0341,
+      "volume24h": 3941895.68451,
+      "last": 3.9208,
+      "keyReasons": [
+        "24h 涨幅 3.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    }
+  ],
+  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 3、空头 0、中性 0。综合靠前：BLUAI(强势上涨)、BLEND(温和上涨)、ADI(温和上涨)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-18T09:13:20.071734+00:00",
+    "origin": "live",
+    "history_id": "2026-06-18T09-13-20.071734+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-18T09-13-20.071734+00-00.json"
+  }
+}

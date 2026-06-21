@@ -80,6 +80,16 @@ def print_figures() -> None:
     python_task("scripts/generate_qbot_teaching_plots.py")
     python_task("scripts/generate_chapter01_figures.py")
     python_task("scripts/generate_chapter03_figures.py")
+    python_task("scripts/generate_chapter05_curve.py")
+    python_task("scripts/generate_chapter05_10_figures.py")
+    python_task("scripts/generate_chapter06_figures.py")
+    python_task("scripts/generate_chapter06_curve.py")
+    python_task("scripts/generate_chapter07_snapshot_curve.py")
+    python_task("scripts/generate_chapter08_figures.py")
+    python_task("scripts/generate_chapter09_figures.py")
+    python_task("scripts/generate_chapter10_figures.py")
+    python_task("scripts/generate_chapter11_figures.py")
+    python_task("scripts/generate_chapter12_figures.py")
     python_task("scripts/generate_supplementary_diagrams.py")
 
 
@@ -94,7 +104,7 @@ TASKS = {
     "courseware-headings": courseware_headings,
     "asset-audit": lambda: python_task("scripts/audit_assets.py"),
     "vendor-drift": lambda: python_task("scripts/check_vendor_drift.py"),
-    "teaching-plots": lambda: python_task("scripts/generate_qbot_teaching_plots.py"),
+    "teaching-plots": print_figures,
     "print-figures": print_figures,
     "lab-10": lambda: python_task("verify.py"),
 }

@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-20T06:37:52Z",
+  "totalScanned": 5,
+  "topK": 3,
+  "opportunities": [
+    {
+      "symbol": "B2",
+      "pair": "B2-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.6,
+      "confidence": 55.378,
+      "change24h": 0.1063,
+      "volume24h": 468137.505012,
+      "last": 0.5432,
+      "keyReasons": [
+        "24h 涨幅 10.6%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -21.5,
+      "confidence": 52.9,
+      "change24h": -0.115,
+      "volume24h": 7624343.41453,
+      "last": 0.05776,
+      "keyReasons": [
+        "24h 跌幅 -11.5%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "ETC",
+      "pair": "ETC-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 20.8,
+      "confidence": 52.486,
+      "change24h": 0.0581,
+      "volume24h": 534897.0223009964,
+      "last": 7.5815,
+      "keyReasons": [
+        "24h 涨幅 5.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    }
+  ],
+  "marketOverview": "扫描 5 个币种，市场方向分化。多头 2、空头 1、中性 0。综合靠前：B2(强势上涨)、BLEND(明显回调)、ETC(强势上涨)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-20T06:37:52.898837+00:00",
+    "origin": "live",
+    "history_id": "2026-06-20T06-37-52.898837+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-20T06-37-52.898837+00-00.json"
+  }
+}

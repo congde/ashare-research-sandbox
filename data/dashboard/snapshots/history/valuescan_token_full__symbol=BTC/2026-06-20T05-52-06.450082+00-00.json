@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": true,
+  "symbol": "BTC",
+  "fetchedAt": 1781934703872,
+  "vsTokenId": 1,
+  "tokenDetail": {
+    "vsTokenId": "1",
+    "name": "Bitcoin",
+    "symbol": "BTC",
+    "icon": "https://static.valuescan.io/valuescan/cmc/coins/1.png",
+    "oldSymbol": "",
+    "price": "63615.29",
+    "highPrice": "126198.06960343386",
+    "lowPrice": "0.04864654",
+    "marketCapDominance": "",
+    "volume24h": "21190850539.06537247",
+    "volumeChange24h": "-27.9843",
+    "percentChange1h": "0.32046578",
+    "percentChange24h": "1.81401991",
+    "percentChange7d": "0.20119619",
+    "percentChange30d": "-18.20991654",
+    "percentChange60d": "-16.11016186",
+    "percentChange90d": "-7.99801205",
+    "marketCap": "1275993242292.995664525024",
+    "totalSupply": "20045296",
+    "circulationSupply": "20045296",
+    "maxSupply": "21000000",
+    "cost": "58952.176081616148458383",
+    "chainAddresses": [
+      {
+        "contractAddress": "BTC",
+        "chainName": "BTC",
+        "holderCount": "56557470",
+        "transCount": "1380444109",
+        "issueDate": 1230998400000,
+        "precision": "8",
+        "totalSupply": "20045311",
+        "coinKey": "BTC_BTC"
+      }
+    ]
+  },
+  "snapshot": {
+    "name": "valuescan_token_full__symbol=BTC",
+    "saved_at": "2026-06-20T05:52:06.450082+00:00",
+    "origin": "live",
+    "history_id": "2026-06-20T05-52-06.450082+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\valuescan_token_full__symbol=BTC\\2026-06-20T05-52-06.450082+00-00.json"
+  }
+}

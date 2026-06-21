@@ -70,7 +70,7 @@ export default function LiveTradingPage() {
 
   function submitDryRun() {
     if (confirmText.trim().toUpperCase() !== CONFIRM_TOKEN) {
-      setOrderResult(`请输入确认词 ${CONFIRM_TOKEN} 后才会模拟提交（对齐 web3-trading 实盘保护）。`);
+      setOrderResult(`请输入确认词 ${CONFIRM_TOKEN} 后才会记录模拟研究动作。`);
       return;
     }
     if (usdAmount <= 0) {
@@ -101,9 +101,9 @@ export default function LiveTradingPage() {
 
   return (
     <TradingPageShell
-      eyebrow="Live Trading Console"
+      eyebrow="Research Dry-Run Console"
       title="模拟交易控制台"
-      description="布局参考 web3-trading /live-trading：信号门禁、CONFIRM 保护与 RiskManager 规则栈；本页仅 dry-run，不会提交真实订单。"
+      description="信号门禁、CONFIRM 保护与 RiskManager 规则栈只用于研究演练；本页仅 dry-run，不会提交真实订单。"
       actions={
         <>
           <Button icon={<ReloadOutlined />} onClick={() => void loadContext()} loading={signalLoading}>
@@ -120,7 +120,7 @@ export default function LiveTradingPage() {
         type="warning"
         showIcon
         message="模拟交易保护"
-        description="教学沙箱不接 web3交易所 写接口。CONFIRM 仅用于演练 web3-trading 实盘流程；真实下单需独立部署上游并补齐 RiskState 持久化。"
+        description="教学沙箱不接交易所写接口。CONFIRM 仅用于演练模拟研究流程；任何真实账户、钱包授权或订单提交都不属于本仓库能力范围。"
       />
 
       <section className="trading-grid">
@@ -181,7 +181,7 @@ export default function LiveTradingPage() {
         </QuantGlowCard>
 
         <QuantGlowCard className="trading-span-6">
-          <SectionHeader title="现货 dry-run" description="对齐 web3-trading 小额实盘表单" />
+          <SectionHeader title="现货 dry-run" description="模拟研究表单，不连接真实账户或订单接口" />
           <div className="live-trading-form">
             <div className="live-trading-field">
               <label>交易对</label>

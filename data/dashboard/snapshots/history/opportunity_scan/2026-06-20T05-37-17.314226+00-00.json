@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-20T05:37:17Z",
+  "totalScanned": 5,
+  "topK": 3,
+  "opportunities": [
+    {
+      "symbol": "B2",
+      "pair": "B2-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 24.5,
+      "confidence": 54.7,
+      "change24h": 0.095,
+      "volume24h": 561409.429892,
+      "last": 0.5334,
+      "keyReasons": [
+        "24h 涨幅 9.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -22.1,
+      "confidence": 53.266,
+      "change24h": -0.1211,
+      "volume24h": 7503914.379124,
+      "last": 0.05731,
+      "keyReasons": [
+        "24h 跌幅 -12.1%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "ETC",
+      "pair": "ETC-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 20.9,
+      "confidence": 52.57,
+      "change24h": 0.0595,
+      "volume24h": 542670.6314219412,
+      "last": 7.5814,
+      "keyReasons": [
+        "24h 涨幅 5.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    }
+  ],
+  "marketOverview": "扫描 5 个币种，市场方向分化。多头 2、空头 1、中性 0。综合靠前：B2(强势上涨)、BLEND(明显回调)、ETC(强势上涨)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-20T05:37:17.314226+00:00",
+    "origin": "live",
+    "history_id": "2026-06-20T05-37-17.314226+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-20T05-37-17.314226+00-00.json"
+  }
+}

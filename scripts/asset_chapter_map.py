@@ -4,6 +4,91 @@ from __future__ import annotations
 
 # filename -> (chapter markdown basename prefix like "02-", alt text, figure caption suffix)
 ASSET_USAGE: dict[str, tuple[str, str, str]] = {
+    "chapter-14-pollution-gate.png": (
+        "14-",
+        "LLM 污染拦截路径",
+        "幻觉、提示泄漏与未来信息进入结论前的拦截路径",
+    ),
+    "chapter-15-scoring-rubric.png": (
+        "15-",
+        "LLM 信号评分规程",
+        "固定样本、固定权重与关键失败门禁的评分路径",
+    ),
+    "chapter-20-overfit-pollution-gate.png": (
+        "20-",
+        "过拟合与前视偏差拦截路径",
+        "过拟合、前视偏差与数据窥探进入绩效解释前的拦截路径",
+    ),
+    "chapter-22-risk-order-gate.png": (
+        "22-",
+        "仓位与风控下单门禁",
+        "订单意图、组合状态与风险规则共同决定是否允许成交",
+    ),
+    "chapter-23-research-ia-path.png": (
+        "23-",
+        "交易研究应用路径",
+        "从行情总览到风险中心的交易研究应用信息架构路径",
+    ),
+    "chapter-24-market-candidate-path.png": (
+        "24-",
+        "行情候选的数据路径",
+        "行情候选从数据源、总览、机会雷达到继续研究或降级停止的路径",
+    ),
+    "chapter-25-kline-llm-binding.png": (
+        "25-",
+        "K 线与 LLM 信号绑定",
+        "K 线指标、规则基线与 LLM 解释之间的证据绑定关系",
+    ),
+    "chapter-26-backtest-risk-center.png": (
+        "26-",
+        "回测与风险中心联动",
+        "回测结果、审计指标与风险拒绝记录之间的联动关系",
+    ),
+    "chapter-27-browser-research-path.png": (
+        "27-",
+        "浏览器验证研究路径",
+        "从研究入口到风险复核的浏览器端到端验证路径",
+    ),
+    "chapter-28-skill-evidence-contract.png": (
+        "28-",
+        "Skill 证据合同",
+        "Codex Skill 复用证据检查流程但保留人工发布责任",
+    ),
+    "chapter-29-snapshot-draft-path.png": (
+        "29-",
+        "快照到研究草稿",
+        "自动化先冻结市场快照再生成研究草稿的证据路径",
+    ),
+    "chapter-30-approval-stop-gate.png": (
+        "30-",
+        "审批门与停止线",
+        "高风险动作先分类审批再根据停止线决定是否执行",
+    ),
+    "chapter-31-eval-version-decision.png": (
+        "31-",
+        "Eval 版本决策",
+        "固定评测样本后比较版本平均分与关键失败",
+    ),
+    "chapter-32-failure-audit-loop.png": (
+        "32-",
+        "失败降级与审计闭环",
+        "失败、降级、恢复和审计记录之间的闭环",
+    ),
+    "chapter-33-sim-trading-boundary.png": (
+        "33-",
+        "端到端模拟交易边界",
+        "端到端模拟交易系统只验证流程完整性不验证真实交易收益",
+    ),
+    "chapter-34-research-path-contracts.png": (
+        "34-",
+        "贯通研究路径合同",
+        "信号、策略、回测、审计、风控与页面验收之间的合同路径",
+    ),
+    "chapter-35-acceptance-retro-loop.png": (
+        "35-",
+        "验收复盘与下一轮迭代",
+        "最终验收、复盘和下一轮可执行任务之间的闭环",
+    ),
     # --- 开篇词：课程总览 + 产品界面实拍 ---
     "chapter-00-delivery-chain.png": (
         "00-",
@@ -212,6 +297,16 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "价格、信号与策略累计收益三面板",
         "3/7 双均线：价格+指标、规则信号、shift(1) 策略路径（参考 Qbot 01-strategy）",
     ),
+    "chapter-04-return-formula-demo.png": (
+        "04-",
+        "价格水平与简单收益率示意图",
+        "价格差值与简单收益率的区别",
+    ),
+    "chapter-04-drawdown-formula-demo.png": (
+        "04-",
+        "权益曲线最大回撤示意图",
+        "权益峰值、谷值与最大回撤",
+    ),
     "chapter-05-entry-decision.png": (
         "05-",
         "任务能力到 Codex 入口的选择路径",
@@ -223,9 +318,19 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "受控工作区中的权限、规则与证据流",
     ),
     "chapter-05-publish-pipeline.png": (
-        "04-",
-        "可发版资料流水线",
-        "资料进入工作区前的分层审查流水线",
+        "05-",
+        "研究结果发布流水线",
+        "研究结论进入页面或报告前的来源、计算、风险和表达门",
+    ),
+    "chapter-05-execution-gate-case.png": (
+        "05-",
+        "个人量化研究执行门案例",
+        "BTC 规则信号、回测证据、动作请求与执行门的降级路径",
+    ),
+    "chapter-05-python-equity-curve.png": (
+        "05-",
+        "Python 价格与回测权益曲线",
+        "BTC 收盘价、ma_crossover 回测权益、入场退出标记与执行门注释",
     ),
     "chapter-06-claim-flow.png": (
         "06-",
@@ -238,9 +343,29 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "分轮调研如何阻止证据升级",
     ),
     "chapter-06-evidence-gates.png": (
-        "17-",
-        "证据门推进流程",
-        "计划里程碑中的证据门推进",
+        "06-",
+        "数据证据门",
+        "行情、资金、链上与情绪数据进入指标或摘要前的来源、时间、口径和用途检查",
+    ),
+    "chapter-06-data-map-path.png": (
+        "06-",
+        "市场数据地图实战路径",
+        "从原始数据、完整性检查、manifest、API 到页面或 LLM 摘要的证据追踪路径",
+    ),
+    "chapter-06-source-cards.png": (
+        "06-",
+        "四类来源卡示例",
+        "行情、资金、链上和情绪来源卡的可回答问题与不能回答问题",
+    ),
+    "chapter-06-time-mismatch-case.png": (
+        "06-",
+        "时间错配反例",
+        "不同观察窗口的数据被拦下，不能合并成同一时点市场事实",
+    ),
+    "chapter-06-python-source-timeline.png": (
+        "06-",
+        "Python 数据来源时间线",
+        "BTC 收盘价、成交量、链上情绪观察日与 manifest 保存时间的同图复核",
     ),
     "chapter-06-plan-anatomy.png": (
         "17-",
@@ -256,6 +381,16 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "07-",
         "方向决定的复核与撤销机制",
         "方向决定的复核与撤销机制",
+    ),
+    "chapter-07-snapshot-fallback.png": (
+        "07-",
+        "市场数据快照与回退路径",
+        "实时接口、快照、latest 指针与 fixture 兜底",
+    ),
+    "chapter-07-python-snapshot-history.png": (
+        "07-",
+        "Python 快照历史累积曲线",
+        "核心数据集 history 文件数量、latest 指针与保存时间的同图复核",
     ),
     "chapter-07-mcp-audit.png": (
         "05-",
@@ -278,6 +413,21 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "从调研证据收敛核心用户的过程",
         "从调研证据收敛核心用户的过程",
     ),
+    "chapter-08-cleaning-gates.png": (
+        "08-",
+        "时间序列清洗门禁",
+        "原始记录、字段契约、时间顺序与用途放行",
+    ),
+    "chapter-08-normalization-trace.png": (
+        "08-",
+        "标准化字段追溯路径",
+        "从页面展示字段反向追到 API、标准化函数和原始 payload",
+    ),
+    "chapter-08-pollution-matrix.png": (
+        "08-",
+        "污染样本处理矩阵",
+        "重复时间戳、逆序记录、关键字段缺失和不可转换字符串的降级或拒绝规则",
+    ),
     "chapter-08-browser-state-machine.png": (
         "22-",
         "浏览器流程状态机",
@@ -298,6 +448,16 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "从真实轨迹提炼 Skill",
         "从成功轨迹提炼 Skill 的流程（预告）",
     ),
+    "chapter-09-indicator-boundaries.png": (
+        "09-",
+        "指标计算与解释边界",
+        "SMA、RSI、布林带和 ATR 的状态描述边界与禁止推断",
+    ),
+    "chapter-09-conflict-card.png": (
+        "09-",
+        "指标冲突解释卡",
+        "均线、RSI、布林带和 ATR 冲突时的合格解释与禁止交易动作",
+    ),
     "chapter-09-indicators-panel.png": (
         "09-",
         "固定样本上的趋势动量波动指标",
@@ -313,10 +473,35 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "方案选择的价值—风险—可验证性三角",
         "方案选择的价值—风险—可验证性三角",
     ),
+    "chapter-10-report-layers.png": (
+        "10-",
+        "报告五层结构",
+        "事实、解释、信号、未知和来源在研究报告中的分层保存",
+    ),
+    "chapter-10-claim-ledger-review.png": (
+        "10-",
+        "主张账本评审",
+        "从报告句子反向定位字段并决定保留、降级、删除或拒绝",
+    ),
+    "chapter-10-claim-traceability.png": (
+        "10-",
+        "报告主张追溯路径",
+        "从报告主张回到来源字段、计算口径与限制声明",
+    ),
     "chapter-11-mvp-loop.png": (
         "11-",
         "功能清单与最小完整闭环的区别",
         "功能清单与最小完整闭环的区别",
+    ),
+    "chapter-11-llm-boundary-card.png": (
+        "11-",
+        "LLM 使用边界卡",
+        "模型输出进入研究记录前的允许范围、证据要求和拒绝条件",
+    ),
+    "chapter-11-fallback-merge.png": (
+        "11-",
+        "规则基线与 LLM 合并路径",
+        "先生成规则基线再合并 LLM 白名单字段，并在失败或越界时回退",
     ),
     "chapter-11-scope-boundary.png": (
         "11-",
@@ -324,7 +509,7 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "第一版范围内外与审批边界",
     ),
     "chapter-11-data-pipeline.png": (
-        "14-",
+        "11-",
         "数据处理三段流水线",
         "数据处理：剖析、转换与对账",
     ),
@@ -343,6 +528,16 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "假设驱动的仓库勘察循环",
         "开工前：假设驱动的仓库勘察循环",
     ),
+    "chapter-12-context-contract.png": (
+        "12-",
+        "LLM 上下文合同",
+        "市场事实、技术状态、证据列表和交易计划进入提示词前的字段合同",
+    ),
+    "chapter-12-visible-window.png": (
+        "12-",
+        "可见时间窗口",
+        "只有决策时点之前已经可见的字段才能进入 LLM 信号解释上下文",
+    ),
     "chapter-12-prd-review.png": (
         "12-",
         "PRD 审查中的发现、建议与人工决定",
@@ -354,7 +549,7 @@ ASSET_USAGE: dict[str, tuple[str, str, str]] = {
         "从正常路径到边界与滥用场景的压力测试",
     ),
     "chapter-12-rules-compile.png": (
-        "21-",
+        "12-",
         "把规则编译成执行清单",
         "把 AGENTS 与 verify 规则编译成执行清单（对照）",
     ),

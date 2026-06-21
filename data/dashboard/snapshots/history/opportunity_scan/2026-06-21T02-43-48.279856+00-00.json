@@ -1,0 +1,117 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-21T02:43:48Z",
+  "totalScanned": 9,
+  "topK": 5,
+  "opportunities": [
+    {
+      "symbol": "ALICE",
+      "pair": "ALICE-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 77.2,
+      "confidence": 86.332,
+      "change24h": 0.6222,
+      "volume24h": 460285.6626062,
+      "last": 0.1898,
+      "keyReasons": [
+        "24h 涨幅 62.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "low",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "JELLYJELLY",
+      "pair": "JELLYJELLY-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -12.3,
+      "confidence": 47.373999999999995,
+      "change24h": -0.0429,
+      "volume24h": 211764.187068,
+      "last": 0.05971,
+      "keyReasons": [
+        "24h 跌幅 -4.3%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "BLUAI",
+      "pair": "BLUAI-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -11.8,
+      "confidence": 47.086,
+      "change24h": -0.0381,
+      "volume24h": 421322.53016,
+      "last": 0.014534,
+      "keyReasons": [
+        "24h 跌幅 -3.8%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 3
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 6.7,
+      "confidence": 44.002,
+      "change24h": 0.0167,
+      "volume24h": 6233425.03306,
+      "last": 0.05817,
+      "keyReasons": [
+        "涨跌幅处于中性区间",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 4
+    },
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "NEUTRAL",
+      "label": "震荡整理",
+      "score": 2.7,
+      "confidence": 41.614,
+      "change24h": 0.0069,
+      "volume24h": 3683552.772846,
+      "last": 4.0748,
+      "keyReasons": [
+        "涨跌幅处于中性区间"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "neutral",
+      "marketState": "uncertain",
+      "rank": 5
+    }
+  ],
+  "marketOverview": "扫描 9 个币种，市场方向分化。多头 1、空头 2、中性 2。综合靠前：ALICE(强势上涨)、JELLYJELLY(温和走弱)、BLUAI(温和走弱)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-21T02:43:48.279856+00:00",
+    "origin": "live",
+    "history_id": "2026-06-21T02-43-48.279856+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-21T02-43-48.279856+00-00.json"
+  }
+}

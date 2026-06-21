@@ -1,0 +1,116 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-18T04:23:51Z",
+  "totalScanned": 10,
+  "topK": 5,
+  "opportunities": [
+    {
+      "symbol": "BLUAI",
+      "pair": "BLUAI-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 27.2,
+      "confidence": 56.308,
+      "change24h": 0.1218,
+      "volume24h": 612593.466146,
+      "last": 0.015696,
+      "keyReasons": [
+        "24h 涨幅 12.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "SWARMS",
+      "pair": "SWARMS-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 21.1,
+      "confidence": 52.641999999999996,
+      "change24h": 0.0607,
+      "volume24h": 221362.798072,
+      "last": 0.00751,
+      "keyReasons": [
+        "24h 涨幅 6.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "JELLYJELLY",
+      "pair": "JELLYJELLY-USDT",
+      "signal": "SELL",
+      "label": "明显回调",
+      "score": -20.1,
+      "confidence": 52.036,
+      "change24h": -0.0506,
+      "volume24h": 364756.230398,
+      "last": 0.06021,
+      "keyReasons": [
+        "24h 跌幅 -5.1%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 3
+    },
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 13.2,
+      "confidence": 47.95,
+      "change24h": 0.0325,
+      "volume24h": 3453026.159498,
+      "last": 3.8995,
+      "keyReasons": [
+        "24h 涨幅 3.2%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 4
+    },
+    {
+      "symbol": "BONK",
+      "pair": "BONK-USDT",
+      "signal": "WEAK_SELL",
+      "label": "温和走弱",
+      "score": -10.9,
+      "confidence": 46.54,
+      "change24h": -0.049,
+      "volume24h": 1401198.699634052,
+      "last": 4.576e-06,
+      "keyReasons": [
+        "24h 跌幅 -4.9%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bearish",
+      "marketState": "uncertain",
+      "rank": 5
+    }
+  ],
+  "marketOverview": "扫描 10 个币种，市场方向分化。多头 3、空头 2、中性 0。综合靠前：BLUAI(强势上涨)、SWARMS(强势上涨)、JELLYJELLY(明显回调)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-18T04:23:51.329253+00:00",
+    "origin": "live",
+    "history_id": "2026-06-18T04-23-51.329253+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-18T04-23-51.329253+00-00.json"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "source": "snapshot",
+  "full": false,
+  "scanTime": "2026-06-18T09:23:59Z",
+  "totalScanned": 5,
+  "topK": 3,
+  "opportunities": [
+    {
+      "symbol": "BLUAI",
+      "pair": "BLUAI-USDT",
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 26.6,
+      "confidence": 55.989999999999995,
+      "change24h": 0.1165,
+      "volume24h": 820857.149978,
+      "last": 0.01567,
+      "keyReasons": [
+        "24h 涨幅 11.7%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "medium",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 1
+    },
+    {
+      "symbol": "BLEND",
+      "pair": "BLEND-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 15.0,
+      "confidence": 49.0,
+      "change24h": 0.02,
+      "volume24h": 6449479.610112,
+      "last": 0.05856,
+      "keyReasons": [
+        "24h 涨幅 2.0%",
+        "24h 成交额活跃"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "ADI",
+      "pair": "ADI-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 13.4,
+      "confidence": 48.058,
+      "change24h": 0.0343,
+      "volume24h": 3956142.120534,
+      "last": 3.9212,
+      "keyReasons": [
+        "24h 涨幅 3.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
+    }
+  ],
+  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 3、空头 0、中性 0。综合靠前：BLUAI(强势上涨)、BLEND(温和上涨)、ADI(温和上涨)。",
+  "scanDurationMs": 0,
+  "engine": "sandbox-rule-based",
+  "errors": [],
+  "snapshot": {
+    "name": "opportunity_scan",
+    "saved_at": "2026-06-18T09:23:59.274613+00:00",
+    "origin": "live",
+    "history_id": "2026-06-18T09-23-59.274613+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-18T09-23-59.274613+00-00.json"
+  }
+}

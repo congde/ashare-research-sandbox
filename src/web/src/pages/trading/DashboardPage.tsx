@@ -290,7 +290,7 @@ export default function DashboardPage() {
         </QuantGlowCard>
 
         <QuantGlowCard className="trading-span-12">
-          <SectionHeader title="运行边界" description="教学项目，不构成投资建议" />
+          <SectionHeader title="运行边界" description="研究与模拟项目，不进入实盘执行" />
           <div className="trading-list">
             {(report?.warnings ?? []).map((warning) => (
               <SignalRow key={warning} title={warning} meta="固定离线样本" />

@@ -153,11 +153,12 @@ def _merge_llm(baseline: dict[str, Any], llm: dict[str, Any], model: str) -> dic
 
 def run_llm_signal_analysis(symbol: str = "BTC", *, model: str | None = None) -> dict[str, Any]:
     resolved_model = resolve_model(model)
+    configured_at_start = llm_configured()
     baseline = run_signal_analysis(symbol)
     if not baseline.get("ok"):
         return baseline
 
-    if not llm_configured():
+    if not configured_at_start:
         baseline = dict(baseline)
         baseline["engineMeta"] = {
             **(baseline.get("engineMeta") or {}),

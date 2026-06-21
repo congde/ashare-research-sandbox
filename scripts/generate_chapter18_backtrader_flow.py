@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """PIL flow diagram: Qbot cerebro assembly vs local rolling engine (03-backtrader.ipynb)."""
 
 from __future__ import annotations
@@ -119,7 +119,7 @@ def backtrader_vs_local() -> Path:
 
     draw.text(
         sb(56, 1000),
-        "教学样本 · 不构成投资建议 · 300 DPI 概念图（非运行时序图）",
+        "教学样本 · 不进入实盘执行 · 300 DPI 概念图（非运行时序图）",
         font=font(18),
         fill="#64748b",
     )

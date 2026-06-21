@@ -1,4 +1,4 @@
-"""Replace generic padding with chapter-specific evidence and handoff sections."""
+﻿"""Replace generic padding with chapter-specific evidence and handoff sections."""
 
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def section(num: int, title: str, values: tuple[str, str, str, str, str]) -> str
 补充停止线、失败出口或人工审批门，再继续后续工作。
 
 在“{title}”对应的固定离线 Web3 沙盒工作中，还要重复检查三条全程边界：不得把虚构资产写成真实标的，
-不得把样本内表现外推成投资建议，不得因为上游代码具备联网或交易能力就把它带入
+不得把样本内表现外推成实盘执行，不得因为上游代码具备联网或交易能力就把它带入
 `src/`。这些限制看似反复出现，实际承担的是回归测试作用：项目每向前一步，都要证明
 自己没有在新语境中重新越界。
 

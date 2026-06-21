@@ -56,7 +56,7 @@ def main() -> int:
     report = build_report()
     encoded = json.dumps(report, ensure_ascii=False)
     for phrase in (
-        "不构成投资建议",
+        "不进入实盘执行",
         "不能执行交易",
         "maximum_drawdown_pct",
         "calmar_ratio",

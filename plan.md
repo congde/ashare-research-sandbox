@@ -1,4 +1,4 @@
-# 架构与实施计划
+﻿# 架构与实施计划
 
 ## 产品形状（选择性复用 web3-trading，压缩为教学 MVP）
 
@@ -49,7 +49,7 @@ data/company.json + data/prices.csv
 在以下情况**立即停止**并回滚到上一个通过 milestone 的状态：
 
 - 实现依赖交易所账户、钱包、实时行情密钥或自动下单；
-- 删除/弱化「不构成投资建议」「不能执行交易」等边界文案；
+- 删除/弱化「不进入实盘执行」「不能执行交易」等边界文案；
 - 用未审查的爬虫数据替换固定样本且无法复现验收结果。
 
 恢复方法：检出最后一次 `lab-10` 通过的提交，阅读 [playbook.md](playbook.md) 中的停止线。
@@ -77,7 +77,7 @@ data/company.json + data/prices.csv
 Redis、MongoDB、GitLab 或生产凭证的集成。
 
 前端基线 `src/web/templates/`、`src/web/static/` 与 `shared/` 也已迁入。后续先改造
-研究看板与回测页的数据接口，再替换当前教学页；实时交易、投资建议和下单页面不得
+研究看板与回测页的数据接口，再替换当前教学页；实时交易、实盘执行和下单页面不得
 直接进入 Web3 离线教学沙盒第一版。
 
 第二个上游 [ai-trading](https://github.com/johnnywuj81/ai-trading) 的 Apache-2.0

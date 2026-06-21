@@ -49,6 +49,16 @@ def rewrite_rolling(text: str) -> str:
     )
 
 
+def patch_rolling_models(text: str) -> str:
+    trial_field = "    num_trials: int = 0\n"
+    if trial_field in text:
+        return text
+    anchor = "    window_results: List[Dict[str, Any]]\n"
+    if anchor not in text:
+        raise RuntimeError("models.py sync output missing WalkForwardResult anchor")
+    return text.replace(anchor, anchor + trial_field)
+
+
 def rewrite_dsl(text: str) -> str:
     return (
         text.replace("from app.strategy_engine.", "from strategy_engine.")
@@ -121,7 +131,7 @@ def main() -> int:
         issue = compare_file(
             vendor_path=VENDOR_WEB3 / rel,
             sandbox_path=SRC / "backtest/rolling" / rel,
-            rewrite=rewrite_rolling,
+            rewrite=patch_rolling_models if rel == "models.py" else rewrite_rolling,
         )
         if issue:
             errors.append(issue)

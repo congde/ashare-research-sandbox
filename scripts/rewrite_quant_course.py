@@ -1,4 +1,4 @@
-"""Generate the 35-chapter Codex + LLM quantitative trading course drafts."""
+﻿"""Generate the 35-chapter Codex + LLM quantitative trading course drafts."""
 
 from __future__ import annotations
 
@@ -63,12 +63,12 @@ CHAPTERS = [
       "区分价格水平、期间收益、交易信号、持仓数量和资金曲线",
       "手工复算一个收益率、一次仓位变化和一段最大回撤",
       "用价格上涨百分比直接代替策略收益", "python report_cli.py --format json --short 3 --long 7", "建立交易研究安全边界"),
-    c(5, 1, "建立第一条安全边界研究不等于投资建议", "建立第一条安全边界：研究不等于投资建议",
+    c(5, 1, "建立第一条安全边界研究不等于实盘执行", "建立第一条安全边界：研究不等于实盘执行",
       "怎样阻止研究系统悄悄升级为交易决策系统", "交易研究边界清单",
       "`prd.md`、`src/risk/manager.py`、`src/web/src/pages/trading/LiveTradingPage.tsx`",
       "用允许、审批、禁止三层边界约束数据、信号和执行动作",
       "审查一份含买卖建议的输出，并将其降级为研究结论",
-      "只添加免责声明，却保留真实账户和订单执行能力", "python scripts/course.py verify", "认识市场数据类型"),
+      "只添加提示语，却保留真实账户和订单执行能力", "python scripts/course.py verify", "认识市场数据类型"),
     c(6, 2, "认识行情资金链上与情绪数据", "认识行情、资金、链上与情绪数据",
       "不同数据回答什么问题，又会引入哪些偏差", "市场数据地图",
       "`data/dashboard/`、`src/dashboard/catalog.py`、`src/dashboard/api.py`",

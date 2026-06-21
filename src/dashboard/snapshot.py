@@ -71,8 +71,15 @@ def save_snapshot(name: str, payload: dict[str, Any], *, origin: str) -> Path:
 
     SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
     saved_at = _now_iso()
-    history_id = _history_id_from_iso(saved_at)
+    base_history_id = _history_id_from_iso(saved_at)
+    history_dir(name).mkdir(parents=True, exist_ok=True)
+    history_id = base_history_id
     history_path = history_dir(name) / f"{history_id}.json"
+    suffix = 1
+    while history_path.exists():
+        history_id = f"{base_history_id}-{suffix}"
+        history_path = history_dir(name) / f"{history_id}.json"
+        suffix += 1
 
     body = dict(payload)
     body["ok"] = body.get("ok", True)
@@ -86,7 +93,6 @@ def save_snapshot(name: str, payload: dict[str, Any], *, origin: str) -> Path:
     }
     encoded = json.dumps(body, ensure_ascii=False, indent=2)
 
-    history_dir(name).mkdir(parents=True, exist_ok=True)
     history_path.write_text(encoded, encoding="utf-8")
 
     latest_path = snapshot_path(name)

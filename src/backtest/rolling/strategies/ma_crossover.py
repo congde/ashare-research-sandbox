@@ -58,7 +58,7 @@ class MACrossoverStrategy(Strategy):
         )
 
     def default_params(self) -> Dict[str, Any]:
-        return {"fast_period": 10, "slow_period": 30, "entry_threshold": 25}
+        return {"fast_period": 10, "slow_period": 20, "entry_threshold": 25}
 
     def param_grid(self) -> Dict[str, List[Any]]:
         return {
