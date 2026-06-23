@@ -1,1 +1,0 @@
-# vendorized sdk agent namespace

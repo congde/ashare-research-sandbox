@@ -1,1 +1,0 @@
-# vendorized runtime sdk namespace
