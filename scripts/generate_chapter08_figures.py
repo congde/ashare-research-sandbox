@@ -2,26 +2,31 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import json
 import textwrap
+from datetime import datetime
+from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
+from matplotlib import pyplot as plt
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "v2" / "assets"
+DATA = ROOT / "data" / "dashboard" / "market_candles.json"
 FONT_PATH = Path("C:/Windows/Fonts/simhei.ttf")
 
 
-def font(size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(str(FONT_PATH), size)
+def font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    if FONT_PATH.is_file():
+        return ImageFont.truetype(str(FONT_PATH), size)
+    return ImageFont.load_default()
 
 
 TITLE = font(42)
 HEAD = font(28)
 BODY = font(23)
 SMALL = font(20)
-TINY = font(18)
 
 BG = "#F7F9FC"
 INK = "#111827"
@@ -59,7 +64,7 @@ def box(
     body: str,
     color: str,
     *,
-    body_font: ImageFont.FreeTypeFont = BODY,
+    body_font: ImageFont.ImageFont = BODY,
 ) -> None:
     x1, y1, _, _ = xy
     draw.rounded_rectangle(xy, radius=18, fill=PANEL, outline=color, width=4)
@@ -71,7 +76,7 @@ def save_cleaning_gates() -> None:
     img = Image.new("RGB", (1760, 940), BG)
     draw = ImageDraw.Draw(img)
     draw.text((80, 55), "第 8 章：时间序列清洗门禁", font=TITLE, fill=INK)
-    draw.text((80, 116), "清洗不是美化数据，而是决定哪些记录有资格进入指标、LLM 摘要或回测。", font=BODY, fill=MUTED)
+    draw.text((80, 116), "清洗不是美化数据，而是决定哪些记录有资格进入指标、大语言模型摘要或回测。", font=BODY, fill=MUTED)
 
     steps = [
         ((80, 260, 360, 455), "原始记录", "保留原字段\n不先改写含义", BLUE),
@@ -88,13 +93,14 @@ def save_cleaning_gates() -> None:
     draw.text((265, 638), "停止线", font=HEAD, fill=RED)
     draw.multiline_text(
         (265, 695),
-        "为了画出连续曲线而自动填补所有缺失值，会把未知伪装成事实；若补值改变收益、指标或买卖点，必须记录规则并重新判断用途。",
+        "为了画出连续曲线而自动填补所有缺失值，会把未知伪装成事实；若补值改变收益、指标或买卖点，先记录规则，再判断用途。",
         font=BODY,
         fill=INK,
         spacing=8,
     )
-    img.save(OUT / "chapter-08-cleaning-gates.png")
-    print(OUT / "chapter-08-cleaning-gates.png")
+    output = OUT / "chapter-08-cleaning-gates.png"
+    img.save(output)
+    print(output)
 
 
 def save_normalization_trace() -> None:
@@ -104,10 +110,10 @@ def save_normalization_trace() -> None:
     draw.text((80, 116), "页面字段越友好，越要能反向追到原始字段、转换规则和缺失处理。", font=BODY, fill=MUTED)
 
     steps = [
-        ((80, 245, 390, 445), "原始 payload", "ai_picks\nchance / funds / risk\ntoken_fund\nfund / sentiment / ratio", BLUE),
+        ((80, 245, 390, 445), "原始数据包", "ai_picks\nchance / funds / risk\ntoken_fund\nfund / sentiment / ratio", BLUE),
         ((505, 245, 815, 445), "normalize.py", "_to_float()\nnormalize_ai_picks()\nnormalize_token_fund()", TEAL),
         ((930, 245, 1240, 445), "展示字段", "title\nsummary\nnetInflow24h\nsentiment.score", ORANGE),
-        ((1355, 245, 1665, 445), "API / 页面", "可读卡片\n缺失状态\n来源仍可追", PURPLE),
+        ((1355, 245, 1665, 445), "接口 / 页面", "可读卡片\n缺失状态\n来源仍可追", PURPLE),
     ]
     for xy, title, body, color in steps:
         box(draw, xy, title, body, color, body_font=SMALL)
@@ -117,10 +123,10 @@ def save_normalization_trace() -> None:
     draw.rounded_rectangle((165, 585, 1675, 825), radius=18, fill="#FFFFFF", outline=GRID, width=3)
     draw.text((205, 615), "反向复核", font=HEAD, fill=INK)
     rows = [
-        ("页面 summary", "回到 API 输出，确认它不是模型补写"),
-        ("API 字段", "回到标准化函数，确认转换规则"),
+        ("页面摘要", "回到接口输出，确认它不是模型补写"),
+        ("接口字段", "回到标准化函数，确认转换规则"),
         ("标准化字段", "回到原始字段，确认来源和缺失状态"),
-        ("无法追溯", "降级为展示文本，不能进入研究结论"),
+        ("无法追溯", "降级为展示文本，不进入研究结论"),
     ]
     y = 675
     for label, desc in rows:
@@ -129,9 +135,10 @@ def save_normalization_trace() -> None:
         y += 43
 
     draw.rounded_rectangle((390, 865, 1450, 935), radius=18, fill="#FFF7ED", outline=ORANGE, width=4)
-    draw.text((425, 886), "标准化只改变表达形状，不应创造新的市场事实。", font=BODY, fill=ORANGE)
-    img.save(OUT / "chapter-08-normalization-trace.png")
-    print(OUT / "chapter-08-normalization-trace.png")
+    draw.text((425, 886), "标准化只改变表达形状，不创造新的市场事实。", font=BODY, fill=ORANGE)
+    output = OUT / "chapter-08-normalization-trace.png"
+    img.save(output)
+    print(output)
 
 
 def save_pollution_matrix() -> None:
@@ -152,7 +159,7 @@ def save_pollution_matrix() -> None:
         ("重复时间戳", "静默覆盖", "保留规则或拒绝原因", "不能直接计算收益"),
         ("逆序记录", "按原顺序算指标", "排序规则可复查", "排序前后都要记录"),
         ("close 缺失", "自动填 0", "保留缺失或拒绝", "可展示但不可回测"),
-        ("N/A 字符串", "当有效数字", "转换失败为 None", "不得让 LLM 猜值"),
+        ("N/A 字符串", "当作有效数字", "转换失败为 None", "不让模型猜值"),
     ]
     y = 335
     for row in rows:
@@ -165,8 +172,63 @@ def save_pollution_matrix() -> None:
 
     draw.rounded_rectangle((300, 895, 1540, 970), radius=18, fill="#FEF2F2", outline=RED, width=4)
     draw.text((340, 918), "如果污染样本仍能产出漂亮图表，说明清洗流程正在隐藏证据缺口。", font=BODY, fill=RED)
-    img.save(OUT / "chapter-08-pollution-matrix.png")
-    print(OUT / "chapter-08-pollution-matrix.png")
+    output = OUT / "chapter-08-pollution-matrix.png"
+    img.save(output)
+    print(output)
+
+
+def moving_average(values: list[float], window: int) -> list[float | None]:
+    out: list[float | None] = []
+    for index in range(len(values)):
+        if index + 1 < window:
+            out.append(None)
+            continue
+        sample = values[index + 1 - window : index + 1]
+        out.append(sum(sample) / window)
+    return out
+
+
+def save_kline_quality_curve() -> None:
+    payload = json.loads(DATA.read_text(encoding="utf-8"))
+    candles = sorted(payload.get("candles") or [], key=lambda row: row.get("tsSec") or 0)
+    dates = [datetime.fromisoformat(str(row["date"])) for row in candles if row.get("date") and row.get("close") is not None]
+    closes = [float(row["close"]) for row in candles if row.get("date") and row.get("close") is not None]
+    ma3 = moving_average(closes, 3)
+    ma7 = moving_average(closes, 7)
+
+    plt.rcParams.update(
+        {
+            "font.sans-serif": ["Microsoft YaHei", "SimHei", "DejaVu Sans", "Arial", "sans-serif"],
+            "axes.unicode_minus": False,
+            "figure.facecolor": "#FCFCFD",
+            "axes.facecolor": "#FFFFFF",
+            "axes.edgecolor": "#D7DBE7",
+            "axes.grid": True,
+            "grid.color": "#E6E8F0",
+        }
+    )
+    fig, ax = plt.subplots(figsize=(13, 7), dpi=160)
+    ax.plot(dates, closes, color=BLUE, linewidth=1.8, label="标准化收盘价 close")
+    ax.plot(dates, ma3, color=TEAL, linewidth=1.6, label="3 日均线")
+    ax.plot(dates, ma7, color=ORANGE, linewidth=1.6, label="7 日均线")
+    ax.scatter(dates, closes, color=BLUE, s=18, alpha=0.65)
+    ax.set_title("第 8 章：K 线字段标准化后的收盘价与均线", loc="left", fontsize=15, fontweight="semibold", color=INK)
+    ax.set_ylabel("价格")
+    ax.set_xlabel("日期")
+    ax.legend(frameon=False, ncol=3, loc="upper left")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    fig.text(
+        0.125,
+        0.02,
+        "来源：data/dashboard/market_candles.json。曲线只证明字段可排序、可转换、可复算，不证明行情方向或交易机会。",
+        fontsize=9.5,
+        color=MUTED,
+    )
+    output = OUT / "chapter-08-kline-quality-curve.png"
+    fig.savefig(output, bbox_inches="tight")
+    plt.close(fig)
+    print(output)
 
 
 def main() -> None:
@@ -174,6 +236,7 @@ def main() -> None:
     save_cleaning_gates()
     save_normalization_trace()
     save_pollution_matrix()
+    save_kline_quality_curve()
 
 
 if __name__ == "__main__":

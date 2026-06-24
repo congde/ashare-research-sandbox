@@ -223,7 +223,8 @@ web3-quant-sandbox/
 | `py scripts/course.py verify` | 交付物检查 + 上游 baseline + pytest |
 | `py scripts/course.py check` | verify + 资源审计 + 章节稿链接检查 |
 | `py scripts/course.py courseware-check` | 章节稿与仓库一致性 |
-| `py scripts/course.py teaching-plots` | 重生成 12 张 Qbot 风格教学 PNG |
+| `py scripts/course.py teaching-plots` | 重生成全部课程教学图（Qbot 风格 + 各讲 PIL/流程图） |
+| `py scripts/course.py print-figures` | 同上（`teaching-plots` 别名） |
 | `py scripts/course.py snapshot` | 联网抓取 dashboard 快照 |
 | `py scripts/course.py save-offline-data` | 快照 + 同步内置样本 |
 
@@ -231,17 +232,34 @@ macOS / Linux 等价：`make setup`、`make verify`、`make check`、`make teach
 
 `verify` 确认交付物齐全、报告含必要边界文案与指标字段，并运行 `vendor/web3-trading`、`vendor/ai-trading` baseline 脚本及 `tests/`。无 web3-trading 时也可单独运行沙箱。
 
-### 教学图（Qbot notebook 模式）
+### 教学图
 
-第 4、9、16–19、21 讲引用的 matplotlib/PIL 图位于 `docs/v2/assets/generated/`，数据源固定为 `data/prices.csv` 与 rolling 回测引擎，**不**调用 tushare / backtrader。
+课程配图位于 `docs/v2/assets/` 与 `docs/v2/assets/generated/`。回测类 matplotlib 图固定使用 `data/prices.csv` 与 rolling 回测引擎，**不**调用 tushare / backtrader；流程图与证据链图由各讲专用脚本生成。
 
 | 命令 | 作用 |
 |------|------|
-| `py scripts/course.py teaching-plots` | 重生成全部 12 张 Qbot 风格教学 PNG（200 DPI） |
-| `py scripts/generate_chapter01_figures.py` | 重生成第 1 讲证据链 PIL 图 |
+| `py scripts/course.py teaching-plots` | 一键重生成全部教学图（等同 `print-figures`） |
+| `py scripts/generate_qbot_teaching_plots.py` | 第 4、9、16–19、21 讲 Qbot 风格 matplotlib 图（200 DPI） |
+| `py scripts/generate_supplementary_diagrams.py` | 补充流程图与 draw.io 源文件 |
 | `py scripts/scan_qbot_notebooks.py` | 扫描 `vendor/Qbot` notebook 出图模式（维护者） |
 
-对照表见 [`vendor/QBOT_AUDIT.md`](vendor/QBOT_AUDIT.md)「已落地 notebook → 课程章节映射」。
+按讲次单独重生成：
+
+| 脚本 | 覆盖讲次 |
+|------|----------|
+| `scripts/generate_chapter01_figures.py` | 第 1 讲 |
+| `scripts/generate_chapter03_figures.py` | 第 3 讲 |
+| `scripts/generate_chapter05_curve.py` | 第 5 讲（证据曲线） |
+| `scripts/generate_chapter05_10_figures.py` | 第 5、7、8、10 讲 |
+| `scripts/generate_chapter06_figures.py` / `generate_chapter06_curve.py` | 第 6 讲 |
+| `scripts/generate_chapter07_snapshot_curve.py` | 第 7 讲（快照历史曲线） |
+| `scripts/generate_chapter08_figures.py` … `generate_chapter12_figures.py` | 第 8–12 讲 |
+| `scripts/generate_chapter13_figures.py` … `generate_chapter21_figures.py` | 第 13–21 讲 |
+| `scripts/generate_chapter21_25_figures.py` | 第 22–25 讲 |
+| `scripts/generate_chapter26_32_figures.py` | 第 26–32 讲 |
+| `scripts/generate_chapter33_35_figures.py` | 第 33–35 讲 |
+
+配图与章节映射见 `scripts/asset_chapter_map.py`；Qbot notebook 对照见 [`vendor/QBOT_AUDIT.md`](vendor/QBOT_AUDIT.md)。
 
 ---
 

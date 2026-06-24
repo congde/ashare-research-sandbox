@@ -3,18 +3,27 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 import textwrap
 
+import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "v2" / "assets"
 FONT_PATH = Path("C:/Windows/Fonts/simhei.ttf")
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
+from research.report import build_report  # noqa: E402
 
 
-def font(size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(str(FONT_PATH), size)
+def font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    if FONT_PATH.exists():
+        return ImageFont.truetype(str(FONT_PATH), size)
+    return ImageFont.load_default()
 
 
 TITLE = font(42)
@@ -31,7 +40,6 @@ ORANGE = "#F59E0B"
 RED = "#DC2626"
 PURPLE = "#7C3AED"
 PANEL = "#FFFFFF"
-GRID = "#D8DEE9"
 
 
 def wrap(text: str, width: int) -> str:
@@ -55,7 +63,12 @@ def save_claim_traceability() -> None:
     img = Image.new("RGB", (1760, 930), BG)
     draw = ImageDraw.Draw(img)
     draw.text((80, 55), "第 10 章：报告主张追溯路径", font=TITLE, fill=INK)
-    draw.text((80, 116), "报告不是把结论写顺，而是让每个关键句子都能回到来源、计算和限制。", font=BODY, fill=MUTED)
+    draw.text(
+        (80, 116),
+        "报告不是把结论写顺，而是让关键句子能回到来源、计算口径和限制声明。",
+        font=BODY,
+        fill=MUTED,
+    )
 
     boxes = [
         ((90, 260, 360, 455), "报告主张", "一句结论\n先拆成主张", BLUE),
@@ -73,7 +86,12 @@ def save_claim_traceability() -> None:
 
     draw.rounded_rectangle((245, 615, 1515, 760), radius=18, fill="#EEF2FF", outline=BLUE, width=4)
     draw.text((285, 645), "发布判断", font=HEAD, fill=BLUE)
-    draw.text((285, 700), "能追源、能复算、限制保留：通过；来源不清、语言越界、删除风险提示：退回或拒绝。", font=BODY, fill=INK)
+    draw.text(
+        (285, 700),
+        "能追源、能复算、限制保留：通过；来源不清、语言越界、删除风险提示：退回或拒绝。",
+        font=BODY,
+        fill=INK,
+    )
     img.save(OUT / "chapter-10-claim-traceability.png")
     print(OUT / "chapter-10-claim-traceability.png")
 
@@ -82,7 +100,12 @@ def save_report_layers() -> None:
     img = Image.new("RGB", (1840, 990), BG)
     draw = ImageDraw.Draw(img)
     draw.text((80, 55), "第 10 章实战：报告五层结构", font=TITLE, fill=INK)
-    draw.text((80, 116), "事实、解释、信号、未知和来源要分层保存；自然语言越流畅，越要能拆回结构字段。", font=BODY, fill=MUTED)
+    draw.text(
+        (80, 116),
+        "事实、解释、信号、未知和来源分层保存；自然语言越流畅，越要能拆回结构字段。",
+        font=BODY,
+        fill=MUTED,
+    )
 
     layers = [
         ("事实", "输入中真实存在的字段或记录\nresearch.facts[].source_id", BLUE),
@@ -99,7 +122,7 @@ def save_report_layers() -> None:
         y += 122
 
     draw.rounded_rectangle((390, 860, 1450, 930), radius=18, fill="#FEF2F2", outline=RED, width=4)
-    draw.text((425, 882), "任何报告句子拆不回五层结构，就不能作为发布结论。", font=BODY, fill=RED)
+    draw.text((425, 882), "报告句子拆不回五层结构，就还不能作为发布结论。", font=BODY, fill=RED)
     img.save(OUT / "chapter-10-report-layers.png")
     print(OUT / "chapter-10-report-layers.png")
 
@@ -133,9 +156,49 @@ def save_claim_ledger_review() -> None:
         y += 132
 
     draw.rounded_rectangle((325, 900, 1515, 975), radius=18, fill="#FFF7ED", outline=ORANGE, width=4)
-    draw.text((365, 923), "账本的目的不是让报告更长，而是让每个关键句子都能被第二个人复核。", font=BODY, fill=ORANGE)
+    draw.text((365, 923), "账本让每个关键句子都能被第二个人复核，而不是让报告变长。", font=BODY, fill=ORANGE)
     img.save(OUT / "chapter-10-claim-ledger-review.png")
     print(OUT / "chapter-10-claim-ledger-review.png")
+
+
+def save_metric_bars() -> None:
+    report = build_report(short=3, long=7)
+    metrics = report["backtest"]["metrics"]
+    names = ["策略收益", "买入持有", "最大回撤"]
+    values = [
+        metrics["strategy_return_pct"],
+        metrics["buy_hold_return_pct"],
+        metrics["maximum_drawdown_pct"],
+    ]
+    colors = [RED, TEAL, ORANGE]
+
+    plt.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei", "Arial Unicode MS", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
+    fig, ax = plt.subplots(figsize=(10, 5.6), dpi=160)
+    fig.patch.set_facecolor(BG)
+    ax.set_facecolor("#FFFFFF")
+    bars = ax.bar(names, values, color=colors, width=0.56)
+    ax.axhline(0, color="#334155", linewidth=1.2)
+    ax.set_title("固定样本报告关键指标", fontsize=18, pad=16)
+    ax.set_ylabel("百分比（%）", fontsize=12)
+    ax.grid(axis="y", color="#E5E7EB", linewidth=0.8)
+    ax.spines[["top", "right"]].set_visible(False)
+    for bar, value in zip(bars, values):
+        y = value + 2 if value >= 0 else value - 3
+        va = "bottom" if value >= 0 else "top"
+        ax.text(bar.get_x() + bar.get_width() / 2, y, f"{value:.2f}%", ha="center", va=va, fontsize=11)
+    ax.text(
+        0.02,
+        -0.18,
+        f"参数 short=3、long=7；交易次数 {metrics['trade_count']}；数据来自 report_cli.py 的 build_report 输出。",
+        transform=ax.transAxes,
+        fontsize=10,
+        color=MUTED,
+    )
+    fig.tight_layout()
+    fig.savefig(OUT / "chapter-10-report-metrics.png", bbox_inches="tight")
+    plt.close(fig)
+    print(OUT / "chapter-10-report-metrics.png")
 
 
 def main() -> None:
@@ -143,6 +206,7 @@ def main() -> None:
     save_claim_traceability()
     save_report_layers()
     save_claim_ledger_review()
+    save_metric_bars()
 
 
 if __name__ == "__main__":

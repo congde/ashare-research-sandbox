@@ -90,6 +90,18 @@ def print_figures() -> None:
     python_task("scripts/generate_chapter10_figures.py")
     python_task("scripts/generate_chapter11_figures.py")
     python_task("scripts/generate_chapter12_figures.py")
+    python_task("scripts/generate_chapter13_figures.py")
+    python_task("scripts/generate_chapter14_figures.py")
+    python_task("scripts/generate_chapter15_figures.py")
+    python_task("scripts/generate_chapter16_figures.py")
+    python_task("scripts/generate_chapter17_figures.py")
+    python_task("scripts/generate_chapter18_figures.py")
+    python_task("scripts/generate_chapter19_figures.py")
+    python_task("scripts/generate_chapter20_figures.py")
+    python_task("scripts/generate_chapter21_figures.py")
+    python_task("scripts/generate_chapter21_25_figures.py")
+    python_task("scripts/generate_chapter26_32_figures.py")
+    python_task("scripts/generate_chapter33_35_figures.py")
     python_task("scripts/generate_supplementary_diagrams.py")
 
 

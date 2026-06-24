@@ -85,8 +85,6 @@ def add_chart_header(fig, ax, title: str, subtitle: str) -> None:
 
 def parse_history_time(path: Path) -> datetime:
     stem = path.stem
-    value = stem.replace("T", " ").replace("+00-00", "+00:00")
-    value = value.replace("-", ":", 2) if False else value
     date_part, time_part = stem.split("T", maxsplit=1)
     time_part = time_part.replace("+00-00", "+00:00").replace("-", ":", 2)
     return datetime.fromisoformat(f"{date_part}T{time_part}").replace(tzinfo=None)

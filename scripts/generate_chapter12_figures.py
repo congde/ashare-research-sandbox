@@ -2,19 +2,29 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+import sys
 import textwrap
 
+import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "v2" / "assets"
 FONT_PATH = Path("C:/Windows/Fonts/simhei.ttf")
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
+from dashboard.signal_analysis import run_signal_analysis  # noqa: E402
 
 
-def font(size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(str(FONT_PATH), size)
+def font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    if FONT_PATH.exists():
+        return ImageFont.truetype(str(FONT_PATH), size)
+    return ImageFont.load_default()
 
 
 TITLE = font(42)
@@ -61,7 +71,12 @@ def save_context_contract() -> None:
     img = Image.new("RGB", (1840, 1040), BG)
     draw = ImageDraw.Draw(img)
     draw.text((80, 55), "第 12 章实战：LLM 上下文合同", font=TITLE, fill=INK)
-    draw.text((80, 116), "上下文不是资料堆叠，而是把模型允许看见的字段、时间和用途写成合同。", font=BODY, fill=MUTED)
+    draw.text(
+        (80, 116),
+        "上下文不是资料堆叠，而是把模型可见字段、时间口径和用途整理成可复查合同。",
+        font=BODY,
+        fill=MUTED,
+    )
 
     boxes = [
         ((100, 235, 420, 430), "市场事实", "symbol\nprice / volume\nsource_time", BLUE),
@@ -105,7 +120,12 @@ def save_visible_window() -> None:
     img = Image.new("RGB", (1840, 980), BG)
     draw = ImageDraw.Draw(img)
     draw.text((80, 55), "第 12 章实战：可见时间窗口", font=TITLE, fill=INK)
-    draw.text((80, 116), "只有决策时点之前已经可见的字段，才能进入 LLM 信号解释上下文。", font=BODY, fill=MUTED)
+    draw.text(
+        (80, 116),
+        "只有决策时点之前已经可见的字段，才能进入模型信号解释上下文。",
+        font=BODY,
+        fill=MUTED,
+    )
 
     y = 360
     x0 = 160
@@ -135,10 +155,57 @@ def save_visible_window() -> None:
     print(OUT / "chapter-12-visible-window.png")
 
 
+def save_context_shape() -> None:
+    baseline = run_signal_analysis("BTC")
+    context = {
+        "market": baseline.get("market"),
+        "kline": baseline.get("kline"),
+        "evidence": baseline.get("evidence"),
+        "onchainMetrics": baseline.get("onchainMetrics"),
+        "tradePlan": baseline.get("tradePlan"),
+        "ruleSignal": {
+            "signal": baseline.get("signal"),
+            "signalLabel": baseline.get("signalLabel"),
+            "confidence": baseline.get("confidence"),
+            "score": baseline.get("score"),
+            "reasons": baseline.get("reasons"),
+        },
+    }
+    rows = [(key, len(json.dumps(value, ensure_ascii=False))) for key, value in context.items()]
+    labels = [row[0] for row in rows]
+    values = [row[1] for row in rows]
+
+    plt.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei", "Arial Unicode MS", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
+    fig, ax = plt.subplots(figsize=(10.5, 5.8), dpi=160)
+    fig.patch.set_facecolor(BG)
+    ax.set_facecolor("#FFFFFF")
+    ax.barh(labels, values, color=[BLUE, TEAL, ORANGE, PURPLE, RED, "#334155"])
+    ax.set_title("BTC 规则基线进入模型上下文的字段体量", fontsize=17, pad=14)
+    ax.set_xlabel("JSON 字符数", fontsize=12)
+    ax.grid(axis="x", color="#E5E7EB", linewidth=0.8)
+    ax.spines[["top", "right"]].set_visible(False)
+    for index, value in enumerate(values):
+        ax.text(value + max(values) * 0.02, index, str(value), va="center", fontsize=10)
+    ax.text(
+        0.01,
+        -0.16,
+        f"signal={baseline.get('signal')}，logicFlow={len(baseline.get('logicFlow') or [])}；数据来自 run_signal_analysis('BTC')。",
+        transform=ax.transAxes,
+        fontsize=10,
+        color=MUTED,
+    )
+    fig.tight_layout()
+    fig.savefig(OUT / "chapter-12-context-shape.png", bbox_inches="tight")
+    plt.close(fig)
+    print(OUT / "chapter-12-context-shape.png")
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     save_context_contract()
     save_visible_window()
+    save_context_shape()
 
 
 if __name__ == "__main__":
