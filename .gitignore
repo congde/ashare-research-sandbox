@@ -1,6 +1,10 @@
-# 出版刊物正文，仅保留本地，不纳入版本库
+# 本地生成或不需要同步到 Git 的目录
 /book/
 /docs/
+outputs/
+vendor/
+data/dashboard/snapshots/
+data/llm_signal_tasks/
 
 .venv/
 .env
@@ -8,9 +12,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .codex/
-outputs/
-vendor/
-data/llm_signal_tasks/
 *.drawio.bkp
 playbook/my-playbook.md
 labs/00-assistant-brief/my-brief.md
