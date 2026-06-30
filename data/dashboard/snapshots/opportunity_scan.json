@@ -2,7 +2,7 @@
   "ok": true,
   "source": "snapshot",
   "full": false,
-  "scanTime": "2026-06-30T11:22:10Z",
+  "scanTime": "2026-06-30T11:46:11Z",
   "totalScanned": 5,
   "topK": 3,
   "opportunities": [
@@ -11,13 +11,13 @@
       "pair": "ADI-USDT",
       "signal": "BUY",
       "label": "强势上涨",
-      "score": 29.7,
-      "confidence": 57.82,
-      "change24h": 0.097,
-      "volume24h": 7858414.848722,
-      "last": 5.5351,
+      "score": 29.4,
+      "confidence": 57.634,
+      "change24h": 0.0939,
+      "volume24h": 7845198.584142,
+      "last": 5.5084,
       "keyReasons": [
-        "24h 涨幅 9.7%",
+        "24h 涨幅 9.4%",
         "24h 成交额活跃"
       ],
       "tradePlan": null,
@@ -31,13 +31,13 @@
       "pair": "BCH-USDT",
       "signal": "WEAK_BUY",
       "label": "温和上涨",
-      "score": 12.2,
-      "confidence": 47.296,
-      "change24h": 0.0216,
-      "volume24h": 1423457.397506,
-      "last": 200.18,
+      "score": 12.3,
+      "confidence": 47.373999999999995,
+      "change24h": 0.0229,
+      "volume24h": 1400304.161806,
+      "last": 200.6,
       "keyReasons": [
-        "24h 涨幅 2.2%"
+        "24h 涨幅 2.3%"
       ],
       "tradePlan": null,
       "riskLevel": "high",
@@ -50,13 +50,13 @@
       "pair": "BLEND-USDT",
       "signal": "WEAK_BUY",
       "label": "温和上涨",
-      "score": 10.3,
-      "confidence": 46.174,
-      "change24h": 0.0229,
-      "volume24h": 318893.314424,
-      "last": 0.06006,
+      "score": 11.5,
+      "confidence": 46.912,
+      "change24h": 0.0352,
+      "volume24h": 318101.590582,
+      "last": 0.06076,
       "keyReasons": [
-        "24h 涨幅 2.3%"
+        "24h 涨幅 3.5%"
       ],
       "tradePlan": null,
       "riskLevel": "high",
@@ -71,9 +71,9 @@
   "errors": [],
   "snapshot": {
     "name": "opportunity_scan",
-    "saved_at": "2026-06-30T11:22:10.733980+00:00",
+    "saved_at": "2026-06-30T11:46:11.965759+00:00",
     "origin": "live",
-    "history_id": "2026-06-30T11-22-10.733980+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-30T11-22-10.733980+00-00.json"
+    "history_id": "2026-06-30T11-46-11.965759+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-30T11-46-11.965759+00-00.json"
   }
 }
