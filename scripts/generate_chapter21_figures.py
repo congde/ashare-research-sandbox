@@ -35,6 +35,7 @@ INK = "#111827"
 MUTED = "#64748B"
 GRID = "#E5E7EB"
 PAPER = "#F7F9FC"
+SYMBOL = "WEB3-DEMO/USDT"
 
 
 def setup_matplotlib() -> None:
@@ -48,7 +49,7 @@ def setup_matplotlib() -> None:
 
 
 def save_compare_windows() -> None:
-    payload = compare_windows(strategy_name="ma_crossover", num_windows=3, limit=120)
+    payload = compare_windows(strategy_name="ma_crossover", symbol=SYMBOL, num_windows=3, limit=120)
     rows = payload["windows"]
     labels = [f"W{row['window']}" for row in rows]
     returns = [float(row["total_return_pct"]) for row in rows]
@@ -91,29 +92,52 @@ def save_compare_windows() -> None:
 
 def save_walk_forward() -> None:
     reset_ledger_for_tests()
-    payload = run_walk_forward(strategy_name="ma_crossover", num_windows=2, limit=120)
-    labels = ["样本内 Sharpe", "样本外 Sharpe", "DSR"]
-    values = [
-        float(payload["in_sample_sharpe"]),
-        float(payload["out_of_sample_sharpe"]),
-        float(payload["dsr"]),
+    payload = run_walk_forward(strategy_name="ma_crossover", symbol=SYMBOL, num_windows=3, limit=120)
+    gates = [
+        (
+            "样本内选择",
+            f"Sharpe {payload['in_sample_sharpe']:.2f}",
+            "训练段表现异常好",
+            ORANGE,
+        ),
+        (
+            "样本外验收",
+            f"OOS Sharpe {payload['out_of_sample_sharpe']:.2f}\nOOS return {payload['out_of_sample_return_pct']:.2f}%",
+            "收益为正，但风险调整优势未延续",
+            RED,
+        ),
+        (
+            "多次试验校正",
+            f"DSR {payload['dsr']:.2f}\ntrials {payload['num_trials']}",
+            "显著性不足，触发过拟合警告",
+            RED,
+        ),
     ]
-    colors = [BLUE, ORANGE, RED]
 
-    fig, ax = plt.subplots(figsize=(9.6, 5.6), dpi=160)
+    fig, ax = plt.subplots(figsize=(11.5, 5.4), dpi=160)
     fig.patch.set_facecolor(PAPER)
-    ax.set_facecolor("#FFFFFF")
-    bars = ax.bar(labels, values, color=colors, width=0.55)
-    ax.axhline(0, color="#94A3B8", linewidth=1)
-    ax.grid(axis="y", color=GRID, linewidth=0.8)
-    ax.spines[["top", "right"]].set_visible(False)
-    for bar, value in zip(bars, values, strict=True):
-        va = "bottom" if value >= 0 else "top"
-        ax.text(bar.get_x() + bar.get_width() / 2, value, f"{value:.2f}", ha="center", va=va, fontsize=11)
+    ax.set_facecolor(PAPER)
+    ax.axis("off")
+    ax.text(0.04, 0.9, "Walk-forward 不是看收益为正，而是看三道门是否同时通过", fontsize=15, color=INK, weight="bold", transform=ax.transAxes)
+    for idx, (title, metric, note, color) in enumerate(gates):
+        x = 0.05 + idx * 0.31
+        ax.add_patch(Rectangle((x, 0.34), 0.25, 0.38, transform=ax.transAxes, facecolor="#FFFFFF", edgecolor=color, linewidth=2))
+        ax.add_patch(Rectangle((x, 0.66), 0.25, 0.06, transform=ax.transAxes, facecolor=color, edgecolor=color))
+        ax.text(x + 0.02, 0.672, title, fontsize=11, color="#FFFFFF", weight="bold", transform=ax.transAxes, va="center")
+        ax.text(x + 0.02, 0.54, metric, fontsize=16, color=INK, weight="bold", transform=ax.transAxes, va="center")
+        ax.text(x + 0.02, 0.40, fill(note, 18), fontsize=10.5, color=MUTED, transform=ax.transAxes, va="center")
+        if idx < len(gates) - 1:
+            ax.annotate(
+                "",
+                xy=(x + 0.29, 0.53),
+                xytext=(x + 0.255, 0.53),
+                arrowprops={"arrowstyle": "->", "color": "#94A3B8", "lw": 2},
+                xycoords=ax.transAxes,
+            )
     ax.text(
-        0.01,
-        -0.18,
-        f"best_params={payload['best_params']}，num_trials={payload['num_trials']}，overfit_warning={payload['overfit_warning']}。",
+        0.05,
+        0.18,
+        f"best_params={payload['best_params']}，overfit_warning={payload['overfit_warning']}。结论：不能把正的 OOS return 写成参数迁移成功。",
         transform=ax.transAxes,
         fontsize=10,
         color=MUTED,
@@ -125,29 +149,35 @@ def save_walk_forward() -> None:
 
 
 def save_cpcv_distribution() -> None:
-    payload = run_cpcv_service(strategy_name="ma_crossover", limit=120)
+    payload = run_cpcv_service(strategy_name="ma_crossover", symbol=SYMBOL, limit=120)
     cpcv = payload["cpcv"]
-    path_sharpes = [float(row["sharpe"]) for row in cpcv["paths"]]
+    paths = list(cpcv["paths"])
+    returns = [float(row["return_pct"]) for row in paths]
 
-    fig, ax = plt.subplots(figsize=(10, 5.6), dpi=160)
+    fig, ax = plt.subplots(figsize=(11.2, 5.6), dpi=160)
     fig.patch.set_facecolor(PAPER)
     ax.set_facecolor("#FFFFFF")
-    ax.hist(path_sharpes, bins=min(8, max(4, len(path_sharpes))), color="#60A5FA", edgecolor="#1E40AF", alpha=0.9)
-    for value, color, label in (
-        (float(cpcv["sharpe_p5"]), ORANGE, "p5"),
-        (float(cpcv["sharpe_p50"]), RED, "p50"),
-        (float(cpcv["sharpe_p95"]), TEAL, "p95"),
-    ):
-        ax.axvline(value, color=color, linestyle="--", linewidth=2, label=f"Sharpe {label}={value:.2f}")
-    ax.set_xlabel("样本外 Sharpe")
-    ax.set_ylabel("路径数量")
-    ax.grid(axis="y", color=GRID, linewidth=0.8)
+    y_pos = list(range(len(paths)))
+    colors = [TEAL if value > 0 else RED for value in returns]
+    ax.barh(y_pos, returns, color=colors, height=0.48)
+    ax.set_xlim(min(returns) - 1.0, max(returns) + 0.8)
+    ax.axvline(0, color="#334155", linewidth=1.2)
+    ax.axvline(float(cpcv["return_p50"]), color=ORANGE, linestyle="--", linewidth=2, label=f"return p50={cpcv['return_p50']}%")
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels([f"路径 {idx + 1}" for idx in y_pos])
+    ax.set_xlabel("样本外收益（%）")
+    ax.set_title("多数路径没有给出稳定支持，不能只相信一条正收益路径", loc="left", fontsize=14, color=INK, weight="bold")
+    ax.grid(axis="x", color=GRID, linewidth=0.8)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.legend(loc="upper right", frameon=False)
+    for idx, value in enumerate(returns):
+        ha = "left" if value >= 0 else "right"
+        offset = 0.25 if value >= 0 else -0.25
+        ax.text(value + offset, idx, f"{value:.2f}%", va="center", ha=ha, fontsize=10, color=INK)
+    ax.legend(loc="lower right", frameon=False)
     ax.text(
         0.01,
         -0.18,
-        f"num_paths={cpcv['num_paths']}，profitable_paths={cpcv['profitable_paths_pct']}%，verdict={cpcv['verdict']}。",
+        f"num_paths={cpcv['num_paths']}，profitable_paths={cpcv['profitable_paths_pct']}%，return_p50={cpcv['return_p50']}%，verdict={cpcv['verdict']}。",
         transform=ax.transAxes,
         fontsize=10,
         color=MUTED,
@@ -159,7 +189,7 @@ def save_cpcv_distribution() -> None:
 
 
 def save_parameter_sensitivity() -> None:
-    payload = run_robustness_audit(strategy_name="ma_crossover", limit=120)
+    payload = run_robustness_audit(strategy_name="ma_crossover", symbol=SYMBOL, limit=120)
     rows = payload["parameter_sensitivity"]["perturbations"]
     labels = [f"{row['param']}\n{row['direction']}" for row in rows]
     drift = [float(row["return_drift_pct"]) for row in rows]
@@ -190,7 +220,7 @@ def save_parameter_sensitivity() -> None:
 
 def save_cost_preset_comparison() -> None:
     rows = [
-        execute_backtest(strategy_name="ma_crossover", limit=120, cost_preset=preset)
+        execute_backtest(strategy_name="ma_crossover", symbol=SYMBOL, limit=120, cost_preset=preset)
         for preset in ["teaching", "realistic", "perp"]
     ]
     labels = [row["cost_preset"] for row in rows]
@@ -219,7 +249,7 @@ def save_cost_preset_comparison() -> None:
     ax1.text(
         0.01,
         -0.18,
-        "成本从 teaching 到 perp：收益 1.55% -> 0.43%，Sharpe 2.10 -> 1.28。",
+        f"成本从 teaching 到 perp：收益 {returns[0]:.2f}% -> {returns[-1]:.2f}%，Sharpe {sharpes[0]:.2f} -> {sharpes[-1]:.2f}。",
         transform=ax1.transAxes,
         fontsize=10,
         color=MUTED,
@@ -231,17 +261,17 @@ def save_cost_preset_comparison() -> None:
 
 
 def save_audit_decision_card() -> None:
-    windows = compare_windows(strategy_name="ma_crossover", num_windows=3, limit=120)
+    windows = compare_windows(strategy_name="ma_crossover", symbol=SYMBOL, num_windows=3, limit=120)
     reset_ledger_for_tests()
-    walk = run_walk_forward(strategy_name="ma_crossover", num_windows=2, limit=120)
-    robust = run_robustness_audit(strategy_name="ma_crossover", limit=120)
-    cpcv = run_cpcv_service(strategy_name="ma_crossover", limit=120)["cpcv"]
+    walk = run_walk_forward(strategy_name="ma_crossover", symbol=SYMBOL, num_windows=3, limit=120)
+    robust = run_robustness_audit(strategy_name="ma_crossover", symbol=SYMBOL, limit=120)
+    cpcv = run_cpcv_service(strategy_name="ma_crossover", symbol=SYMBOL, limit=120)["cpcv"]
     rows = [
         ("连续窗口", f"{windows['positive_windows']}/{windows['num_windows']} 正收益，stable={windows['stable']}", "降级：阶段依赖明显"),
         ("Walk-forward", f"OOS return={walk['out_of_sample_return_pct']}%，DSR={walk['dsr']}", "保留观察：DSR 不显著"),
         ("CPCV", f"{cpcv['num_paths']} 路径，盈利路径 {cpcv['profitable_paths_pct']}%，{cpcv['verdict']}", "不通过稳定性证明"),
-        ("参数敏感性", f"stability_score={robust['parameter_sensitivity']['stability_score']}", "参数附近不稳"),
-        ("PBO", f"PBO={robust['pbo']['pbo']}，verdict={robust['pbo']['verdict']}", "过拟合风险暂不高"),
+        ("参数敏感性", f"stability_score={robust['parameter_sensitivity']['stability_score']}", "默认参数附近已有漂移"),
+        ("PBO", f"PBO={robust['pbo']['pbo']}，verdict={robust['pbo']['verdict']}", "过拟合风险偏高"),
     ]
 
     fig, ax = plt.subplots(figsize=(12, 5.8), dpi=160)

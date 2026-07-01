@@ -268,12 +268,16 @@ def save_action_distribution_chart() -> None:
     img = Image.new("RGB", (1840, 980), BG)
     draw = ImageDraw.Draw(img)
     draw.text((80, 50), "合成样本中的动作、持仓与分数门禁", font=TITLE, fill=INK)
-    draw.text((80, 108), "同一组合成 K 线中，先定位 LONG，再检查持仓区间和分数门禁；图用于复核规则触发，不证明收益。", font=BODY, fill=MUTED)
+    draw.text((80, 108), "先看价格路径上的 LONG/EXIT，再看动作、持仓、分数三条轨道是否互相对齐。", font=BODY, fill=MUTED)
+    draw.rounded_rectangle((1260, 48, 1510, 102), radius=14, fill="#EFF6FF", outline=BLUE, width=2)
+    draw.text((1280, 61), f"WAIT {counts.get('WAIT', 0)} / LONG {counts.get('LONG', 0)}", font=SMALL, fill=BLUE)
+    draw.rounded_rectangle((1535, 48, 1765, 102), radius=14, fill="#ECFDF5", outline=TEAL, width=2)
+    draw.text((1555, 61), f"交易 {len(trades)}  权益 {equity[-1]['equity']:.2f}", font=SMALL, fill=TEAL)
 
-    chart = (70, 165, 1320, 560)
-    lane = (70, 600, 1320, 805)
-    left, right = 135, 1265
-    top, bottom = 235, 520
+    chart = (70, 165, 1770, 520)
+    lane = (70, 555, 1770, 835)
+    left, right = 150, 1690
+    top, bottom = 235, 475
     width = right - left
     total = len(signals)
     closes = [float(row["close"]) for row in signals]
@@ -287,22 +291,43 @@ def save_action_distribution_chart() -> None:
             return (y1 + y2) // 2
         return int(y2 - (value - low) * (y2 - y1) / (high - low))
 
-    draw.rounded_rectangle(chart, radius=20, fill=PANEL, outline="#CBD5E1", width=2)
-    draw.rounded_rectangle(lane, radius=20, fill=PANEL, outline="#CBD5E1", width=2)
-    draw.text((105, 185), "收盘价与入出场", font=HEAD, fill=INK)
+    draw.rounded_rectangle(chart, radius=18, fill=PANEL, outline="#D7DEE8", width=2)
+    draw.rounded_rectangle(lane, radius=18, fill=PANEL, outline="#D7DEE8", width=2)
+    draw.text((110, 188), "价格路径与交易标记", font=HEAD, fill=INK)
     close_low, close_high = min(closes), max(closes)
+
+    for frac in (0.25, 0.5, 0.75):
+        y = int(top + (bottom - top) * frac)
+        draw.line((left, y, right, y), fill="#E5EAF2", width=1)
+    for pos in range(0, total, 5):
+        x = x_at(pos)
+        draw.line((x, bottom, x, bottom + 10), fill="#CBD5E1", width=2)
+        draw.text((x - 8, bottom + 18), str(pos), font=SMALL, fill=MUTED)
+
     close_points = [(x_at(i), y_at(v, close_low, close_high, top, bottom)) for i, v in enumerate(closes)]
-    draw.line(close_points, fill=BLUE, width=5)
+    if len(close_points) > 1:
+        draw.line(close_points, fill=BLUE, width=5)
 
     idx_to_pos = {int(row["idx"]): pos for pos, row in enumerate(signals)}
     close_by_idx = {int(row["idx"]): float(row["close"]) for row in signals}
+    for trade in trades:
+        entry_idx = int(trade.entry_idx)
+        exit_idx = int(trade.exit_idx)
+        if entry_idx not in idx_to_pos or exit_idx not in idx_to_pos:
+            continue
+        x1 = x_at(idx_to_pos[entry_idx])
+        x2 = x_at(idx_to_pos[exit_idx])
+        draw.rounded_rectangle((x1, top + 4, x2, bottom - 4), radius=10, fill="#E7F8EF")
+        draw.line(close_points, fill=BLUE, width=5)
+
     for pos, row in enumerate(signals):
         if row["action"] != "LONG":
             continue
         x = x_at(pos)
         y = y_at(float(row["close"]), close_low, close_high, top, bottom)
-        draw.polygon([(x, y - 18), (x - 16, y + 14), (x + 16, y + 14)], fill=TEAL)
-        draw.text((x + 20, y - 28), "LONG", font=SMALL, fill=TEAL)
+        draw.ellipse((x - 18, y - 18, x + 18, y + 18), fill=TEAL)
+        draw.polygon([(x, y - 12), (x - 9, y + 8), (x + 9, y + 8)], fill="#FFFFFF")
+        draw.text((x + 18, y - 34), "LONG", font=SMALL, fill=TEAL)
 
     for trade in trades:
         entry_idx = int(trade.entry_idx)
@@ -311,53 +336,49 @@ def save_action_distribution_chart() -> None:
             x1 = x_at(idx_to_pos[entry_idx])
             x2 = x_at(idx_to_pos[exit_idx])
             y_exit = y_at(close_by_idx[exit_idx], close_low, close_high, top, bottom)
-            draw.polygon([(x2, y_exit + 18), (x2 - 16, y_exit - 12), (x2 + 16, y_exit - 12)], fill=RED)
-            draw.text((x2 + 20, y_exit - 10), "EXIT", font=SMALL, fill=RED)
+            draw.ellipse((x2 - 18, y_exit - 18, x2 + 18, y_exit + 18), fill=RED)
+            draw.polygon([(x2, y_exit + 12), (x2 - 9, y_exit - 8), (x2 + 9, y_exit - 8)], fill="#FFFFFF")
+            draw.text((x2 + 18, y_exit - 8), "EXIT", font=SMALL, fill=RED)
 
-    draw.text((105, 620), "证据泳道", font=HEAD, fill=INK)
-    row_labels = [("动作", 680), ("持仓", 735), ("分数", 790)]
-    for label, y in row_labels:
-        draw.text((105, y - 18), label, font=BODY, fill=MUTED)
-        draw.line((left, y, right, y), fill="#CBD5E1", width=2)
+    draw.text((left, bottom + 52), "K 线序号", font=SMALL, fill=MUTED)
+    draw.text((110, 580), "三条证据轨道", font=HEAD, fill=INK)
+    lanes = [
+        ("动作轨道", 650, "WAIT 是细点，LONG 是绿色节点", ORANGE),
+        ("持仓轨道", 725, "绿色区间表示持有多头", TEAL),
+        ("分数门禁", 800, "柱越过虚线才满足入场阈值", PURPLE),
+    ]
+    for label, y, hint, color in lanes:
+        draw.text((110, y - 28), label, font=BODY, fill=INK)
+        draw.text((245, y - 25), hint, font=SMALL, fill=MUTED)
+        draw.line((left, y, right, y), fill="#D7DEE8", width=2)
 
-    action_y, position_y, score_base_y = 680, 735, 790
+    action_y, position_y, score_base_y = 650, 725, 800
     for pos, row in enumerate(signals):
         x = x_at(pos)
         if row["action"] == "LONG":
-            draw.ellipse((x - 9, action_y - 9, x + 9, action_y + 9), fill=TEAL)
+            draw.ellipse((x - 12, action_y - 12, x + 12, action_y + 12), fill=TEAL)
         else:
-            draw.ellipse((x - 4, action_y - 4, x + 4, action_y + 4), fill=ORANGE)
+            draw.ellipse((x - 4, action_y - 4, x + 4, action_y + 4), fill="#FBBF24")
 
     for trade in trades:
         x1 = x_at(idx_to_pos[int(trade.entry_idx)])
         x2 = x_at(idx_to_pos[int(trade.exit_idx)])
-        draw.rounded_rectangle((x1, position_y - 17, x2, position_y + 17), radius=8, fill="#DCFCE7", outline=TEAL, width=2)
-        draw.text((x2 + 18, position_y - 15), f"{trade.bars_held} 根，{trade.exit_reason}", font=SMALL, fill=TEAL)
+        draw.rounded_rectangle((x1, position_y - 18, x2, position_y + 18), radius=10, fill="#BBF7D0", outline=TEAL, width=2)
+        draw.text((x2 + 18, position_y - 15), f"{trade.bars_held} 根 / {trade.exit_reason}", font=SMALL, fill=TEAL)
 
     score_low, score_high = min(scores + [25.0]), max(scores + [25.0])
-    threshold_y = y_at(25.0, score_low, score_high, 755, 800)
+    score_top, score_bottom = 760, 820
+    threshold_y = y_at(25.0, score_low, score_high, score_top, score_bottom)
     draw.line((left, threshold_y, right, threshold_y), fill="#334155", width=2)
-    draw.text((right - 175, threshold_y - 24), "threshold=25", font=SMALL, fill="#334155")
+    draw.text((right - 160, threshold_y - 28), "threshold=25", font=SMALL, fill="#334155")
     for pos, score in enumerate(scores):
         x = x_at(pos)
-        y = y_at(score, score_low, score_high, 755, 800)
-        draw.line((x, score_base_y, x, y), fill=TEAL if score >= 25 else "#CBD5E1", width=4)
+        y = y_at(score, score_low, score_high, score_top, score_bottom)
+        color = TEAL if score >= 25 else "#CBD5E1"
+        draw.rounded_rectangle((x - 5, min(y, score_base_y), x + 5, max(y, score_base_y)), radius=3, fill=color)
 
-    final_equity = equity[-1]["equity"] if equity else 0
-    cards = [
-        ("信号总数", str(total), BLUE),
-        ("交易数", str(len(trades)), ORANGE),
-        ("最终权益", f"{final_equity:.2f}", TEAL),
-        ("动作分布", f"WAIT {counts.get('WAIT', 0)} / LONG {counts.get('LONG', 0)}", PURPLE),
-    ]
-    for i, (label, value, color) in enumerate(cards):
-        y = 185 + i * 132
-        draw.rounded_rectangle((1370, y, 1765, y + 102), radius=16, fill="#FFFFFF", outline=color, width=3)
-        draw.text((1394, y + 18), label, font=BODY, fill=MUTED)
-        draw.text((1394, y + 52), value, font=HEAD if i < 3 else BODY, fill=color)
-    draw.text((1370, 730), "读图重点：", font=BODY, fill=INK)
-    draw.text((1370, 770), "复核规则触发、持仓", font=BODY, fill=INK)
-    draw.text((1370, 810), "和分数门禁，不证明收益。", font=BODY, fill=INK)
+    draw.text((100, 890), "读图顺序：1. 找到 LONG 节点；2. 检查持仓区间；3. 对照分数是否越过 threshold=25。", font=BODY, fill=INK)
+    draw.text((100, 930), "这张图用于复核规则触发、持仓和分数门禁，不用于证明策略收益。", font=BODY, fill=MUTED)
 
     img.save(OUT / "chapter-16-action-distribution.png")
     print(OUT / "chapter-16-action-distribution.png")
