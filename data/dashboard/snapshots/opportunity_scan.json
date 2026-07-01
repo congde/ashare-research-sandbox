@@ -2,45 +2,45 @@
   "ok": true,
   "source": "snapshot",
   "full": false,
-  "scanTime": "2026-06-30T15:45:50Z",
+  "scanTime": "2026-07-01T10:56:00Z",
   "totalScanned": 5,
   "topK": 3,
   "opportunities": [
     {
       "symbol": "BLEND",
       "pair": "BLEND-USDT",
-      "signal": "WEAK_BUY",
-      "label": "温和上涨",
-      "score": 11.8,
-      "confidence": 47.062,
-      "change24h": 0.0377,
-      "volume24h": 348247.562128,
-      "last": 0.06083,
+      "signal": "BUY",
+      "label": "强势上涨",
+      "score": 25.0,
+      "confidence": 54.97,
+      "change24h": 0.0995,
+      "volume24h": 296760.299582,
+      "last": 0.06647,
       "keyReasons": [
-        "24h 涨幅 3.8%"
+        "24h 涨幅 10.0%"
       ],
       "tradePlan": null,
-      "riskLevel": "high",
+      "riskLevel": "medium",
       "bias": "bullish",
       "marketState": "uncertain",
       "rank": 1
     },
     {
-      "symbol": "BONK",
-      "pair": "BONK-USDT",
-      "signal": "WEAK_SELL",
-      "label": "温和走弱",
-      "score": -10.9,
-      "confidence": 46.57,
-      "change24h": -0.0295,
-      "volume24h": 526380.781847294,
-      "last": 4.11e-06,
+      "symbol": "APT",
+      "pair": "APT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.4,
+      "confidence": 46.246,
+      "change24h": 0.0241,
+      "volume24h": 290754.75655824,
+      "last": 0.586,
       "keyReasons": [
-        "24h 跌幅 -2.9%"
+        "24h 涨幅 2.4%"
       ],
       "tradePlan": null,
       "riskLevel": "high",
-      "bias": "bearish",
+      "bias": "bullish",
       "marketState": "uncertain",
       "rank": 2
     },
@@ -49,11 +49,11 @@
       "pair": "BCH-USDT",
       "signal": "NEUTRAL",
       "label": "震荡整理",
-      "score": 3.7,
-      "confidence": 42.208,
-      "change24h": 0.0168,
-      "volume24h": 1400254.252338,
-      "last": 199.68,
+      "score": 3.8,
+      "confidence": 42.274,
+      "change24h": 0.0179,
+      "volume24h": 2586205.789588,
+      "last": 205.08,
       "keyReasons": [
         "涨跌幅处于中性区间"
       ],
@@ -64,15 +64,15 @@
       "rank": 3
     }
   ],
-  "marketOverview": "扫描 5 个币种，市场方向分化。多头 1、空头 1、中性 1。综合靠前：BLEND(温和上涨)、BONK(温和走弱)、BCH(震荡整理)。",
-  "scanDurationMs": 1,
+  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 2、空头 0、中性 1。综合靠前：BLEND(强势上涨)、APT(温和上涨)、BCH(震荡整理)。",
+  "scanDurationMs": 0,
   "engine": "sandbox-rule-based",
   "errors": [],
   "snapshot": {
     "name": "opportunity_scan",
-    "saved_at": "2026-06-30T15:45:50.462391+00:00",
+    "saved_at": "2026-07-01T10:56:00.403133+00:00",
     "origin": "live",
-    "history_id": "2026-06-30T15-45-50.462391+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-06-30T15-45-50.462391+00-00.json"
+    "history_id": "2026-07-01T10-56-00.403133+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T10-56-00.403133+00-00.json"
   }
 }

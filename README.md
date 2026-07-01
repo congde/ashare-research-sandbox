@@ -12,6 +12,12 @@
 
 联系方式：congdeyuan@gmail.com
 
+## 界面预览
+
+![首页概览](image/首页概览.png)
+
+![回测详情](image/回测详情.png)
+
 ## 主要能力
 
 | 能力 | Web 路由 | 主要代码路径 | 说明 |
@@ -170,6 +176,5 @@ py scripts/course.py teaching-plots
 - 前端代码放在 `src/web/`。
 - 测试放在 `tests/`。
 - 离线样本放在 `data/`。
-- 课程正文放在 `docs/v2/`。
 - 生成型文件优先放入 `outputs/` 或 `reports/`。
 - 不要恢复已经删除的旧目录，例如 `app/`、`challenges/`、`harness-kit/` 或 `labs/`。
