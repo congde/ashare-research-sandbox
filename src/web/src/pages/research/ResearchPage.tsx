@@ -262,6 +262,35 @@ export default function ResearchPage() {
           </Button>
         </div>
       }
+      aside={
+        <QuantGlowCard className="research-hero-summary">
+          <div className="research-hero-summary-top">
+            <span>{pair}</span>
+            <StatusPill tone={signalTone(signal?.signal)}>{signalBusy ? "分析中" : signal?.signalLabel ?? "待分析"}</StatusPill>
+          </div>
+          <strong>{formatPrice(signal?.market?.price ?? price)}</strong>
+          <div className="research-hero-summary-grid">
+            <div>
+              <span>24h 涨跌</span>
+              <b className={(tickerMeta?.changeRate ?? 0) >= 0 ? "research-positive" : "research-negative"}>
+                {formatPct(tickerMeta?.changeRate)}
+              </b>
+            </div>
+            <div>
+              <span>置信度</span>
+              <b>{signal?.confidence?.toFixed(1) ?? "—"}%</b>
+            </div>
+            <div>
+              <span>行情</span>
+              <b>{metrics?.regime ?? "—"}</b>
+            </div>
+            <div>
+              <span>数据源</span>
+              <b>{kline?.source ?? "—"}</b>
+            </div>
+          </div>
+        </QuantGlowCard>
+      }
     >
       {error && (
         <QuantGlowCard className="trading-span-12" title={<SectionHeader title="加载错误" />}>
@@ -269,9 +298,9 @@ export default function ResearchPage() {
         </QuantGlowCard>
       )}
 
-      <section className="trading-grid">
+      <section className="trading-grid research-primary-grid">
         <QuantGlowCard
-          className="trading-span-12"
+          className="trading-span-12 research-kline-card"
           title={<SectionHeader title="币种 K 线" description={`${pair} · ${kline?.trend ?? "加载中"}`} />}
           badge={<StatusPill tone="neutral">{kline?.source ?? "—"}</StatusPill>}
         >
@@ -343,7 +372,7 @@ export default function ResearchPage() {
             showMa60={showMa60}
             showVolume={showVolume}
             showPriceLines={showPriceLines}
-            height={440}
+            height={360}
           />
 
           <dl className="research-kline-metrics">
@@ -388,7 +417,7 @@ export default function ResearchPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
-          className="trading-span-12"
+          className="trading-span-12 research-signal-card"
           title={<SectionHeader title="LLM 信号分析" description="与 web3-trading /analysis 对齐 · DeepSeek V4 Pro 异步分析" />}
           badge={
             <StatusPill tone={signalTone(signal?.signal)}>

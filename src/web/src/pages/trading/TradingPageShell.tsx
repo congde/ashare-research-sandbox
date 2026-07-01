@@ -39,7 +39,7 @@ export function TradingPageShell({
 }: TradingPageShellProps) {
   return (
     <div className="trading-shell">
-      <section className="trading-hero">
+      <section className={`trading-hero${aside ? "" : " trading-hero-single"}`}>
         <div className="trading-heading">
           <div>
             <div className="trading-eyebrow">{eyebrow}</div>
