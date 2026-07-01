@@ -607,12 +607,12 @@ export default function BacktestsPage() {
       </section>
 
       <nav className="backtest-section-nav" aria-label="回测页面导航">
-        <a href="#backtest-results">结果总览</a>
-        <a href="#backtest-chart">权益曲线</a>
-        <a href="#backtest-comparison">策略比较</a>
-        <a href="#factor-research">因子挖掘</a>
-        <a href="#backtest-validation">样本外验证</a>
-        <a href="#backtest-trades">交易明细</a>
+        <a href="#backtest-results"><span>01</span>结果总览</a>
+        <a href="#backtest-chart"><span>02</span>权益曲线</a>
+        <a href="#backtest-comparison"><span>03</span>策略比较</a>
+        <a href="#factor-research"><span>04</span>因子挖掘</a>
+        <a href="#backtest-validation"><span>05</span>样本外验证</a>
+        <a href="#backtest-trades"><span>06</span>交易明细</a>
       </nav>
 
       <QuantGlowCard
@@ -654,7 +654,7 @@ export default function BacktestsPage() {
         style={{ marginBottom: 16 }}
         title={
           <SectionHeader
-            title="GP / ML 因子挖掘"
+            title="04 · 因子挖掘"
             description="收益因子（IC→方向回测）· 风险因子（RIC→仓位缩放预览）· 训练/测试切分与过拟合提示"
           />
         }
@@ -889,7 +889,15 @@ export default function BacktestsPage() {
         )}
       </QuantGlowCard>
       <section className="trading-grid" id="backtest-results">
-        <QuantGlowCard className="trading-span-12 result-overview-card">
+        <QuantGlowCard
+          className="trading-span-12 result-overview-card"
+          title={
+            <SectionHeader
+              title="01 · 结果总览"
+              description="先看结论，再下钻权益曲线、策略比较、因子挖掘和样本外验证。"
+            />
+          }
+        >
           <div className="backtest-verdict-row">
             <div>
               <span>研究判读</span>
@@ -927,7 +935,6 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
-          id="backtest-chart"
           className="trading-span-12"
           title={
             <SectionHeader
@@ -951,11 +958,11 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
-          id="backtest-comparison"
+          id="backtest-chart"
           className="trading-span-12"
           title={
             <SectionHeader
-              title="回测图表"
+              title="02 · 权益曲线"
               description={chartRangeLabel}
             />
           }
@@ -974,11 +981,11 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
-          id="backtest-validation"
+          id="backtest-comparison"
           className="trading-span-12"
           title={
             <SectionHeader
-              title="多策略比较"
+              title="03 · 策略比较"
               description={`统一样本 · 领先 ${compare?.leader ?? "—"} · 落后 ${compare?.laggard ?? "—"}`}
             />
           }
@@ -1013,6 +1020,7 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
+          id="backtest-validation"
           className="trading-span-12"
           title={
             <SectionHeader
@@ -1054,7 +1062,7 @@ export default function BacktestsPage() {
           className="trading-span-12"
           title={
             <SectionHeader
-              title="Walk-forward 参数优化"
+              title="05 · 样本外验证"
               description={
                 walkForward
                   ? `样本内 Sharpe ${walkForward.in_sample_sharpe.toFixed(2)} · 样本外 ${walkForward.out_of_sample_sharpe.toFixed(2)} · DSR ${(walkForward.dsr ?? 0).toFixed(2)} · 试验 ${walkForward.num_trials ?? 0} 次`
@@ -1250,8 +1258,8 @@ export default function BacktestsPage() {
 
         <QuantGlowCard
           id="backtest-trades"
-          className="trading-span-8"
-          title={<SectionHeader title="成交明细" description={`${tradeRows.length} 笔 · SL ${stopLoss}% / TP ${takeProfit}%`} />}
+          className="trading-span-12 trade-detail-card"
+          title={<SectionHeader title="06 · 交易明细" description={`${tradeRows.length} 笔 · SL ${stopLoss}% / TP ${takeProfit}%`} />}
         >
           <Table
             className="trading-ant-table"
@@ -1266,7 +1274,7 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
-          className="trading-span-4"
+          className="trading-span-12 backtest-assumption-card"
           title={<SectionHeader title="假设与限制" description="教学沙箱边界" />}
         >
           <div className="trading-list">
