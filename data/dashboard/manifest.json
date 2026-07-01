@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-01T13:25:20+00:00",
+  "updated_at": "2026-07-01T13:26:30+00:00",
   "datasets": {
     "market_tickers": {
       "layer": "snapshot",
@@ -38,13 +38,13 @@
     "valuescan_token_full": {
       "layer": "snapshot",
       "origin": "live",
-      "path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\valuescan_token_full__symbol=BTC\\2026-07-01T13-22-57.269243+00-00.json",
+      "path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\valuescan_token_full__symbol=BTC\\2026-07-01T13-26-30.456935+00-00.json",
       "complete": true,
       "reason": "",
-      "updated_at": "2026-07-01T13:22:57+00:00",
+      "updated_at": "2026-07-01T13:26:30+00:00",
       "cache_key": "valuescan_token_full__symbol=BTC",
       "latest_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\valuescan_token_full__symbol=BTC.json",
-      "history_id": "2026-07-01T13-22-57.269243+00-00"
+      "history_id": "2026-07-01T13-26-30.456935+00-00"
     },
     "onchain": {
       "layer": "snapshot",
