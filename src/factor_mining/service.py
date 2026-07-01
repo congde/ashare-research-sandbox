@@ -279,6 +279,10 @@ def _metrics_payload(metrics: Any) -> dict[str, Any]:
             "turnover_rate": 0.0,
             "top_quintile_return": 0.0,
             "bottom_quintile_return": 0.0,
+            "t_stat": 0.0,
+            "p_value": 1.0,
+            "rank_autocorr": 0.0,
+            "quantile_returns": [0.0, 0.0, 0.0, 0.0, 0.0],
         }
     return {
         "ic_mean": metrics.ic_mean,
@@ -290,6 +294,10 @@ def _metrics_payload(metrics: Any) -> dict[str, Any]:
         "turnover_rate": metrics.turnover_rate,
         "top_quintile_return": metrics.top_quintile_return,
         "bottom_quintile_return": metrics.bottom_quintile_return,
+        "t_stat": metrics.t_stat,
+        "p_value": metrics.p_value,
+        "rank_autocorr": metrics.rank_autocorr,
+        "quantile_returns": list(metrics.quantile_returns),
     }
 
 

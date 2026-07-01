@@ -405,6 +405,19 @@ export interface RollingBacktestPayload {
   worst_trade_pct: number;
   profit_factor: number;
   avg_bars_held: number;
+  avg_win_pct?: number;
+  avg_loss_pct?: number;
+  payoff_ratio?: number;
+  expectancy_pct?: number;
+  exposure_pct?: number;
+  benchmark_return_pct?: number;
+  alpha_pct?: number;
+  recovery_factor?: number;
+  tail_ratio?: number;
+  omega_ratio?: number;
+  max_consecutive_wins?: number;
+  max_consecutive_losses?: number;
+  monte_carlo_95?: number | null;
   stop_loss_pct?: number;
   take_profit_pct?: number;
   trailing_stop_pct?: number;
@@ -617,6 +630,10 @@ export interface FactorMetricsView {
   turnover_rate?: number;
   top_quintile_return?: number;
   bottom_quintile_return?: number;
+  t_stat?: number;
+  p_value?: number;
+  rank_autocorr?: number;
+  quantile_returns?: number[];
 }
 
 export interface FactorValidationView {

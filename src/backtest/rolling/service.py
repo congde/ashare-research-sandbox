@@ -12,6 +12,7 @@ from backtest.audit.pbo import probability_of_backtest_overfitting
 from backtest.audit.robustness import run_parameter_sensitivity
 from backtest.cost_presets import PRESETS, cost_assumptions, infer_funding_rate_pct, resolve_cost_options
 from backtest.runner import load_prices
+from backtest.rolling.diagnostics import compute_trade_diagnostics
 from backtest.rolling.engine import run_backtest
 from backtest.rolling.hooks import build_risk_hook_manager
 from backtest.rolling.metrics import compute_metrics
@@ -244,6 +245,14 @@ def execute_backtest(
     result.candle_signals = candle_signals
 
     payload = asdict(result)
+    payload.update(
+        compute_trade_diagnostics(
+            trades=trades,
+            candles=candles,
+            total_return_pct=float(payload.get("total_return_pct", 0.0)),
+            max_drawdown_pct=float(payload.get("max_drawdown_pct", 0.0)),
+        )
+    )
     payload["ok"] = True
     payload["engine"] = "web3-trading/rolling-window"
     payload["stop_loss_pct"] = config.stop_loss_pct
@@ -276,6 +285,7 @@ COMPARE_STRATEGY_KEYS = (
     "boll_mean_reversion",
     "rsi_mean_reversion",
     "macd",
+    "ml_temporal",
     "buy_and_hold",
 )
 

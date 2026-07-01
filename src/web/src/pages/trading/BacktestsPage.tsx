@@ -1,5 +1,5 @@
-import { ReloadOutlined } from "@ant-design/icons";
-import { Alert, Button, Checkbox, InputNumber, Select, Space, Table, message } from "antd";
+import { ExperimentOutlined, FundProjectionScreenOutlined, PlayCircleOutlined, ReloadOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import { Alert, Button, Checkbox, InputNumber, Segmented, Select, Space, Table, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -35,6 +35,17 @@ const COST_PRESET_OPTIONS = [
   { label: "现实（5bps+动态滑点）", value: "realistic" },
   { label: "永续（+资金费率）", value: "perp" },
 ];
+
+const STRATEGY_FAMILY_OPTIONS = [
+  { label: "规则策略", value: "rules" },
+  { label: "ML 时序", value: "ml" },
+  { label: "挖掘因子", value: "factor" },
+];
+
+const STRATEGY_FAMILY: Record<string, "rules" | "ml" | "factor"> = {
+  ml_temporal: "ml",
+  mined_factor: "factor",
+};
 
 function tsToDate(ts: number): string {
   return tsToChartDay(ts);
@@ -103,6 +114,7 @@ function toTradeRows(trades: RollingTrade[]): TradeRow[] {
 
 export default function BacktestsPage() {
   const [strategies, setStrategies] = useState<{ label: string; value: string }[]>([]);
+  const [strategyFamily, setStrategyFamily] = useState<"rules" | "ml" | "factor">("rules");
   const [strategy, setStrategy] = useState("ma_crossover");
   const [symbol, setSymbol] = useState("BTC-USDT");
   const [refreshLive, setRefreshLive] = useState(false);
@@ -146,6 +158,29 @@ export default function BacktestsPage() {
         ]);
       });
   }, []);
+
+  useEffect(() => {
+    if (strategyFamily === "ml") {
+      setStrategy("ml_temporal");
+      return;
+    }
+    if (strategyFamily === "factor") {
+      setStrategy("mined_factor");
+      return;
+    }
+    if (STRATEGY_FAMILY[strategy] && STRATEGY_FAMILY[strategy] !== "rules") {
+      setStrategy("ma_crossover");
+    }
+  }, [strategyFamily]);
+
+  const visibleStrategies = useMemo(
+    () =>
+      strategies.filter((item) => {
+        const family = STRATEGY_FAMILY[item.value] ?? "rules";
+        return family === strategyFamily;
+      }),
+    [strategies, strategyFamily],
+  );
 
   const runBacktest = useCallback(async () => {
     setLoading(true);
@@ -389,14 +424,23 @@ export default function BacktestsPage() {
     <TradingPageShell
       eyebrow="Backtest Lab"
       title="策略回测"
-      description="对齐 web3-trading 滚动窗口回测：策略注册表、止损止盈、权益曲线与交易明细；数据来自教学样本或离线 K 线。回测是历史模拟，不是真实下单。"
+      description="策略研究工作台：规则策略、ML 时序模型、因子挖掘、样本外验证和组合审计集中在一个可执行流程里。回测是历史模拟，不是真实下单。"
       actions={
         <>
+          <Segmented
+            value={strategyFamily}
+            onChange={(value) => setStrategyFamily(value as "rules" | "ml" | "factor")}
+            options={STRATEGY_FAMILY_OPTIONS}
+            disabled={loading}
+          />
           <Select
             value={strategy}
-            onChange={setStrategy}
+            onChange={(value) => {
+              setStrategy(value);
+              setStrategyFamily(STRATEGY_FAMILY[value] ?? "rules");
+            }}
             style={{ minWidth: 180 }}
-            options={strategies}
+            options={visibleStrategies.length ? visibleStrategies : strategies}
             disabled={loading}
           />
           <Select
@@ -500,6 +544,39 @@ export default function BacktestsPage() {
         }
       />
       <QuantGlowCard
+        className="trading-span-12 backtest-workflow-card"
+        style={{ marginBottom: 16 }}
+        title={
+          <SectionHeader
+            title="研究工作流"
+            description="先选模型族，再跑回测；随后进入因子挖掘、Walk-forward、稳健性审计和组合验证。"
+          />
+        }
+      >
+        <div className="backtest-workflow-grid">
+          <button type="button" className="backtest-workflow-step" onClick={() => void runBacktest()}>
+            <PlayCircleOutlined />
+            <strong>1. 运行当前模型</strong>
+            <span>{strategyFamily === "ml" ? "滚动训练 ML 时序分类器" : "生成权益曲线和交易明细"}</span>
+          </button>
+          <button type="button" className="backtest-workflow-step" onClick={() => void runFactorMine()}>
+            <ExperimentOutlined />
+            <strong>2. 挖掘候选因子</strong>
+            <span>GP / ML 搜索、IC 显著性和分位收益</span>
+          </button>
+          <button type="button" className="backtest-workflow-step" onClick={() => void runWalkForward()}>
+            <FundProjectionScreenOutlined />
+            <strong>3. 样本外验证</strong>
+            <span>训练窗搜参，OOS 验证，DSR 修正</span>
+          </button>
+          <button type="button" className="backtest-workflow-step" onClick={() => void runAuditSuite()}>
+            <SafetyCertificateOutlined />
+            <strong>4. 审计稳定性</strong>
+            <span>PBO、参数敏感性和 CPCV 路径</span>
+          </button>
+        </div>
+      </QuantGlowCard>
+      <QuantGlowCard
         className="trading-span-12"
         style={{ marginBottom: 16 }}
         title={
@@ -516,7 +593,7 @@ export default function BacktestsPage() {
           ) : undefined
         }
       >
-        <Space wrap style={{ marginBottom: 12 }}>
+        <Space wrap className="factor-control-strip">
           <Select
             value={mineTarget}
             onChange={setMineTarget}
@@ -557,15 +634,26 @@ export default function BacktestsPage() {
           <Button loading={factorLoading} onClick={() => void runFactorMine()}>
             运行挖掘
           </Button>
-          <Button
-            className="btn-gradient"
-            type="primary"
-            loading={loading}
-            disabled={mineTarget === "risk" || !factorMine?.leader?.backtest_spec}
-            onClick={() => void runMinedBacktest()}
-          >
-            用领先因子回测
-          </Button>
+          <div className="factor-backtest-action">
+            <Button
+              className="factor-backtest-button"
+              type="primary"
+              size="large"
+              loading={loading}
+              disabled={mineTarget === "risk" || !factorMine?.leader?.backtest_spec}
+              icon={<PlayCircleOutlined />}
+              onClick={() => void runMinedBacktest()}
+            >
+              用领先因子回测
+            </Button>
+            <span className={factorMine?.leader?.backtest_spec ? "factor-action-ready" : ""}>
+              {mineTarget === "risk"
+                ? "风险因子仅做仓位缩放"
+                : factorMine?.leader?.backtest_spec
+                  ? "领先因子已就绪"
+                  : "先运行收益因子挖掘"}
+            </span>
+          </div>
         </Space>
         {factorError && <Alert type="error" message={factorError} showIcon style={{ marginBottom: 12 }} />}
         {factorMine ? (
@@ -633,26 +721,89 @@ export default function BacktestsPage() {
               <Alert key={item} type="warning" message={item} showIcon style={{ marginBottom: 8 }} />
             ))}
             {factorMine.leader?.validation ? (
-              <div className="trading-metric-grid" style={{ marginBottom: 8 }}>
-                <MetricTile
-                  label="五分位 spread"
-                  value={factorMine.leader.validation.quintile_spread}
-                  tone="neutral"
-                  precision={4}
-                />
-                <MetricTile
-                  label="换手 proxy"
-                  value={factorMine.leader.validation.turnover_rate}
-                  tone="neutral"
-                  precision={3}
-                />
-                <MetricTile
-                  label="IC 衰减"
-                  value={factorMine.leader.validation.ic_decay}
-                  tone="neutral"
-                  precision={4}
-                />
-              </div>
+              <>
+                <div className="trading-metric-grid" style={{ marginBottom: 8 }}>
+                  <MetricTile
+                    label="五分位 spread"
+                    value={factorMine.leader.validation.quintile_spread}
+                    tone="neutral"
+                    precision={4}
+                  />
+                  <MetricTile
+                    label="换手 proxy"
+                    value={factorMine.leader.validation.turnover_rate}
+                    tone="neutral"
+                    precision={3}
+                  />
+                  <MetricTile
+                    label="IC 衰减"
+                    value={factorMine.leader.validation.ic_decay}
+                    tone="neutral"
+                    precision={4}
+                  />
+                  <MetricTile
+                    label="t-stat"
+                    value={
+                      factorMine.leader.method === "gp"
+                        ? factorMine.gp?.test?.t_stat ?? 0
+                        : factorMine.ml?.test?.t_stat ?? 0
+                    }
+                    tone="neutral"
+                    precision={2}
+                  />
+                  <MetricTile
+                    label="p-value"
+                    value={
+                      factorMine.leader.method === "gp"
+                        ? factorMine.gp?.test?.p_value ?? 1
+                        : factorMine.ml?.test?.p_value ?? 1
+                    }
+                    tone="neutral"
+                    precision={3}
+                  />
+                  <MetricTile
+                    label="Rank 自相关"
+                    value={
+                      factorMine.leader.method === "gp"
+                        ? factorMine.gp?.test?.rank_autocorr ?? 0
+                        : factorMine.ml?.test?.rank_autocorr ?? 0
+                    }
+                    tone="neutral"
+                    precision={3}
+                  />
+                </div>
+                {(() => {
+                  const branch = factorMine.leader?.method === "gp" ? factorMine.gp : factorMine.ml;
+                  const quantiles = branch?.test?.quantile_returns ?? [];
+                  return quantiles.length ? (
+                    <Table
+                      className="trading-ant-table"
+                      pagination={false}
+                      size="small"
+                      rowKey="bucket"
+                      dataSource={quantiles.map((value, index) => ({
+                        bucket: `Q${index + 1}`,
+                        return: value,
+                      }))}
+                      columns={[
+                        { title: "测试分位", dataIndex: "bucket", width: 100 },
+                        {
+                          title: "前瞻收益",
+                          dataIndex: "return",
+                          render: (value: number) => (
+                            <MonoNumber
+                              value={value * 100}
+                              kind="pct"
+                              tone={value >= 0 ? "profit" : "loss"}
+                              showSign
+                            />
+                          ),
+                        },
+                      ]}
+                    />
+                  ) : null;
+                })()}
+              </>
             ) : null}
           </>
         ) : (
@@ -687,6 +838,33 @@ export default function BacktestsPage() {
             <MetricTile label="交易数" value={result?.total_trades ?? 0} kind="qty" tone="neutral" />
             <MetricTile label="Calmar" value={result?.calmar_ratio ?? 0} tone="neutral" precision={2} />
             <MetricTile label="盈亏比" value={result?.profit_factor ?? 0} tone="neutral" precision={2} />
+            <MetricTile label="超额收益" value={result?.alpha_pct ?? 0} kind="pct" tone={(result?.alpha_pct ?? 0) >= 0 ? "profit" : "loss"} showSign />
+            <MetricTile label="暴露度" value={result?.exposure_pct ?? 0} kind="pct" tone="neutral" />
+            <MetricTile label="期望/笔" value={result?.expectancy_pct ?? 0} kind="pct" tone={(result?.expectancy_pct ?? 0) >= 0 ? "profit" : "loss"} showSign />
+            <MetricTile label="尾部比" value={result?.tail_ratio ?? 0} tone="neutral" precision={2} />
+          </div>
+        </QuantGlowCard>
+
+        <QuantGlowCard
+          className="trading-span-12"
+          title={
+            <SectionHeader
+              title="交易质量诊断"
+              description="Trade analyzer / portfolio stats：胜负分布、连续亏损、基准超额与尾部风险"
+            />
+          }
+        >
+          <div className="trading-metric-grid">
+            <MetricTile label="基准收益" value={result?.benchmark_return_pct ?? 0} kind="pct" tone="neutral" showSign />
+            <MetricTile label="Alpha" value={result?.alpha_pct ?? 0} kind="pct" tone={(result?.alpha_pct ?? 0) >= 0 ? "profit" : "loss"} showSign />
+            <MetricTile label="平均盈利" value={result?.avg_win_pct ?? 0} kind="pct" tone="profit" showSign />
+            <MetricTile label="平均亏损" value={result?.avg_loss_pct ?? 0} kind="pct" tone="loss" showSign />
+            <MetricTile label="Payoff" value={result?.payoff_ratio ?? 0} tone="neutral" precision={2} />
+            <MetricTile label="Omega" value={result?.omega_ratio ?? 0} tone="neutral" precision={2} />
+            <MetricTile label="恢复因子" value={result?.recovery_factor ?? 0} tone="neutral" precision={2} />
+            <MetricTile label="MC 5%收益" value={result?.monte_carlo_95 ?? 0} kind="pct" tone={(result?.monte_carlo_95 ?? 0) >= 0 ? "profit" : "loss"} showSign />
+            <MetricTile label="连胜" value={result?.max_consecutive_wins ?? 0} kind="qty" tone="profit" />
+            <MetricTile label="连亏" value={result?.max_consecutive_losses ?? 0} kind="qty" tone="loss" />
           </div>
         </QuantGlowCard>
 
@@ -796,7 +974,17 @@ export default function BacktestsPage() {
               description={
                 walkForward
                   ? `样本内 Sharpe ${walkForward.in_sample_sharpe.toFixed(2)} · 样本外 ${walkForward.out_of_sample_sharpe.toFixed(2)} · DSR ${(walkForward.dsr ?? 0).toFixed(2)} · 试验 ${walkForward.num_trials ?? 0} 次`
-                  : "训练窗网格搜参 → 样本外验证 · 点击顶部 Walk-forward 运行"
+                  : "训练窗网格搜参 → 样本外验证 · 点击右侧按钮运行"
+              }
+              action={
+                <Button
+                  className="card-run-button"
+                  type="primary"
+                  loading={wfoLoading}
+                  onClick={() => void runWalkForward()}
+                >
+                  启动 Walk-forward
+                </Button>
               }
             />
           }
@@ -852,7 +1040,16 @@ export default function BacktestsPage() {
               description={
                 robustness
                   ? `稳定性 ${(robustness.parameter_sensitivity.stability_score * 100).toFixed(0)}% · PBO ${(robustness.pbo.pbo * 100).toFixed(0)}% · CPCV 盈利路径 ${(cpcv?.cpcv.profitable_paths_pct ?? 0).toFixed(0)}%`
-                  : "点击顶部「稳健性审计」运行参数扰动、过拟合概率与组合 OOS 路径"
+                  : "点击右侧按钮运行参数扰动、过拟合概率与组合 OOS 路径"
+              }
+              action={
+                <Button
+                  className="card-run-button"
+                  loading={auditLoading}
+                  onClick={() => void runAuditSuite()}
+                >
+                  启动审计
+                </Button>
               }
             />
           }
@@ -896,7 +1093,16 @@ export default function BacktestsPage() {
               description={
                 portfolio
                   ? `均收益 ${portfolio.equal_weight_leg_avg_return_pct.toFixed(2)}% · 日收益加总 ${portfolio.equal_weight_daily_return_sum_pct.toFixed(2)}%`
-                  : "基于 data/prices.csv 派生三 leg · 点击顶部「组合回测」"
+                  : "基于 data/prices.csv 派生三 leg · 点击右侧按钮运行"
+              }
+              action={
+                <Button
+                  className="card-run-button"
+                  loading={portfolioLoading}
+                  onClick={() => void runPortfolio()}
+                >
+                  启动组合回测
+                </Button>
               }
             />
           }

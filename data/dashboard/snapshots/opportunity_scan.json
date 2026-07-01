@@ -2,115 +2,39 @@
   "ok": true,
   "source": "snapshot",
   "full": false,
-  "scanTime": "2026-07-01T11:26:34Z",
-  "totalScanned": 7,
-  "topK": 5,
+  "scanTime": "2026-07-01T12:14:23Z",
+  "totalScanned": 5,
+  "topK": 1,
   "opportunities": [
     {
       "symbol": "BLEND",
       "pair": "BLEND-USDT",
       "signal": "BUY",
       "label": "强势上涨",
-      "score": 25.6,
-      "confidence": 55.366,
-      "change24h": 0.1061,
-      "volume24h": 309599.422072,
-      "last": 0.06639,
+      "score": 25.4,
+      "confidence": 55.228,
+      "change24h": 0.1038,
+      "volume24h": 315592.810896,
+      "last": 0.06612,
       "keyReasons": [
-        "24h 涨幅 10.6%"
+        "24h 涨幅 10.4%"
       ],
       "tradePlan": null,
       "riskLevel": "medium",
       "bias": "bullish",
       "marketState": "uncertain",
       "rank": 1
-    },
-    {
-      "symbol": "BCH",
-      "pair": "BCH-USDT",
-      "signal": "WEAK_BUY",
-      "label": "温和上涨",
-      "score": 13.0,
-      "confidence": 47.775999999999996,
-      "change24h": 0.0296,
-      "volume24h": 2656603.554496,
-      "last": 205.74,
-      "keyReasons": [
-        "24h 涨幅 3.0%"
-      ],
-      "tradePlan": null,
-      "riskLevel": "high",
-      "bias": "bullish",
-      "marketState": "uncertain",
-      "rank": 2
-    },
-    {
-      "symbol": "APT",
-      "pair": "APT-USDT",
-      "signal": "WEAK_BUY",
-      "label": "温和上涨",
-      "score": 11.3,
-      "confidence": 46.804,
-      "change24h": 0.0334,
-      "volume24h": 295558.42481722625,
-      "last": 0.5863,
-      "keyReasons": [
-        "24h 涨幅 3.3%"
-      ],
-      "tradePlan": null,
-      "riskLevel": "high",
-      "bias": "bullish",
-      "marketState": "uncertain",
-      "rank": 3
-    },
-    {
-      "symbol": "ADI",
-      "pair": "ADI-USDT",
-      "signal": "NEUTRAL",
-      "label": "震荡整理",
-      "score": 2.1,
-      "confidence": 41.284,
-      "change24h": 0.0014,
-      "volume24h": 3262276.492504,
-      "last": 5.5425,
-      "keyReasons": [
-        "涨跌幅处于中性区间"
-      ],
-      "tradePlan": null,
-      "riskLevel": "high",
-      "bias": "neutral",
-      "marketState": "uncertain",
-      "rank": 4
-    },
-    {
-      "symbol": "BLUAI",
-      "pair": "BLUAI-USDT",
-      "signal": "NEUTRAL",
-      "label": "震荡整理",
-      "score": 0.9,
-      "confidence": 40.51,
-      "change24h": 0.0085,
-      "volume24h": 223602.627102,
-      "last": 0.013333,
-      "keyReasons": [
-        "涨跌幅处于中性区间"
-      ],
-      "tradePlan": null,
-      "riskLevel": "high",
-      "bias": "neutral",
-      "marketState": "uncertain",
-      "rank": 5
     }
   ],
-  "marketOverview": "扫描 7 个币种，市场整体偏多。多头 3、空头 0、中性 2。综合靠前：BLEND(强势上涨)、BCH(温和上涨)、APT(温和上涨)。",
+  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 1、空头 0、中性 0。综合靠前：BLEND(强势上涨)。",
   "scanDurationMs": 0,
   "engine": "sandbox-rule-based",
   "errors": [],
   "snapshot": {
     "name": "opportunity_scan",
-    "saved_at": "2026-07-01T11:26:34.828785+00:00",
+    "saved_at": "2026-07-01T12:14:23.706298+00:00",
     "origin": "live",
-    "history_id": "2026-07-01T11-26-34.828785+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T11-26-34.828785+00-00.json"
+    "history_id": "2026-07-01T12-14-23.706298+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T12-14-23.706298+00-00.json"
   }
 }

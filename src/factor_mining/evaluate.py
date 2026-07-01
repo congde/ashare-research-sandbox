@@ -18,6 +18,10 @@ class FactorMetrics:
     turnover_rate: float = 0.0
     top_quintile_return: float = 0.0
     bottom_quintile_return: float = 0.0
+    t_stat: float = 0.0
+    p_value: float = 1.0
+    rank_autocorr: float = 0.0
+    quantile_returns: tuple[float, ...] = ()
 
 
 def _rank_values(values: list[float]) -> list[float]:
@@ -79,6 +83,22 @@ def _quintile_spread(xs: list[float], ys: list[float]) -> tuple[float, float, fl
     return top_mean - bottom_mean, top_mean, bottom_mean
 
 
+def _quantile_returns(xs: list[float], ys: list[float], buckets: int = 5) -> tuple[float, ...]:
+    if len(xs) < buckets * 2:
+        return tuple(0.0 for _ in range(buckets))
+    order = sorted(range(len(xs)), key=lambda i: xs[i])
+    out: list[float] = []
+    for bucket in range(buckets):
+        start = int(len(order) * bucket / buckets)
+        end = int(len(order) * (bucket + 1) / buckets)
+        members = order[start:end]
+        if not members:
+            out.append(0.0)
+        else:
+            out.append(sum(ys[i] for i in members) / len(members))
+    return tuple(round(value, 6) for value in out)
+
+
 def _turnover_rate(signal: Sequence[float | None]) -> float:
     """Share of bars where signal sign flips vs previous valid value."""
     prev: float | None = None
@@ -94,6 +114,24 @@ def _turnover_rate(signal: Sequence[float | None]) -> float:
             steps += 1
         prev = curr_sign
     return flips / steps if steps else 0.0
+
+
+def _rank_autocorr(signal: Sequence[float | None]) -> float:
+    xs: list[float] = []
+    ys: list[float] = []
+    prev: float | None = None
+    for value in signal:
+        if value is None or not math.isfinite(value):
+            continue
+        if prev is not None:
+            xs.append(prev)
+            ys.append(float(value))
+        prev = float(value)
+    return spearman(xs, ys) if len(xs) >= 3 else 0.0
+
+
+def _normal_p_value_from_t(t_stat: float) -> float:
+    return max(0.0, min(1.0, math.erfc(abs(t_stat) / math.sqrt(2.0))))
 
 
 def evaluate_factor(
@@ -120,11 +158,14 @@ def evaluate_factor(
         mean_ic = sum(rolling_ics) / len(rolling_ics)
         ic_std = math.sqrt(sum((v - mean_ic) ** 2 for v in rolling_ics) / (len(rolling_ics) - 1))
     ir = ic / ic_std if ic_std > 1e-9 else 0.0
+    t_stat = ic / math.sqrt(max(1e-9, (1 - ic * ic) / max(1, len(xs) - 2)))
 
     hits = sum(1 for a, b in zip(xs, ys) if (a > 0 and b > 0) or (a < 0 and b < 0))
     hit_rate = hits / len(xs)
     spread, top_ret, bottom_ret = _quintile_spread(xs, ys)
     turnover = _turnover_rate(signal)
+    rank_autocorr = _rank_autocorr(signal)
+    quantile_returns = _quantile_returns(xs, ys)
 
     return FactorMetrics(
         ic_mean=round(ic, 6),
@@ -136,6 +177,10 @@ def evaluate_factor(
         turnover_rate=round(turnover, 6),
         top_quintile_return=round(top_ret, 6),
         bottom_quintile_return=round(bottom_ret, 6),
+        t_stat=round(t_stat, 6),
+        p_value=round(_normal_p_value_from_t(t_stat), 6),
+        rank_autocorr=round(rank_autocorr, 6),
+        quantile_returns=quantile_returns,
     )
 
 

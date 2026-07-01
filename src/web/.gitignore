@@ -1,2 +1,5 @@
 node_modules
-static
+static/*
+!static/index.html
+!static/assets/
+!static/assets/*

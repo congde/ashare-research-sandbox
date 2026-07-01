@@ -26,10 +26,11 @@ def test_teaching_scenario_covers_fill_pending_and_risk_block() -> None:
     assert payload["risk_rejections"][0]["rule_id"] == "MAX_POSITION_PCT"
 
 
-def test_compare_strategies_returns_five_rows() -> None:
+def test_compare_strategies_returns_strategy_benchmarks() -> None:
     payload = compare_strategies(limit=120)
     assert payload["ok"] is True
-    assert len(payload["strategies"]) == 5
+    assert len(payload["strategies"]) >= 6
+    assert any(row["strategy_key"] == "ml_temporal" for row in payload["strategies"])
     assert payload["leader"]
     assert payload["laggard"]
 

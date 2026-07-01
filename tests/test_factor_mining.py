@@ -45,6 +45,9 @@ def test_build_feature_matrix_aligns_labels() -> None:
     metrics = evaluate_factor(features["ret_1"], labels, min_samples=20)
     assert metrics is not None
     assert metrics.sample_count > 0
+    assert -1.0 <= metrics.rank_autocorr <= 1.0
+    assert 0.0 <= metrics.p_value <= 1.0
+    assert len(metrics.quantile_returns) == 5
 
 
 def test_gp_search_returns_expression() -> None:
@@ -84,6 +87,9 @@ def test_run_factor_mining_both_modes() -> None:
     assert "validation" in leader
     assert "quintile_spread" in leader["validation"]
     assert "turnover_rate" in leader["validation"]
+    assert "p_value" in payload["gp"]["test"]
+    assert "rank_autocorr" in payload["gp"]["test"]
+    assert len(payload["gp"]["test"]["quantile_returns"]) == 5
     assert payload["ok"] is True
     assert payload["gp"]["expression"]
     assert payload["gp"]["backtest_spec"]["factor_source"] == "gp"
