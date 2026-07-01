@@ -2,7 +2,7 @@
   "ok": true,
   "source": "snapshot",
   "full": false,
-  "scanTime": "2026-07-01T10:56:00Z",
+  "scanTime": "2026-07-01T11:03:09Z",
   "totalScanned": 5,
   "topK": 3,
   "opportunities": [
@@ -11,13 +11,13 @@
       "pair": "BLEND-USDT",
       "signal": "BUY",
       "label": "强势上涨",
-      "score": 25.0,
-      "confidence": 54.97,
-      "change24h": 0.0995,
-      "volume24h": 296760.299582,
-      "last": 0.06647,
+      "score": 24.3,
+      "confidence": 54.556,
+      "change24h": 0.0926,
+      "volume24h": 302964.837908,
+      "last": 0.06605,
       "keyReasons": [
-        "24h 涨幅 10.0%"
+        "24h 涨幅 9.3%"
       ],
       "tradePlan": null,
       "riskLevel": "medium",
@@ -26,17 +26,17 @@
       "rank": 1
     },
     {
-      "symbol": "APT",
-      "pair": "APT-USDT",
+      "symbol": "BCH",
+      "pair": "BCH-USDT",
       "signal": "WEAK_BUY",
       "label": "温和上涨",
-      "score": 10.4,
-      "confidence": 46.246,
-      "change24h": 0.0241,
-      "volume24h": 290754.75655824,
-      "last": 0.586,
+      "score": 12.3,
+      "confidence": 47.397999999999996,
+      "change24h": 0.0233,
+      "volume24h": 2637921.739024,
+      "last": 205.67,
       "keyReasons": [
-        "24h 涨幅 2.4%"
+        "24h 涨幅 2.3%"
       ],
       "tradePlan": null,
       "riskLevel": "high",
@@ -45,34 +45,34 @@
       "rank": 2
     },
     {
-      "symbol": "BCH",
-      "pair": "BCH-USDT",
-      "signal": "NEUTRAL",
-      "label": "震荡整理",
-      "score": 3.8,
-      "confidence": 42.274,
-      "change24h": 0.0179,
-      "volume24h": 2586205.789588,
-      "last": 205.08,
+      "symbol": "APT",
+      "pair": "APT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 10.6,
+      "confidence": 46.36,
+      "change24h": 0.026,
+      "volume24h": 294052.36331436,
+      "last": 0.5868,
       "keyReasons": [
-        "涨跌幅处于中性区间"
+        "24h 涨幅 2.6%"
       ],
       "tradePlan": null,
       "riskLevel": "high",
-      "bias": "neutral",
+      "bias": "bullish",
       "marketState": "uncertain",
       "rank": 3
     }
   ],
-  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 2、空头 0、中性 1。综合靠前：BLEND(强势上涨)、APT(温和上涨)、BCH(震荡整理)。",
+  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 3、空头 0、中性 0。综合靠前：BLEND(强势上涨)、BCH(温和上涨)、APT(温和上涨)。",
   "scanDurationMs": 0,
   "engine": "sandbox-rule-based",
   "errors": [],
   "snapshot": {
     "name": "opportunity_scan",
-    "saved_at": "2026-07-01T10:56:00.403133+00:00",
+    "saved_at": "2026-07-01T11:03:09.687109+00:00",
     "origin": "live",
-    "history_id": "2026-07-01T10-56-00.403133+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T10-56-00.403133+00-00.json"
+    "history_id": "2026-07-01T11-03-09.687109+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T11-03-09.687109+00-00.json"
   }
 }

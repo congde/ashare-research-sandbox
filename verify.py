@@ -15,15 +15,22 @@ def npm_command() -> str:
     return "npm.cmd" if os.name == "nt" else "npm"
 
 
+def npm_env() -> dict[str, str]:
+    env = os.environ.copy()
+    env.setdefault("NPM_CONFIG_CACHE", str(ROOT / ".npm-cache"))
+    return env
+
+
 def build_frontend() -> None:
     if not (WEB_DIR / "package.json").is_file():
         raise SystemExit("missing React frontend: src/web/package.json")
     npm = npm_command()
+    env = npm_env()
     if (WEB_DIR / "package-lock.json").is_file():
-        subprocess.run([npm, "ci"], cwd=WEB_DIR, check=True)
+        subprocess.run([npm, "ci"], cwd=WEB_DIR, env=env, check=True)
     else:
-        subprocess.run([npm, "install"], cwd=WEB_DIR, check=True)
-    subprocess.run([npm, "run", "build"], cwd=WEB_DIR, check=True)
+        subprocess.run([npm, "install"], cwd=WEB_DIR, env=env, check=True)
+    subprocess.run([npm, "run", "build"], cwd=WEB_DIR, env=env, check=True)
 
 
 def main() -> int:

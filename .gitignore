@@ -7,6 +7,9 @@ data/dashboard/snapshots/
 data/llm_signal_tasks/
 
 .venv/
+.python/
+.npm-cache/
+.tmp-python-*.exe
 .env
 __pycache__/
 *.pyc

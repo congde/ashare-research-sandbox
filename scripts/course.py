@@ -10,6 +10,20 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 VENV = ROOT / ".venv"
+MIN_PYTHON = (3, 11)
+MANAGED_PYTHON_VERSION = (3, 11, 9)
+MANAGED_PYTHON = ROOT / ".python" / "python-3.11.9" / (
+    "python.exe" if os.name == "nt" else "bin/python3.11"
+)
+
+
+def require_supported_python() -> None:
+    if sys.version_info < MIN_PYTHON:
+        version = ".".join(str(part) for part in MIN_PYTHON)
+        current = ".".join(str(part) for part in sys.version_info[:3])
+        raise SystemExit(
+            f"Python {version}+ is required; current interpreter is Python {current}."
+        )
 
 
 def venv_executable(name: str) -> Path:
@@ -18,8 +32,26 @@ def venv_executable(name: str) -> Path:
     return VENV / directory / f"{name}{suffix}"
 
 
-def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
-    subprocess.run(command, cwd=ROOT, env=env, check=True)
+def run(
+    command: list[str],
+    *,
+    cwd: str | Path = ROOT,
+    env: dict[str, str] | None = None,
+) -> None:
+    subprocess.run(command, cwd=cwd, env=env, check=True)
+
+
+def setup_python() -> Path:
+    if MANAGED_PYTHON.is_file():
+        return MANAGED_PYTHON
+    require_supported_python()
+    return Path(sys.executable)
+
+
+def npm_env() -> dict[str, str]:
+    env = os.environ.copy()
+    env.setdefault("NPM_CONFIG_CACHE", str(ROOT / ".npm-cache"))
+    return env
 
 
 def require_venv(name: str) -> Path:
@@ -35,9 +67,10 @@ def require_venv(name: str) -> Path:
 
 
 def setup() -> None:
+    base_python = setup_python()
     venv_python = venv_executable("python")
     if not venv_python.is_file():
-        run([sys.executable, "-m", "venv", str(VENV)])
+        run([str(base_python), "-m", "venv", str(VENV)])
     else:
         print("virtual environment already exists; updating dependencies", flush=True)
     run(
@@ -54,11 +87,12 @@ def setup() -> None:
     web_dir = ROOT / "src" / "web"
     if (web_dir / "package.json").is_file():
         npm = "npm.cmd" if os.name == "nt" else "npm"
+        env = npm_env()
         if (web_dir / "package-lock.json").is_file():
-            run([npm, "ci"], cwd=str(web_dir))
+            run([npm, "ci"], cwd=web_dir, env=env)
         else:
-            run([npm, "install"], cwd=str(web_dir))
-        run([npm, "run", "build"], cwd=str(web_dir))
+            run([npm, "install"], cwd=web_dir, env=env)
+        run([npm, "run", "build"], cwd=web_dir, env=env)
     print("setup complete")
 
 
