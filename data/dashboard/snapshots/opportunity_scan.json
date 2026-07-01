@@ -2,7 +2,7 @@
   "ok": true,
   "source": "snapshot",
   "full": false,
-  "scanTime": "2026-07-01T12:14:23Z",
+  "scanTime": "2026-07-01T12:31:56Z",
   "totalScanned": 5,
   "topK": 1,
   "opportunities": [
@@ -11,13 +11,13 @@
       "pair": "BLEND-USDT",
       "signal": "BUY",
       "label": "强势上涨",
-      "score": 25.4,
-      "confidence": 55.228,
-      "change24h": 0.1038,
-      "volume24h": 315592.810896,
-      "last": 0.06612,
+      "score": 26.2,
+      "confidence": 55.714,
+      "change24h": 0.1119,
+      "volume24h": 312217.286816,
+      "last": 0.06683,
       "keyReasons": [
-        "24h 涨幅 10.4%"
+        "24h 涨幅 11.2%"
       ],
       "tradePlan": null,
       "riskLevel": "medium",
@@ -32,9 +32,9 @@
   "errors": [],
   "snapshot": {
     "name": "opportunity_scan",
-    "saved_at": "2026-07-01T12:14:23.706298+00:00",
+    "saved_at": "2026-07-01T12:31:56.975708+00:00",
     "origin": "live",
-    "history_id": "2026-07-01T12-14-23.706298+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T12-14-23.706298+00-00.json"
+    "history_id": "2026-07-01T12-31-56.975708+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T12-31-56.975708+00-00.json"
   }
 }

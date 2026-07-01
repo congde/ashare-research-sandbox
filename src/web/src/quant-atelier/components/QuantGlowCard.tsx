@@ -12,6 +12,7 @@ interface QuantGlowCardProps {
   variant?: 'default' | 'live' | 'critical'
   title?: ReactNode
   badge?: ReactNode
+  id?: string
   onClick?: () => void
   className?: string
   style?: CSSProperties
@@ -22,12 +23,14 @@ export function QuantGlowCard({
   variant = 'default',
   title,
   badge,
+  id,
   onClick,
   className,
   style,
 }: QuantGlowCardProps) {
   return (
     <article
+      id={id}
       className={`qa-glow-card ${variant === "critical" ? "qa-glow-critical" : ""} ${className ?? ""} ${variant === "live" ? "qa-breathe" : ""}`}
       onClick={onClick}
       style={{

@@ -1,5 +1,6 @@
 import { SafetyOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import { Select, Space, Table } from "antd";
+import { useMemo, useState } from "react";
 import { useReport } from "../../contexts/ReportContext";
 import {
   MetricTile,
@@ -10,14 +11,57 @@ import {
   TradingPageShell,
 } from "./TradingPageShell";
 
+const REJECTION_LIMIT_OPTIONS = [
+  { label: "Top 10", value: 10 },
+  { label: "Top 25", value: 25 },
+  { label: "Top 50", value: 50 },
+  { label: "全部", value: 0 },
+];
+
+const REJECTION_WINDOW_OPTIONS = [
+  { label: "全部时间", value: "all" },
+  { label: "近 30 天", value: "30d" },
+  { label: "近 90 天", value: "90d" },
+  { label: "近 180 天", value: "180d" },
+];
+
+function dateMs(value: string): number {
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 export default function RiskPage() {
   const { report, loading } = useReport();
+  const [rejectionLimit, setRejectionLimit] = useState(25);
+  const [ruleFilter, setRuleFilter] = useState("all");
+  const [windowFilter, setWindowFilter] = useState("all");
   const riskChecks = report?.risk_checks ?? [];
   const trades = report?.backtest.trades ?? [];
   const rejections = report?.backtest.risk_rejections ?? [];
   const activeRules = report?.fusion.risk_rules ?? report?.backtest.risk_rules ?? [];
   const runtimeChecks = riskChecks.filter((item) => item.phase === "pre_trade");
   const postChecks = riskChecks.filter((item) => item.phase !== "pre_trade");
+  const ruleOptions = useMemo(
+    () => [
+      { label: "全部规则", value: "all" },
+      ...Array.from(new Set(rejections.map((item) => item.rule_id)))
+        .sort()
+        .map((ruleId) => ({ label: ruleId, value: ruleId })),
+    ],
+    [rejections],
+  );
+  const filteredRejections = useMemo(() => {
+    const latestMs = rejections.reduce((latest, item) => Math.max(latest, dateMs(item.date)), 0);
+    const windowDays =
+      windowFilter === "30d" ? 30 : windowFilter === "90d" ? 90 : windowFilter === "180d" ? 180 : 0;
+    const cutoff = windowDays && latestMs ? latestMs - windowDays * 24 * 60 * 60 * 1000 : 0;
+    const rows = rejections
+      .filter((item) => ruleFilter === "all" || item.rule_id === ruleFilter)
+      .filter((item) => !cutoff || dateMs(item.date) >= cutoff)
+      .sort((a, b) => dateMs(b.date) - dateMs(a.date));
+    return rejectionLimit > 0 ? rows.slice(0, rejectionLimit) : rows;
+  }, [rejectionLimit, rejections, ruleFilter, windowFilter]);
+  const rejectionSummary = `${filteredRejections.length}/${rejections.length} 条`;
 
   return (
     <TradingPageShell
@@ -119,12 +163,42 @@ export default function RiskPage() {
           </div>
         </QuantGlowCard>
 
-        <QuantGlowCard className="trading-span-6" title={<SectionHeader title="拦截明细" />}>
+        <QuantGlowCard
+          className="trading-span-6"
+          title={
+            <SectionHeader
+              title="拦截明细"
+              description={`默认显示最近拦截；当前 ${rejectionSummary}`}
+              action={
+                <Space wrap className="risk-table-controls">
+                  <Select
+                    value={rejectionLimit}
+                    onChange={setRejectionLimit}
+                    options={REJECTION_LIMIT_OPTIONS}
+                    style={{ width: 104 }}
+                  />
+                  <Select
+                    value={windowFilter}
+                    onChange={setWindowFilter}
+                    options={REJECTION_WINDOW_OPTIONS}
+                    style={{ width: 116 }}
+                  />
+                  <Select
+                    value={ruleFilter}
+                    onChange={setRuleFilter}
+                    options={ruleOptions}
+                    style={{ minWidth: 168 }}
+                  />
+                </Space>
+              }
+            />
+          }
+        >
           <Table
             className="trading-ant-table"
-            pagination={false}
+            pagination={rejectionLimit === 0 ? { pageSize: 25, showSizeChanger: false } : false}
             rowKey={(row) => `${row.date}-${row.side}-${row.rule_id}-${row.reason}`}
-            dataSource={rejections}
+            dataSource={filteredRejections}
             locale={{ emptyText: "无运行时拦截记录" }}
             columns={[
               { title: "日期", dataIndex: "date" },

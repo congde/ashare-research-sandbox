@@ -6,6 +6,10 @@
   min-height: 100%;
 }
 
+.trading-hero {
+  order: 0;
+}
+
 .qa-glow-card {
   backdrop-filter: blur(16px);
   background: rgba(255, 255, 255, 0.04);
@@ -98,6 +102,7 @@
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  order: 4;
 }
 
 .trading-dashboard-grid {
@@ -191,11 +196,194 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.backtest-hero-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.backtest-command-center {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.75fr);
+  order: 1;
+}
+
+.backtest-section-nav {
+  align-items: center;
+  backdrop-filter: blur(14px);
+  background: rgba(4, 8, 18, 0.56);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  order: 2;
+  padding: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.backtest-section-nav a {
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--qa-text-2);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 9px 11px;
+  text-decoration: none;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.backtest-section-nav a:hover,
+.backtest-section-nav a:focus-visible {
+  background: rgba(34, 211, 238, 0.09);
+  border-color: rgba(34, 211, 238, 0.28);
+  color: var(--qa-neutral);
+  outline: none;
+}
+
+.backtest-config-panel {
+  background:
+    linear-gradient(135deg, rgba(34, 211, 238, 0.07), transparent 36%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.backtest-form-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.backtest-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.backtest-field-wide {
+  grid-column: span 2;
+}
+
+.backtest-field > span {
+  color: var(--qa-text-2);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.backtest-field .ant-select,
+.backtest-field .ant-input-number {
+  width: 100%;
+}
+
+.backtest-field .ant-segmented {
+  min-height: 34px;
+}
+
+.backtest-config-footer {
+  align-items: center;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.backtest-config-footer > span {
+  color: var(--qa-text-2);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.backtest-summary-panel {
+  background:
+    linear-gradient(145deg, rgba(16, 185, 129, 0.08), transparent 42%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.backtest-summary-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.backtest-run-card {
+  background: rgba(4, 8, 18, 0.36);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.backtest-run-card span {
+  color: var(--qa-neutral);
+  display: block;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.backtest-run-card strong {
+  color: var(--qa-text-1);
+  display: block;
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.backtest-run-card em {
+  color: var(--qa-text-2);
+  display: block;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.backtest-summary-metrics {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.backtest-summary-metrics .trading-metric-tile {
+  min-height: 86px;
+  padding: 12px;
+}
+
+.backtest-disclaimer {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 8px;
+  color: var(--qa-text-2);
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 11px 12px;
+}
+
+.backtest-disclaimer a {
+  color: var(--qa-neutral);
+  font-weight: 700;
+}
+
 .backtest-workflow-card {
   background:
     linear-gradient(135deg, rgba(34, 211, 238, 0.08), transparent 42%),
     linear-gradient(115deg, rgba(16, 185, 129, 0.07), transparent 58%),
     rgba(255, 255, 255, 0.04);
+  order: 3;
+}
+
+.factor-mining-card {
+  order: 5;
 }
 
 .backtest-workflow-grid {
@@ -214,8 +402,8 @@
   display: grid;
   gap: 8px;
   grid-template-columns: 30px minmax(0, 1fr);
-  min-height: 92px;
-  padding: 12px;
+  min-height: 104px;
+  padding: 14px;
   text-align: left;
   transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
@@ -258,6 +446,48 @@
 
 .trading-metric-grid-dense {
   gap: 10px;
+}
+
+.result-overview-card {
+  background:
+    linear-gradient(135deg, rgba(16, 185, 129, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.backtest-verdict-row {
+  align-items: center;
+  background: rgba(4, 8, 18, 0.34);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-bottom: 14px;
+  padding: 14px;
+}
+
+.backtest-verdict-row span:not(.trading-status-pill) {
+  color: var(--qa-text-2);
+  display: block;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.3;
+  margin-bottom: 5px;
+}
+
+.backtest-verdict-row strong {
+  color: var(--qa-text-1);
+  display: block;
+  font-size: 18px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.backtest-verdict-row p {
+  color: var(--qa-text-2);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 6px 0 0;
 }
 
 .trading-metric-tile {
@@ -716,6 +946,11 @@
   white-space: nowrap;
 }
 
+.risk-table-controls {
+  justify-content: flex-end;
+  min-width: 0;
+}
+
 .trading-ant-table .ant-table {
   background: transparent;
 }
@@ -731,7 +966,8 @@
 
 @media (max-width: 1180px) {
   .trading-hero,
-  .trading-grid {
+  .trading-grid,
+  .backtest-command-center {
     grid-template-columns: 1fr;
   }
 
@@ -750,6 +986,10 @@
   }
 
   .trading-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .backtest-form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -786,8 +1026,21 @@
     width: 100%;
   }
 
-  .trading-actions .ant-btn {
+  .trading-actions .ant-btn,
+  .backtest-hero-actions,
+  .backtest-hero-actions .ant-btn {
     flex: 1 1 140px;
+    width: 100%;
+  }
+
+  .backtest-section-nav {
+    overflow-x: auto;
+    position: static;
+    scrollbar-width: thin;
+  }
+
+  .backtest-section-nav a {
+    white-space: nowrap;
   }
 
   .trading-command-strip {
@@ -806,7 +1059,27 @@
   .trading-metric-grid,
   .trading-kv,
   .trading-action-grid,
+  .backtest-form-grid,
+  .backtest-summary-metrics,
   .backtest-workflow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .backtest-field-wide {
+    grid-column: span 1;
+  }
+
+  .backtest-config-footer {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .backtest-config-footer .ant-btn {
+    width: 100%;
+  }
+
+  .backtest-verdict-row {
+    align-items: stretch;
     grid-template-columns: 1fr;
   }
 
@@ -826,6 +1099,14 @@
   .trading-toolbar-left,
   .trading-toolbar-right {
     width: 100%;
+  }
+
+  .risk-table-controls {
+    justify-content: flex-start;
+  }
+
+  .risk-table-controls .ant-select {
+    flex: 1 1 150px;
   }
 
   .factor-backtest-action {

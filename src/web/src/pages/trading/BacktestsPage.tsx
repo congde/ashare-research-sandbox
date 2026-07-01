@@ -420,90 +420,54 @@ export default function BacktestsPage() {
     return `${from ?? "—"} → ${through ?? "—"} · ${sourceLabel}${saved ? ` · ${saved}` : ""} · 前 ${warmup} 根预热`;
   }, [result, windowLabel]);
 
+  const selectedStrategyLabel = useMemo(
+    () => strategies.find((item) => item.value === strategy)?.label ?? result?.strategy ?? strategy,
+    [result?.strategy, strategies, strategy],
+  );
+  const dataModeLabel = refreshLive && symbol !== "WEB3-DEMO/USDT" ? "实时刷新" : "离线快照";
+  const runStateLabel = loading ? "运行中" : result ? "已完成" : "待运行";
+  const refreshDisabled = loading || symbol === "WEB3-DEMO/USDT";
+  const resultVerdict = useMemo(() => {
+    if (!result) {
+      return {
+        tone: "neutral" as const,
+        label: "等待实验",
+        detail: "先运行回测，生成权益曲线、交易明细和风险诊断。",
+      };
+    }
+    if ((result.max_drawdown_pct ?? 0) > 18 || (result.sharpe_ratio ?? 0) < 0) {
+      return {
+        tone: "loss" as const,
+        label: "风险偏高",
+        detail: "优先查看回撤、止损假设和窗口稳定性，再考虑样本外验证。",
+      };
+    }
+    if ((result.alpha_pct ?? 0) > 0 && (result.sharpe_ratio ?? 0) >= 0.5) {
+      return {
+        tone: "profit" as const,
+        label: "通过初筛",
+        detail: "可以继续跑 Walk-forward、稳健性审计和组合验证。",
+      };
+    }
+    return {
+      tone: "neutral" as const,
+      label: "需要复核",
+      detail: "收益或风险优势不明显，建议比较策略、成本假设和因子解释。",
+    };
+  }, [result]);
+
   return (
     <TradingPageShell
-      eyebrow="Backtest Lab"
+      eyebrow="Research Workbench"
       title="策略回测"
-      description="策略研究工作台：规则策略、ML 时序模型、因子挖掘、样本外验证和组合审计集中在一个可执行流程里。回测是历史模拟，不是真实下单。"
+      description="面向真实研究流程的策略实验台：配置数据与风险假设，运行规则/ML/因子模型，检查收益、回撤、稳定性和样本外表现。"
       actions={
-        <>
-          <Segmented
-            value={strategyFamily}
-            onChange={(value) => setStrategyFamily(value as "rules" | "ml" | "factor")}
-            options={STRATEGY_FAMILY_OPTIONS}
-            disabled={loading}
-          />
-          <Select
-            value={strategy}
-            onChange={(value) => {
-              setStrategy(value);
-              setStrategyFamily(STRATEGY_FAMILY[value] ?? "rules");
-            }}
-            style={{ minWidth: 180 }}
-            options={visibleStrategies.length ? visibleStrategies : strategies}
-            disabled={loading}
-          />
-          <Select
-            value={symbol}
-            onChange={setSymbol}
-            style={{ minWidth: 220 }}
-            options={SYMBOL_OPTIONS}
-            disabled={loading}
-          />
-          <Select
-            value={barLimit}
-            onChange={setBarLimit}
-            style={{ minWidth: 100 }}
-            options={LIMIT_OPTIONS}
-            disabled={loading}
-          />
-          <Select
-            value={costPreset}
-            onChange={(value) => setCostPreset(value as "teaching" | "realistic" | "perp")}
-            style={{ minWidth: 180 }}
-            options={COST_PRESET_OPTIONS}
-            disabled={loading}
-          />
-          <Space>
-            <span style={{ color: "var(--qa-text-2)", fontSize: 12 }}>止损%</span>
-            <InputNumber min={0.5} max={20} step={0.5} value={stopLoss} onChange={(v) => setStopLoss(Number(v ?? 3))} />
-          </Space>
-          <Space>
-            <span style={{ color: "var(--qa-text-2)", fontSize: 12 }}>止盈%</span>
-            <InputNumber min={0.5} max={50} step={0.5} value={takeProfit} onChange={(v) => setTakeProfit(Number(v ?? 5))} />
-          </Space>
-          <Space>
-            <span style={{ color: "var(--qa-text-2)", fontSize: 12 }}>移动止损%</span>
-            <InputNumber min={0} max={20} step={0.5} value={trailingStop} onChange={(v) => setTrailingStop(Number(v ?? 0))} />
-          </Space>
-          <Space>
-            <span style={{ color: "var(--qa-text-2)", fontSize: 12 }}>最长持仓</span>
-            <InputNumber min={0} max={500} step={1} value={maxHoldBars} onChange={(v) => setMaxHoldBars(Number(v ?? 0))} />
-          </Space>
-          <Checkbox
-            checked={refreshLive}
-            onChange={(event) => setRefreshLive(event.target.checked)}
-            disabled={loading || symbol === "WEB3-DEMO/USDT"}
-          >
-            拉取最新 K 线
-          </Checkbox>
-          <Button className="btn-gradient" type="primary" loading={loading} onClick={() => void runBacktest()}>
-            <ReloadOutlined /> 运行回测
+        <div className="backtest-hero-actions">
+          <StatusPill tone={loading ? "neutral" : loadError ? "loss" : "profit"}>{runStateLabel}</StatusPill>
+          <Button className="btn-gradient" type="primary" size="large" loading={loading} onClick={() => void runBacktest()}>
+            <ReloadOutlined /> 运行实验
           </Button>
-          <Space>
-            <span style={{ color: "var(--qa-text-2)", fontSize: 12 }}>WFO 窗</span>
-            <InputNumber min={2} max={5} value={wfoWindows} onChange={(v) => setWfoWindows(Number(v ?? 3))} />
-          </Space>
-          <Button loading={wfoLoading} onClick={() => void runWalkForward()}>
-            Walk-forward
-          </Button>
-          <Button loading={auditLoading} onClick={() => void runAuditSuite()}>
-            稳健性审计
-          </Button>
-          <Button loading={portfolioLoading} onClick={() => void runPortfolio()}>
-            组合回测
-          </Button>
-        </>
+        </div>
       }
       aside={
         <QuantGlowCard
@@ -529,20 +493,128 @@ export default function BacktestsPage() {
         </QuantGlowCard>
       }
     >
-      <Alert
-        type="info"
-        showIcon
-        style={{ marginBottom: 16 }}
-        message="回测是什么？"
-        description={
-          <>
-            用历史 K 线按规则模拟交易，留下成交与指标证据；不连接真实账户。
-            教学样本固定至 2026-02-20；选 BTC-USDT 可用离线快照（约至今日）或勾选「拉取最新 K 线」。
-            完整导读见 docs/samples/backtest-teaching-guide.md。
-            事件驱动轨迹与风控拒绝见 <Link to="/risk">风控中心</Link>。
-          </>
-        }
-      />
+      <section className="backtest-command-center">
+        <QuantGlowCard
+          className="backtest-config-panel"
+          title={
+            <SectionHeader
+              title="实验配置"
+              description="先定义数据、模型和风控假设；参数变化不会自动重跑，点击运行实验后固化本次结果。"
+            />
+          }
+        >
+          <div className="backtest-form-grid">
+            <label className="backtest-field backtest-field-wide">
+              <span>模型族</span>
+              <Segmented
+                block
+                value={strategyFamily}
+                onChange={(value) => setStrategyFamily(value as "rules" | "ml" | "factor")}
+                options={STRATEGY_FAMILY_OPTIONS}
+                disabled={loading}
+              />
+            </label>
+            <label className="backtest-field">
+              <span>策略模型</span>
+              <Select
+                value={strategy}
+                onChange={(value) => {
+                  setStrategy(value);
+                  setStrategyFamily(STRATEGY_FAMILY[value] ?? "rules");
+                }}
+                options={visibleStrategies.length ? visibleStrategies : strategies}
+                disabled={loading}
+              />
+            </label>
+            <label className="backtest-field">
+              <span>标的资产</span>
+              <Select value={symbol} onChange={setSymbol} options={SYMBOL_OPTIONS} disabled={loading} />
+            </label>
+            <label className="backtest-field">
+              <span>K 线数量</span>
+              <Select value={barLimit} onChange={setBarLimit} options={LIMIT_OPTIONS} disabled={loading} />
+            </label>
+            <label className="backtest-field">
+              <span>成本假设</span>
+              <Select
+                value={costPreset}
+                onChange={(value) => setCostPreset(value as "teaching" | "realistic" | "perp")}
+                options={COST_PRESET_OPTIONS}
+                disabled={loading}
+              />
+            </label>
+            <label className="backtest-field">
+              <span>止损 %</span>
+              <InputNumber min={0.5} max={20} step={0.5} value={stopLoss} onChange={(v) => setStopLoss(Number(v ?? 3))} />
+            </label>
+            <label className="backtest-field">
+              <span>止盈 %</span>
+              <InputNumber min={0.5} max={50} step={0.5} value={takeProfit} onChange={(v) => setTakeProfit(Number(v ?? 5))} />
+            </label>
+            <label className="backtest-field">
+              <span>移动止损 %</span>
+              <InputNumber min={0} max={20} step={0.5} value={trailingStop} onChange={(v) => setTrailingStop(Number(v ?? 0))} />
+            </label>
+            <label className="backtest-field">
+              <span>最长持仓</span>
+              <InputNumber min={0} max={500} step={1} value={maxHoldBars} onChange={(v) => setMaxHoldBars(Number(v ?? 0))} />
+            </label>
+            <label className="backtest-field">
+              <span>WFO 窗口</span>
+              <InputNumber min={2} max={5} value={wfoWindows} onChange={(v) => setWfoWindows(Number(v ?? 3))} />
+            </label>
+          </div>
+          <div className="backtest-config-footer">
+            <Checkbox
+              checked={refreshLive}
+              onChange={(event) => setRefreshLive(event.target.checked)}
+              disabled={refreshDisabled}
+            >
+              拉取最新 K 线
+            </Checkbox>
+            <span>{symbol === "WEB3-DEMO/USDT" ? "教学样本固定，不支持实时刷新" : "可使用快照或刷新最新行情"}</span>
+            <Button className="btn-gradient" type="primary" loading={loading} onClick={() => void runBacktest()}>
+              <PlayCircleOutlined /> 运行实验
+            </Button>
+          </div>
+        </QuantGlowCard>
+
+        <QuantGlowCard
+          className="backtest-summary-panel"
+          title={<SectionHeader title="本次实验" description={chartRangeLabel} />}
+        >
+          <div className="backtest-summary-stack">
+            <div className="backtest-run-card">
+              <span>{dataModeLabel}</span>
+              <strong>{selectedStrategyLabel}</strong>
+              <em>{symbol} · {barLimit} 根 · {costPreset}</em>
+            </div>
+            <div className="backtest-summary-metrics">
+              <MetricTile label="总收益" value={result?.total_return_pct ?? 0} kind="pct" tone={(result?.total_return_pct ?? 0) >= 0 ? "profit" : "loss"} showSign />
+              <MetricTile label="最大回撤" value={-(result?.max_drawdown_pct ?? 0)} kind="pct" tone="loss" showSign />
+              <MetricTile label="Sharpe" value={result?.sharpe_ratio ?? 0} tone="neutral" precision={2} />
+              <MetricTile label="Alpha" value={result?.alpha_pct ?? 0} kind="pct" tone={(result?.alpha_pct ?? 0) >= 0 ? "profit" : "loss"} showSign />
+            </div>
+            {loadError ? (
+              <Alert type="warning" showIcon message={loadError} />
+            ) : (
+              <div className="backtest-disclaimer">
+                历史模拟，不连接真实账户。风控拒绝与事件驱动轨迹见 <Link to="/risk">风控中心</Link>。
+              </div>
+            )}
+          </div>
+        </QuantGlowCard>
+      </section>
+
+      <nav className="backtest-section-nav" aria-label="回测页面导航">
+        <a href="#backtest-results">结果总览</a>
+        <a href="#backtest-chart">权益曲线</a>
+        <a href="#backtest-comparison">策略比较</a>
+        <a href="#factor-research">因子挖掘</a>
+        <a href="#backtest-validation">样本外验证</a>
+        <a href="#backtest-trades">交易明细</a>
+      </nav>
+
       <QuantGlowCard
         className="trading-span-12 backtest-workflow-card"
         style={{ marginBottom: 16 }}
@@ -577,7 +649,8 @@ export default function BacktestsPage() {
         </div>
       </QuantGlowCard>
       <QuantGlowCard
-        className="trading-span-12"
+        id="factor-research"
+        className="trading-span-12 factor-mining-card"
         style={{ marginBottom: 16 }}
         title={
           <SectionHeader
@@ -815,8 +888,16 @@ export default function BacktestsPage() {
           />
         )}
       </QuantGlowCard>
-      <section className="trading-grid">
-        <QuantGlowCard className="trading-span-12">
+      <section className="trading-grid" id="backtest-results">
+        <QuantGlowCard className="trading-span-12 result-overview-card">
+          <div className="backtest-verdict-row">
+            <div>
+              <span>研究判读</span>
+              <strong>{resultVerdict.label}</strong>
+              <p>{resultVerdict.detail}</p>
+            </div>
+            <StatusPill tone={resultVerdict.tone}>{resultVerdict.label}</StatusPill>
+          </div>
           <div className="trading-metric-grid">
             <MetricTile label="策略" value={result?.strategy ?? "—"} subtle={result?.engine ?? "web3-trading"} />
             <MetricTile label="Sharpe" value={result?.sharpe_ratio ?? 0} tone="neutral" precision={2} />
@@ -846,6 +927,7 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
+          id="backtest-chart"
           className="trading-span-12"
           title={
             <SectionHeader
@@ -869,6 +951,7 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
+          id="backtest-comparison"
           className="trading-span-12"
           title={
             <SectionHeader
@@ -891,6 +974,7 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
+          id="backtest-validation"
           className="trading-span-12"
           title={
             <SectionHeader
@@ -1165,6 +1249,7 @@ export default function BacktestsPage() {
         </QuantGlowCard>
 
         <QuantGlowCard
+          id="backtest-trades"
           className="trading-span-8"
           title={<SectionHeader title="成交明细" description={`${tradeRows.length} 笔 · SL ${stopLoss}% / TP ${takeProfit}%`} />}
         >
