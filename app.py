@@ -359,6 +359,7 @@ class Handler(BaseHTTPRequestHandler):
                 gp_generations=qi("gpGenerations", 12),
                 gp_population=qi("gpPopulation", 24),
                 seed=qi("seed", 42),
+                llm_model=q("llmModel", "") or None,
             ),
         }
         handler = routes.get(path)

@@ -643,7 +643,7 @@ export interface FactorValidationView {
 }
 
 export interface FactorBacktestSpec {
-  factor_source: "gp" | "ml";
+  factor_source: "gp" | "ml" | "template" | "llm";
   expr?: Record<string, unknown>;
   weights?: Record<string, number>;
   label?: string;
@@ -665,7 +665,7 @@ export interface RiskApplicationPreview {
 }
 
 export interface FactorMiningLeader {
-  method: "gp" | "ml";
+  method: "gp" | "ml" | "template" | "llm";
   label?: string;
   train_ic?: number;
   test_ic?: number;
@@ -675,13 +675,19 @@ export interface FactorMiningLeader {
 }
 
 export interface FactorMiningBranch {
-  method: "gp" | "ml";
+  method: "gp" | "ml" | "template" | "llm";
   expression?: string;
   formula?: string;
+  rationale?: string;
+  proposal_source?: string;
+  model?: string | null;
+  llm_error?: string | null;
   fitness?: number;
   complexity?: number;
   selected_features?: string[];
   weights?: Record<string, number>;
+  candidates?: Array<{ name?: string; expression?: string; rationale?: string; train_ic?: number; test_ic?: number }>;
+  proposals?: Array<{ name?: string; rationale?: string; weights?: Record<string, number>; train_ic?: number; test_ic?: number }>;
   train?: FactorMetricsView;
   test?: FactorMetricsView;
   overfit_gap?: number;
@@ -697,7 +703,7 @@ export interface FactorMiningPayload {
   metric_name?: string;
   label_description?: string;
   application?: string;
-  mode: "gp" | "ml" | "both";
+  mode: "gp" | "ml" | "template" | "llm" | "both" | "all";
   symbol: string;
   kline_type: string;
   horizon_bars: number;
@@ -709,6 +715,8 @@ export interface FactorMiningPayload {
   baseline_univariate?: Array<{ feature: string; ic_mean: number; ir: number; hit_rate: number }>;
   gp?: FactorMiningBranch;
   ml?: FactorMiningBranch;
+  template?: FactorMiningBranch;
+  llm?: FactorMiningBranch;
   leader?: FactorMiningLeader | null;
   warnings?: string[];
   what_it_proves?: string[];

@@ -28,7 +28,7 @@ class MinedFactorStrategy(Strategy):
         features, _, _ = build_feature_matrix(candles, horizon=int(params.get("horizon", 1)))
 
         source = params.get("factor_source", "gp")
-        if source == "ml":
+        if source in ("ml", "llm"):
             normalized = _normalize_features(features)
             weights = params.get("weights") or {}
             raw = _combine_linear(normalized, weights)

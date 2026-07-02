@@ -44,6 +44,10 @@ const STRATEGY_FAMILY_OPTIONS = [
 
 const STRATEGY_FAMILY: Record<string, "rules" | "ml" | "factor"> = {
   ml_temporal: "ml",
+  ml_temporal_knn: "ml",
+  ml_temporal_tree: "ml",
+  ml_temporal_boosting: "ml",
+  ml_temporal_ensemble: "ml",
   mined_factor: "factor",
 };
 
@@ -141,7 +145,7 @@ export default function BacktestsPage() {
   const [factorLoading, setFactorLoading] = useState(false);
   const [factorError, setFactorError] = useState<string | null>(null);
   const [mineHorizon, setMineHorizon] = useState(1);
-  const [mineMode, setMineMode] = useState<"gp" | "ml" | "both">("both");
+  const [mineMode, setMineMode] = useState<"gp" | "ml" | "template" | "llm" | "both" | "all">("all");
   const [mineTarget, setMineTarget] = useState<"return" | "risk">("return");
   const [mineRiskKind, setMineRiskKind] = useState<"abs_ret" | "realized_vol">("abs_ret");
 
@@ -694,7 +698,10 @@ export default function BacktestsPage() {
             onChange={setMineMode}
             style={{ minWidth: 120 }}
             options={[
+              { label: "全量", value: "all" },
               { label: "GP + ML", value: "both" },
+              { label: "模板 Alpha", value: "template" },
+              { label: "LLM 提案", value: "llm" },
               { label: "仅 GP", value: "gp" },
               { label: "仅 ML", value: "ml" },
             ]}

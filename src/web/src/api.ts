@@ -408,7 +408,7 @@ export async function fetchBacktestAudit(
 }
 
 export interface FetchFactorMineOptions {
-  mode?: "gp" | "ml" | "both";
+  mode?: "gp" | "ml" | "template" | "llm" | "both" | "all";
   target?: "return" | "risk";
   riskKind?: "abs_ret" | "realized_vol";
   symbol?: string;
@@ -418,11 +418,12 @@ export interface FetchFactorMineOptions {
   gpPopulation?: number;
   seed?: number;
   refresh?: boolean;
+  llmModel?: string;
 }
 
 export async function fetchFactorMine(options: FetchFactorMineOptions = {}): Promise<FactorMiningPayload> {
   const params = new URLSearchParams({
-    mode: options.mode ?? "both",
+    mode: options.mode ?? "all",
     target: options.target ?? "return",
     riskKind: options.riskKind ?? "abs_ret",
     limit: String(options.limit ?? 120),
@@ -436,6 +437,9 @@ export async function fetchFactorMine(options: FetchFactorMineOptions = {}): Pro
   }
   if (options.refresh) {
     params.set("refresh", "1");
+  }
+  if (options.llmModel) {
+    params.set("llmModel", options.llmModel);
   }
   const response = await fetch(`/api/dashboard/factor-mine?${params}`);
   const payload = (await response.json()) as FactorMiningPayload;

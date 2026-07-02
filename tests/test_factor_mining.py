@@ -101,6 +101,26 @@ def test_run_factor_mining_both_modes() -> None:
     assert payload["warnings"]
 
 
+def test_run_factor_mining_all_modes_adds_template_and_llm() -> None:
+    payload = run_factor_mining(
+        mode="all",
+        symbol="WEB3-DEMO/USDT",
+        limit=120,
+        horizon=1,
+        gp_generations=4,
+        gp_population=8,
+        seed=13,
+    )
+    assert payload["ok"] is True
+    assert payload["feature_count"] >= 50
+    assert payload["template"]["expression"]
+    assert payload["llm"]["formula"]
+    assert payload["llm"]["proposal_source"] in {"llm", "fallback_templates"}
+    assert payload["leader"]["method"] in {"gp", "ml", "template", "llm"}
+    if payload["leader"]["method"] == "llm":
+        assert payload["leader"]["backtest_spec"]["factor_source"] == "llm"
+
+
 def test_mined_factor_backtest_runs() -> None:
     mined = run_factor_mining(
         mode="ml",

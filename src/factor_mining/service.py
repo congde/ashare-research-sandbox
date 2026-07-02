@@ -13,13 +13,15 @@ from factor_mining.evaluate import (
 from factor_mining.expressions import eval_series
 from factor_mining.features import MiningTarget, RiskKind, build_feature_matrix
 from factor_mining.gp import GPConfig, run_gp_search
+from factor_mining.llm import run_llm_factor_search
 from factor_mining.ml import run_ml_search
 from backtest.trials import get_ledger
 from factor_mining.risk_apply import preview_position_scales
 from factor_mining.serialize import expr_to_dict
+from factor_mining.templates import run_template_search
 
 
-MiningMode = Literal["gp", "ml", "both"]
+MiningMode = Literal["gp", "ml", "template", "llm", "both", "all"]
 
 _LABEL_META: dict[tuple[MiningTarget, RiskKind], dict[str, str]] = {
     ("return", "abs_ret"): {
@@ -52,6 +54,7 @@ def run_factor_mining(
     gp_generations: int = 12,
     gp_population: int = 24,
     seed: int = 42,
+    llm_model: str | None = None,
 ) -> dict[str, Any]:
     pair, kline_type, candles, data_meta = load_candles(
         symbol=symbol,
@@ -107,8 +110,10 @@ def run_factor_mining(
 
     gp_result: dict[str, Any] | None = None
     ml_result: dict[str, Any] | None = None
+    template_result: dict[str, Any] | None = None
+    llm_result: dict[str, Any] | None = None
 
-    if mode in ("gp", "both"):
+    if mode in ("gp", "both", "all"):
         raw_gp = run_gp_search(
             train_features,
             train_labels,
@@ -137,7 +142,7 @@ def run_factor_mining(
             gp_result["risk_spec"] = gp_result["factor_spec"]
         payload["gp"] = gp_result
 
-    if mode in ("ml", "both"):
+    if mode in ("ml", "both", "all"):
         raw_ml = run_ml_search(train_features, train_labels, feature_names)
         ml_result = dict(raw_ml)
         ml_result["train"] = ml_result.pop("metrics")
@@ -156,9 +161,62 @@ def run_factor_mining(
             ml_result["risk_spec"] = ml_result["factor_spec"]
         payload["ml"] = ml_result
 
-    payload["leader"] = _pick_leader(gp_result, ml_result)
+    if mode in ("template", "all"):
+        raw_template = run_template_search(train_features, train_labels, test_features, test_labels)
+        template_result = dict(raw_template)
+        template_expr = template_result.pop("expr", None)
+        template_result["train"] = template_result.pop("metrics")
+        template_result["overfit_gap"] = _overfit_gap(template_result["train"], template_result["test"])
+        template_result["factor_spec"] = _build_factor_spec(
+            target=target,
+            source="template",
+            label=template_result.get("expression") or "template_factor",
+            horizon=horizon,
+            expr=expr_to_dict(template_expr) if template_expr is not None else None,
+        )
+        if target == "return":
+            template_result["backtest_spec"] = template_result["factor_spec"]
+        else:
+            template_result["risk_spec"] = template_result["factor_spec"]
+        payload["template"] = template_result
+
+    if mode in ("llm", "all"):
+        raw_llm = run_llm_factor_search(
+            train_features,
+            train_labels,
+            test_features,
+            test_labels,
+            feature_names,
+            target=target,
+            horizon=horizon,
+            symbol=pair,
+            model=llm_model,
+        )
+        llm_result = dict(raw_llm)
+        llm_result["train"] = llm_result.pop("metrics")
+        llm_result["overfit_gap"] = _overfit_gap(llm_result["train"], llm_result["test"])
+        llm_result["factor_spec"] = _build_factor_spec(
+            target=target,
+            source="llm",
+            label=llm_result.get("formula") or "llm_factor",
+            horizon=horizon,
+            weights=llm_result.get("weights") or {},
+        )
+        if target == "return":
+            llm_result["backtest_spec"] = llm_result["factor_spec"]
+        else:
+            llm_result["risk_spec"] = llm_result["factor_spec"]
+        payload["llm"] = llm_result
+
+    payload["leader"] = _pick_leader(gp_result, ml_result, template_result, llm_result)
     if payload["leader"]:
-        source = gp_result if payload["leader"]["method"] == "gp" else ml_result
+        source_map = {
+            "gp": gp_result,
+            "ml": ml_result,
+            "template": template_result,
+            "llm": llm_result,
+        }
+        source = source_map.get(payload["leader"]["method"])
         if source:
             spec = source.get("factor_spec")
             if target == "return":
@@ -175,7 +233,7 @@ def run_factor_mining(
                     6,
                 ),
             }
-    payload["warnings"] = _warnings(mode, target, gp_result, ml_result)
+    payload["warnings"] = _warnings(mode, target, gp_result, ml_result, template_result, llm_result)
     payload["what_it_proves"] = _what_it_proves(target, meta["metric_name"])
     if target == "risk" and payload["leader"] and payload["leader"].get("risk_spec"):
         payload["risk_application"] = preview_position_scales(
@@ -185,7 +243,12 @@ def run_factor_mining(
         )
 
     ledger = get_ledger()
-    for label, result in (("gp", gp_result), ("ml", ml_result)):
+    for label, result in (
+        ("gp", gp_result),
+        ("ml", ml_result),
+        ("template", template_result),
+        ("llm", llm_result),
+    ):
         if not result:
             continue
         train_ic = float((result.get("train") or {}).get("ic_mean", 0.0))
@@ -229,7 +292,7 @@ def _build_factor_spec(
     }
     if target == "risk":
         spec["application"] = "position_scale"
-    if source == "ml":
+    if source in ("ml", "llm"):
         spec["weights"] = dict(weights or {})
     elif expr is not None:
         spec["expr"] = expr
@@ -326,24 +389,24 @@ def _overfit_gap(train: dict[str, Any], test: dict[str, Any]) -> float:
 def _pick_leader(
     gp_result: dict[str, Any] | None,
     ml_result: dict[str, Any] | None,
+    template_result: dict[str, Any] | None = None,
+    llm_result: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     candidates: list[dict[str, Any]] = []
-    if gp_result:
+    for method, result, label_key in (
+        ("gp", gp_result, "expression"),
+        ("ml", ml_result, "formula"),
+        ("template", template_result, "expression"),
+        ("llm", llm_result, "formula"),
+    ):
+        if not result:
+            continue
         candidates.append(
             {
-                "method": "gp",
-                "label": gp_result.get("expression"),
-                "train_ic": gp_result.get("train", {}).get("ic_mean", 0.0),
-                "test_ic": gp_result.get("test", {}).get("ic_mean", 0.0),
-            }
-        )
-    if ml_result:
-        candidates.append(
-            {
-                "method": "ml",
-                "label": ml_result.get("formula"),
-                "train_ic": ml_result.get("train", {}).get("ic_mean", 0.0),
-                "test_ic": ml_result.get("test", {}).get("ic_mean", 0.0),
+                "method": method,
+                "label": result.get(label_key),
+                "train_ic": result.get("train", {}).get("ic_mean", 0.0),
+                "test_ic": result.get("test", {}).get("ic_mean", 0.0),
             }
         )
     if not candidates:
@@ -370,6 +433,8 @@ def _warnings(
     target: MiningTarget,
     gp_result: dict[str, Any] | None,
     ml_result: dict[str, Any] | None,
+    template_result: dict[str, Any] | None = None,
+    llm_result: dict[str, Any] | None = None,
 ) -> list[str]:
     metric = "RIC" if target == "risk" else "IC"
     warnings = [
@@ -379,16 +444,29 @@ def _warnings(
     if target == "risk":
         warnings.append("风险因子挖掘不替代第 22 讲运行时风控否决；仅演示仓位缩放思路。")
         warnings.append("Barra 式截面风险模型未实现；本沙箱为单标的时序波动预测。")
-    for label, result in (("GP", gp_result), ("ML", ml_result)):
+    for label, result in (
+        ("GP", gp_result),
+        ("ML", ml_result),
+        ("Template", template_result),
+        ("LLM", llm_result),
+    ):
         if result is None:
             continue
         gap = result.get("overfit_gap", 0.0)
         if gap > 0.15:
             warnings.append(f"{label} 训练/测试 {metric} 差距 {gap:.3f}，疑似过拟合。")
-    if mode == "both" and gp_result and ml_result:
-        gp_test = abs(gp_result.get("test", {}).get("ic_mean", 0.0))
-        ml_test = abs(ml_result.get("test", {}).get("ic_mean", 0.0))
-        winner = "GP" if gp_test >= ml_test else "ML"
+    if mode in ("both", "all"):
+        scored = [
+            (label, abs(result.get("test", {}).get("ic_mean", 0.0)))
+            for label, result in (
+                ("GP", gp_result),
+                ("ML", ml_result),
+                ("Template", template_result),
+                ("LLM", llm_result),
+            )
+            if result is not None
+        ]
+        winner = max(scored, key=lambda item: item[1])[0] if scored else "NA"
         warnings.append(f"测试集上 {winner} 表现更好，但仍需滚动窗口复核。")
     return warnings
 
@@ -418,7 +496,7 @@ def run_mined_factor_backtest(
         "horizon": int(backtest_spec.get("horizon") or 1),
         "entry_threshold": entry_threshold,
     }
-    if source == "ml":
+    if source in ("ml", "llm"):
         strategy_params["weights"] = dict(backtest_spec.get("weights") or {})
     else:
         strategy_params["expr"] = backtest_spec.get("expr")
@@ -438,6 +516,6 @@ def run_mined_factor_backtest(
     payload["factor_label"] = strategy_params["label"]
     payload["backtest_spec"] = backtest_spec
     assumptions = list(payload.get("assumptions") or [])
-    assumptions.append("信号来自 GP/ML 挖掘因子，阈值触发 LONG/SHORT。")
+    assumptions.append("信号来自 GP/ML/模板/LLM 挖掘因子，阈值触发 LONG/SHORT。")
     payload["assumptions"] = assumptions
     return payload
