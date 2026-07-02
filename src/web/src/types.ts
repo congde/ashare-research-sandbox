@@ -245,7 +245,12 @@ export interface OpportunityItem {
   confidence?: number;
   change24h?: number;
   volume24h?: number;
+  last?: number;
   keyReasons?: string[];
+  tradePlan?: unknown;
+  riskLevel?: string;
+  bias?: string;
+  marketState?: string;
   rank?: number;
   summary?: string;
 }

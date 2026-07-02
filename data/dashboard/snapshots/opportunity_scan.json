@@ -2,39 +2,77 @@
   "ok": true,
   "source": "snapshot",
   "full": false,
-  "scanTime": "2026-07-01T13:21:17Z",
+  "scanTime": "2026-07-02T06:43:54Z",
   "totalScanned": 5,
-  "topK": 1,
+  "topK": 3,
   "opportunities": [
     {
-      "symbol": "BLEND",
-      "pair": "BLEND-USDT",
+      "symbol": "BCH",
+      "pair": "BCH-USDT",
       "signal": "BUY",
       "label": "强势上涨",
-      "score": 23.8,
-      "confidence": 54.298,
-      "change24h": 0.0883,
-      "volume24h": 347848.366584,
-      "last": 0.06567,
+      "score": 23.2,
+      "confidence": 53.932,
+      "change24h": 0.0622,
+      "volume24h": 2783446.472546,
+      "last": 215.59,
       "keyReasons": [
-        "24h 涨幅 8.8%"
+        "24h 涨幅 6.2%"
       ],
       "tradePlan": null,
       "riskLevel": "medium",
       "bias": "bullish",
       "marketState": "uncertain",
       "rank": 1
+    },
+    {
+      "symbol": "APT",
+      "pair": "APT-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 12.4,
+      "confidence": 47.428,
+      "change24h": 0.0438,
+      "volume24h": 346937.15636589844,
+      "last": 0.6024,
+      "keyReasons": [
+        "24h 涨幅 4.4%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 2
+    },
+    {
+      "symbol": "BONK",
+      "pair": "BONK-USDT",
+      "signal": "WEAK_BUY",
+      "label": "温和上涨",
+      "score": 11.5,
+      "confidence": 46.888,
+      "change24h": 0.0348,
+      "volume24h": 734803.0314151966,
+      "last": 4.272e-06,
+      "keyReasons": [
+        "24h 涨幅 3.5%"
+      ],
+      "tradePlan": null,
+      "riskLevel": "high",
+      "bias": "bullish",
+      "marketState": "uncertain",
+      "rank": 3
     }
   ],
-  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 1、空头 0、中性 0。综合靠前：BLEND(强势上涨)。",
+  "marketOverview": "扫描 5 个币种，市场整体偏多。多头 3、空头 0、中性 0。综合靠前：BCH(强势上涨)、APT(温和上涨)、BONK(温和上涨)。",
   "scanDurationMs": 0,
   "engine": "sandbox-rule-based",
   "errors": [],
   "snapshot": {
     "name": "opportunity_scan",
-    "saved_at": "2026-07-01T13:21:17.598323+00:00",
+    "saved_at": "2026-07-02T06:43:54.717552+00:00",
     "origin": "live",
-    "history_id": "2026-07-01T13-21-17.598323+00-00",
-    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-01T13-21-17.598323+00-00.json"
+    "history_id": "2026-07-02T06-43-54.717552+00-00",
+    "history_path": "D:\\work\\gitee\\ashare-research-sandbox\\data\\dashboard\\snapshots\\history\\opportunity_scan\\2026-07-02T06-43-54.717552+00-00.json"
   }
 }

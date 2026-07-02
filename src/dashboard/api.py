@@ -405,8 +405,8 @@ def ticker_stats(symbol: str = "BTC-USDT", *, refresh: bool = False) -> dict[str
 
 def opportunity_scan(
     *,
-    top_k: int = 5,
-    max_symbols: int = 30,
+    top_k: int = 30,
+    max_symbols: int = 300,
     min_volume_24h: float = 200000,
     refresh: bool = False,
 ) -> dict[str, Any]:

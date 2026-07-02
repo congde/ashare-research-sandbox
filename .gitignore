@@ -1,21 +1,32 @@
-# 本地生成或不需要同步到 Git 的目录
+# Local generated files that should not be committed
 /book/
 /docs/
 outputs/
 vendor/
 data/dashboard/snapshots/
 data/llm_signal_tasks/
+data/_*.txt
+data/_pdf*.txt
+data/_review*.txt
+data/_safe*.txt
+data/dashboard/_*.json
+data/dashboard/snapshots/history/
 
 .venv/
 .python/
 .npm-cache/
+node_modules/
 .tmp-python-*.exe
 .env
+tmp/
+image/
 __pycache__/
 *.pyc
 .pytest_cache/
 .codex/
 *.drawio.bkp
+*.inspect.ndjson
+*.log
 playbook/my-playbook.md
 labs/00-assistant-brief/my-brief.md
 labs/03-entry-workspace/my-entry-decision.md

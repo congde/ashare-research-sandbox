@@ -1,5 +1,5 @@
-import { ReloadOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Input, Segmented, Select } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +17,12 @@ interface TickerRow {
   symbol?: string;
   changeRate?: number;
   last?: number;
+  volValue?: number;
+  high?: number;
+  low?: number;
 }
+
+type RadarSortKey = "score" | "confidence" | "volume" | "change";
 
 function formatVolume(value: number) {
   if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)}B`;
@@ -68,6 +73,43 @@ function formatChange(rate?: number) {
   return `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
 }
 
+function formatRisk(value?: string) {
+  if (value === "low") return "低风险";
+  if (value === "medium") return "中风险";
+  if (value === "high") return "高风险";
+  return "待确认";
+}
+
+function riskTone(value?: string) {
+  if (value === "low") return "profit";
+  if (value === "medium") return "ai";
+  if (value === "high") return "loss";
+  return "neutral";
+}
+
+function formatBias(value?: string) {
+  if (value === "bullish") return "多头";
+  if (value === "bearish") return "空头";
+  return "中性";
+}
+
+function opportunityPhase(item: OpportunityItem) {
+  const score = Math.abs(Number(item.score || 0));
+  const confidence = Number(item.confidence || 0);
+  const volume = Number(item.volume24h || 0);
+  if (score >= 25 && confidence >= 55 && volume >= 1_000_000) return "可跟踪";
+  if (score >= 15 && volume >= 500_000) return "观察中";
+  if (String(item.riskLevel || "") === "high") return "高波动";
+  return "待验证";
+}
+
+function actionHint(item: OpportunityItem) {
+  const signal = String(item.signal || "").toUpperCase();
+  if (signal.includes("BUY")) return "研究";
+  if (signal.includes("SELL")) return "避险";
+  return "观察";
+}
+
 function leadingSector(sectors: Awaited<ReturnType<typeof fetchSectorFund>>["sectors"]) {
   const getInflow = (sector: NonNullable<typeof sectors>[number], range: string) =>
     Number((sector.categoriesTradeDataList || []).find((entry) => entry.timeRange === range)?.tradeInflow || 0);
@@ -89,6 +131,8 @@ function RadarCard({
   const conf = Number(item.confidence || 0);
   const pair = item.pair || `${item.symbol}-USDT`;
   const reasons = (item.keyReasons || []).slice(0, 2).join(" · ");
+  const risk = String(item.riskLevel || "");
+  const phase = opportunityPhase(item);
 
   return (
     <article className={`radar-card ${signalClass(item.signal)}${featured ? " featured" : ""}`}>
@@ -104,6 +148,7 @@ function RadarCard({
       <div className="radar-card-main">
         <div className="radar-card-head">
           <span className="radar-card-symbol">{item.symbol}</span>
+          <span className="radar-card-pair">{pair}</span>
           <span className="radar-signal-pill">{item.label || item.signal || "中性"}</span>
         </div>
         <div className="radar-card-metrics">
@@ -119,10 +164,24 @@ function RadarCard({
             <span className="radar-metric-label">成交额</span>
             <span className="radar-metric-value">${formatVolume(Number(item.volume24h || 0))}</span>
           </div>
+          <div>
+            <span className="radar-metric-label">风险</span>
+            <span className="radar-metric-value">{formatRisk(risk)}</span>
+          </div>
+          <div>
+            <span className="radar-metric-label">状态</span>
+            <span className="radar-metric-value">{phase}</span>
+          </div>
         </div>
         {reasons ? <div className="radar-card-reason">{reasons}</div> : null}
+        <div className="radar-factor-row">
+          <span>动量 {formatChange(item.change24h)}</span>
+          <span>流动性 ${formatVolume(Number(item.volume24h || 0))}</span>
+          <span>方向 {formatBias(item.bias)}</span>
+        </div>
       </div>
       <div className="radar-card-actions">
+        <StatusPill tone={riskTone(risk)}>{actionHint(item)}</StatusPill>
         <Button size="small" type="primary" className="btn-gradient" onClick={() => onResearch(pair)}>
           市场情报
         </Button>
@@ -140,6 +199,10 @@ export default function RadarPage() {
   const [tickers, setTickers] = useState<TickerRow[]>([]);
   const [fearGreed, setFearGreed] = useState("-");
   const [sectorLead, setSectorLead] = useState("-");
+  const [searchText, setSearchText] = useState("");
+  const [signalFilter, setSignalFilter] = useState("all");
+  const [riskFilter, setRiskFilter] = useState("all");
+  const [sortKey, setSortKey] = useState<RadarSortKey>("score");
   const scanningRef = useRef(false);
 
   const applyContext = useCallback(
@@ -185,7 +248,7 @@ export default function RadarPage() {
     }
     setScanError(null);
     try {
-      const payload = await fetchOpportunityScan({ refresh });
+      const payload = await fetchOpportunityScan({ topK: 30, maxSymbols: 300, refresh });
       if (!payload.ok) {
         throw new Error(payload.message || "机会扫描失败");
       }
@@ -235,6 +298,41 @@ export default function RadarPage() {
     }
     return "暂无扫描结果";
   }, [refreshing, scanError, opportunities.length, scanResult, scanning]);
+
+  const visibleOpportunities = useMemo(() => {
+    const query = searchText.trim().toUpperCase();
+    const rows = opportunities.filter((item) => {
+      if (query && !`${item.symbol} ${item.pair ?? ""} ${item.label ?? ""}`.toUpperCase().includes(query)) return false;
+      if (signalFilter !== "all" && String(item.bias || "neutral") !== signalFilter) return false;
+      if (riskFilter !== "all" && String(item.riskLevel || "unknown") !== riskFilter) return false;
+      return true;
+    });
+    const sorters: Record<RadarSortKey, (item: OpportunityItem) => number> = {
+      score: (item) => Math.abs(Number(item.score || 0)),
+      confidence: (item) => Number(item.confidence || 0),
+      volume: (item) => Number(item.volume24h || 0),
+      change: (item) => Math.abs(Number(item.change24h || 0)),
+    };
+    return rows.slice().sort((a, b) => sorters[sortKey](b) - sorters[sortKey](a));
+  }, [opportunities, riskFilter, searchText, signalFilter, sortKey]);
+
+  const radarStats = useMemo(() => {
+    const bullish = opportunities.filter((item) => item.bias === "bullish").length;
+    const bearish = opportunities.filter((item) => item.bias === "bearish").length;
+    const highRisk = opportunities.filter((item) => item.riskLevel === "high").length;
+    const avgConfidence = opportunities.length
+      ? opportunities.reduce((sum, item) => sum + Number(item.confidence || 0), 0) / opportunities.length
+      : 0;
+    const topVolume = opportunities.reduce((sum, item) => sum + Number(item.volume24h || 0), 0);
+    return { bullish, bearish, highRisk, avgConfidence, topVolume };
+  }, [opportunities]);
+
+  const playbook = useMemo(() => {
+    const top = visibleOpportunities[0];
+    if (!top) return "等待扫描结果后生成机会摘要。";
+    const direction = formatBias(top.bias);
+    return `${top.symbol} 当前排名靠前，方向 ${direction}，置信度 ${Number(top.confidence || 0).toFixed(0)}%，风险 ${formatRisk(top.riskLevel)}。先进入市场情报核验 K 线、消息面与资金面，再决定是否进入实验配置。`;
+  }, [visibleOpportunities]);
 
   return (
     <TradingPageShell
@@ -327,6 +425,82 @@ export default function RadarPage() {
             </div>
           </div>
 
+          <div className="radar-terminal-grid">
+            <div className="radar-terminal-panel radar-terminal-primary">
+              <span>机会池</span>
+              <strong>{visibleOpportunities.length}</strong>
+              <p>全量 {scanResult?.totalScanned ?? "-"} · 候选 {opportunities.length}</p>
+            </div>
+            <div className="radar-terminal-panel">
+              <span>多头 / 空头</span>
+              <strong>{radarStats.bullish}/{radarStats.bearish}</strong>
+              <p>按扫描方向分层</p>
+            </div>
+            <div className="radar-terminal-panel">
+              <span>平均置信度</span>
+              <strong>{radarStats.avgConfidence ? `${radarStats.avgConfidence.toFixed(0)}%` : "-"}</strong>
+              <p>过滤噪声后的命中质量</p>
+            </div>
+            <div className="radar-terminal-panel">
+              <span>高风险</span>
+              <strong>{radarStats.highRisk}</strong>
+              <p>需二次确认的波动标的</p>
+            </div>
+            <div className="radar-terminal-panel">
+              <span>队列成交额</span>
+              <strong>${formatVolume(radarStats.topVolume)}</strong>
+              <p>Top 队列合计流动性</p>
+            </div>
+          </div>
+
+          <div className="radar-command-bar">
+            <Input
+              allowClear
+              prefix={<SearchOutlined />}
+              placeholder="搜索币种 / 交易对 / 标签"
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
+            />
+            <Segmented
+              value={signalFilter}
+              onChange={(value) => setSignalFilter(String(value))}
+              options={[
+                { label: "全部", value: "all" },
+                { label: "多头", value: "bullish" },
+                { label: "空头", value: "bearish" },
+                { label: "中性", value: "neutral" },
+              ]}
+            />
+            <Select
+              value={riskFilter}
+              onChange={setRiskFilter}
+              options={[
+                { label: "全部风险", value: "all" },
+                { label: "低风险", value: "low" },
+                { label: "中风险", value: "medium" },
+                { label: "高风险", value: "high" },
+              ]}
+            />
+            <Select
+              value={sortKey}
+              onChange={setSortKey}
+              options={[
+                { label: "按机会强度", value: "score" },
+                { label: "按置信度", value: "confidence" },
+                { label: "按成交额", value: "volume" },
+                { label: "按波动", value: "change" },
+              ]}
+            />
+          </div>
+
+          <div className="radar-playbook">
+            <div>
+              <span>Analyst Playbook</span>
+              <p>{playbook}</p>
+            </div>
+            <Button onClick={() => navigate("/backtests")}>进入实验配置</Button>
+          </div>
+
           {scanning && !opportunities.length ? (
             <div className="radar-state-box">
               <div className="radar-spinner" />
@@ -339,7 +513,7 @@ export default function RadarPage() {
             </div>
           ) : opportunities.length ? (
             <div className="radar-list">
-              {opportunities.map((item, index) => (
+              {visibleOpportunities.map((item, index) => (
                 <RadarCard
                   key={`${item.symbol}-${item.rank ?? index}`}
                   item={item}

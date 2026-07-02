@@ -222,7 +222,13 @@ def save_portfolio_leg_comparison() -> None:
     drawdowns = [float(row["max_drawdown_pct"]) for row in rows]
     x_pos = list(range(len(labels)))
     width = 0.34
-    fig, ax = plt.subplots(figsize=(10.5, 5.8), dpi=160)
+    fig, (ax, corr_ax) = plt.subplots(
+        2,
+        1,
+        figsize=(10.8, 7.0),
+        dpi=160,
+        gridspec_kw={"height_ratios": [2.0, 1.15], "hspace": 0.42},
+    )
     fig.patch.set_facecolor(PAPER)
     ax.set_facecolor("#FFFFFF")
     ax.bar([x - width / 2 for x in x_pos], returns, width=width, color=BLUE, label="收益 %")
@@ -234,15 +240,46 @@ def save_portfolio_leg_comparison() -> None:
     ax.grid(axis="y", color=GRID, linewidth=0.8)
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, loc="upper left")
-    ax.text(
+
+    corr_rows = payload["pair_correlations"]
+    corr_labels = [
+        f"{row['a'].replace('WEB3-DEMO', 'LEG').replace('/USDT', '')}\n×\n{row['b'].replace('WEB3-DEMO', 'LEG').replace('/USDT', '')}"
+        for row in corr_rows
+    ]
+    corr_values = [float(row["correlation"]) for row in corr_rows]
+    corr_colors = [RED if value >= 0.7 else TEAL for value in corr_values]
+    corr_x = list(range(len(corr_labels)))
+    corr_ax.set_facecolor("#FFFFFF")
+    corr_ax.bar(corr_x, corr_values, color=corr_colors, width=0.5)
+    corr_ax.axhline(0.7, color=ORANGE, linewidth=1.4, linestyle="--")
+    corr_ax.axhline(0, color="#94A3B8", linewidth=1)
+    corr_ax.set_ylim(-0.15, 1.08)
+    corr_ax.set_xticks(corr_x)
+    corr_ax.set_xticklabels(corr_labels, fontsize=8.6)
+    corr_ax.set_ylabel("两两相关性")
+    corr_ax.grid(axis="y", color=GRID, linewidth=0.8)
+    corr_ax.spines[["top", "right"]].set_visible(False)
+    corr_ax.text(
+        2.05,
+        0.72,
+        "0.7 参考线",
+        color=ORANGE,
+        fontsize=9,
+        va="bottom",
+    )
+    for x, value in zip(corr_x, corr_values, strict=True):
+        va = "bottom" if value >= 0 else "top"
+        offset = 0.03 if value >= 0 else -0.03
+        corr_ax.text(x, value + offset, f"{value:.4f}", ha="center", va=va, fontsize=9, color=INK)
+
+    fig.text(
         0.01,
-        -0.2,
+        0.02,
         f"equal_weight_daily_return_sum={payload['equal_weight_daily_return_sum_pct']}%，avg_leg_return={payload['equal_weight_leg_avg_return_pct']}%。",
-        transform=ax.transAxes,
         fontsize=10,
         color=MUTED,
     )
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.11, right=0.98, top=0.96, bottom=0.17, hspace=0.5)
     fig.savefig(OUT / "chapter-22-portfolio-leg-comparison.png", bbox_inches="tight")
     plt.close(fig)
     print(OUT / "chapter-22-portfolio-leg-comparison.png")

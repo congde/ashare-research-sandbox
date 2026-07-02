@@ -179,6 +179,94 @@
   white-space: nowrap;
 }
 
+.radar-terminal-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1.2fr repeat(4, minmax(0, 1fr));
+  margin-bottom: 14px;
+}
+
+.radar-terminal-panel {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--qa-line-subtle);
+  border-radius: 10px;
+  min-width: 0;
+  padding: 12px;
+}
+
+.radar-terminal-panel span {
+  color: var(--qa-text-2);
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.radar-terminal-panel strong {
+  color: var(--qa-text-1);
+  display: block;
+  font-family: var(--qa-font-mono);
+  font-size: 24px;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radar-terminal-panel p {
+  color: var(--qa-text-2);
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 8px 0 0;
+}
+
+.radar-terminal-primary {
+  background: linear-gradient(135deg, rgba(29, 106, 138, 0.16), rgba(255, 255, 255, 0.035));
+  border-color: rgba(29, 106, 138, 0.30);
+}
+
+.radar-command-bar {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(130px, 0.4fr) minmax(150px, 0.42fr);
+  margin-bottom: 12px;
+}
+
+.radar-command-bar .ant-input-affix-wrapper,
+.radar-command-bar .ant-select,
+.radar-command-bar .ant-segmented {
+  min-width: 0;
+}
+
+.radar-playbook {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--qa-line-subtle);
+  border-radius: 10px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+}
+
+.radar-playbook span {
+  color: var(--qa-neutral);
+  display: block;
+  font-size: 11px;
+  font-weight: 750;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.radar-playbook p {
+  color: var(--qa-text-2);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+}
+
 .radar-list {
   display: grid;
   gap: 12px;
@@ -276,6 +364,12 @@
   font-weight: 700;
 }
 
+.radar-card-pair {
+  color: var(--qa-text-2);
+  font-family: var(--qa-font-mono);
+  font-size: 12px;
+}
+
 .radar-signal-pill {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--qa-line-subtle);
@@ -339,6 +433,21 @@
   margin-bottom: 8px;
 }
 
+.radar-factor-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.radar-factor-row span {
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid var(--qa-line-subtle);
+  border-radius: 999px;
+  color: var(--qa-text-2);
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
 .radar-card-actions {
   align-items: center;
   display: flex;
@@ -377,7 +486,24 @@
   }
 }
 
+[data-theme="light"] .radar-terminal-panel,
+[data-theme="light"] .radar-playbook,
+[data-theme="light"] .radar-factor-row span {
+  background: #ffffff;
+  border-color: rgba(23, 33, 24, 0.10);
+}
+
 @media (max-width: 900px) {
+  .radar-terminal-grid,
+  .radar-command-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .radar-playbook {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .radar-card {
     grid-template-columns: 1fr;
   }

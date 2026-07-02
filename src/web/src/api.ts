@@ -110,8 +110,8 @@ export function fetchOpportunityScan(options?: {
   refresh?: boolean;
 }) {
   const params = new URLSearchParams({
-    topK: String(options?.topK ?? 5),
-    maxSymbols: String(options?.maxSymbols ?? 30),
+    topK: String(options?.topK ?? 30),
+    maxSymbols: String(options?.maxSymbols ?? 300),
     minVolume24h: String(options?.minVolume24h ?? 200_000),
   });
   if (options?.refresh) {

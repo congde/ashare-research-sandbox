@@ -11,6 +11,7 @@ import {
 import { Layout, Menu } from "antd";
 import { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import FloatingPageAssistant from "../components/FloatingPageAssistant";
 import { useThemeMode } from "../contexts/ThemeContext";
 
 const { Header, Sider, Content } = Layout;
@@ -97,6 +98,7 @@ export default function MainLayout() {
         <Content className="app-shell-content">
           <Outlet />
         </Content>
+        <FloatingPageAssistant />
       </Layout>
     </Layout>
   );

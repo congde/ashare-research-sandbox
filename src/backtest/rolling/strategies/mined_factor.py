@@ -78,5 +78,113 @@ class MinedFactorStrategy(Strategy):
             "entry_threshold": 0.5,
         }
 
+
+class MinedFactorLRStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Linear Regression."""
+    name = "mined_factor_lr"
+    display_name = "挖掘因子 - 线性回归"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorRFStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Random Forest."""
+    name = "mined_factor_rf"
+    display_name = "挖掘因子 - 随机森林"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorGBMStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Gradient Boosting."""
+    name = "mined_factor_gbm"
+    display_name = "挖掘因子 - 梯度提升"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorNNStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Neural Network."""
+    name = "mined_factor_nn"
+    display_name = "挖掘因子 - 神经网络"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorEnsembleStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Ensemble methods."""
+    name = "mined_factor_ensemble"
+    display_name = "挖掘因子 - 集成模型"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorBayesStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Bayesian methods."""
+    name = "mined_factor_bayes"
+    display_name = "挖掘因子 - 贝叶斯模型"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorKNNStrategy(MinedFactorStrategy):
+    """Mined factor strategy using KNN."""
+    name = "mined_factor_knn_factor"
+    display_name = "挖掘因子 - KNN 模型"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "ml")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorGPStrategy(MinedFactorStrategy):
+    """Mined factor strategy using Genetic Programming."""
+    name = "mined_factor_gp"
+    display_name = "挖掘因子 - 遗传规划"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "gp")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
+
+class MinedFactorLLMStrategy(MinedFactorStrategy):
+    """Mined factor strategy using LLM-generated factors."""
+    name = "mined_factor_llm"
+    display_name = "挖掘因子 - LLM 智能因子"
+
+    def prepare(self, candles: List[Dict], params: Dict[str, Any]) -> None:
+        params_copy = dict(params)
+        params_copy.setdefault("factor_source", "llm")
+        params_copy.setdefault("label", self.display_name)
+        super().prepare(candles, params_copy)
+
     def is_incremental(self) -> bool:
         return False
