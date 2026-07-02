@@ -3,7 +3,10 @@
 /docs/
 outputs/
 vendor/
+scripts/*_figures.py
 data/dashboard/snapshots/
+data/backtest_trials.jsonl
+data/dashboard/manifest.json
 data/llm_signal_tasks/
 data/_*.txt
 data/_pdf*.txt
