@@ -1,0 +1,89 @@
+{
+  "ok": true,
+  "source": "fixture",
+  "updated_at": "2026-07-02T00:00:00+00:00",
+  "sources": [
+    {"id": "cointelegraph", "name": "Cointelegraph", "url": "https://cointelegraph.com/rss", "ok": true, "count": 2},
+    {"id": "theblock", "name": "The Block", "url": "https://www.theblock.co/rss.xml", "ok": true, "count": 2},
+    {"id": "decrypt", "name": "Decrypt", "url": "https://decrypt.co/feed", "ok": true, "count": 2},
+    {"id": "gdelt", "name": "GDELT", "url": "https://api.gdeltproject.org/api/v2/doc/doc", "ok": true, "count": 2}
+  ],
+  "metrics": {
+    "article_count": 8,
+    "positive_count": 3,
+    "negative_count": 2,
+    "risk_event_count": 2,
+    "positive_ratio": 0.375,
+    "sentiment_score": 0.125,
+    "top_topics": [["ETF", 2], ["DeFi", 2], ["Security", 2], ["Regulation", 1]],
+    "top_assets": [["BTC", 3], ["ETH", 2], ["SOL", 1]]
+  },
+  "factor_signals": {
+    "news_heat_24h": 8,
+    "risk_event_count_24h": 2,
+    "positive_news_ratio_24h": 0.375,
+    "asset_mention_count_24h": {"BTC": 3, "ETH": 2, "SOL": 1}
+  },
+  "items": [
+    {
+      "source": "Cointelegraph",
+      "source_id": "cointelegraph",
+      "title": "Bitcoin ETF inflows lift market sentiment as traders watch resistance",
+      "url": "https://cointelegraph.com/example/bitcoin-etf-inflows",
+      "published_at": "2026-07-02T00:00:00+00:00",
+      "summary": "ETF inflows and renewed institutional demand improved short-term sentiment around Bitcoin.",
+      "assets": ["BTC"],
+      "topics": ["ETF"],
+      "sentiment": 2,
+      "risk_event": false
+    },
+    {
+      "source": "The Block",
+      "source_id": "theblock",
+      "title": "Ethereum staking upgrade draws DeFi liquidity attention",
+      "url": "https://www.theblock.co/example/ethereum-staking-defi",
+      "published_at": "2026-07-01T22:00:00+00:00",
+      "summary": "DeFi protocols are adjusting liquidity incentives around Ethereum staking flows.",
+      "assets": ["ETH"],
+      "topics": ["DeFi"],
+      "sentiment": 1,
+      "risk_event": false
+    },
+    {
+      "source": "Decrypt",
+      "source_id": "decrypt",
+      "title": "Solana ecosystem airdrop speculation boosts activity",
+      "url": "https://decrypt.co/example/solana-airdrop",
+      "published_at": "2026-07-01T20:00:00+00:00",
+      "summary": "Wallet activity rose as users positioned for potential ecosystem rewards.",
+      "assets": ["SOL"],
+      "topics": ["Airdrop"],
+      "sentiment": 1,
+      "risk_event": false
+    },
+    {
+      "source": "GDELT",
+      "source_id": "gdelt",
+      "title": "Crypto bridge exploit raises renewed security concerns",
+      "url": "https://example.com/crypto-bridge-exploit",
+      "published_at": "2026-07-01T18:00:00+00:00",
+      "summary": "example.com",
+      "assets": ["ETH"],
+      "topics": ["Security", "DeFi"],
+      "sentiment": -2,
+      "risk_event": true
+    },
+    {
+      "source": "GDELT",
+      "source_id": "gdelt",
+      "title": "Regulators review stablecoin market structure proposals",
+      "url": "https://example.com/stablecoin-regulation",
+      "published_at": "2026-07-01T16:00:00+00:00",
+      "summary": "example.com",
+      "assets": ["USDT", "USDC"],
+      "topics": ["Stablecoin", "Regulation"],
+      "sentiment": -1,
+      "risk_event": true
+    }
+  ]
+}

@@ -3,10 +3,10 @@ import { Button, Input, Select, Switch } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { fetchKlineAnalysis, fetchMarketTickers, pollLlmSignalAnalysis, submitLlmSignalAnalysis } from "../../api";
+import { fetchKlineAnalysis, fetchMarketTickers, fetchWeb3News, pollLlmSignalAnalysis, submitLlmSignalAnalysis } from "../../api";
 import { KlineAnalysisChart } from "../../components/charts/KlineAnalysisChart";
 import { useReport } from "../../contexts/ReportContext";
-import type { KlineAnalysisPayload, SignalAnalysisPayload } from "../../types";
+import type { KlineAnalysisPayload, SignalAnalysisPayload, Web3NewsPayload } from "../../types";
 import { QuantGlowCard, SectionHeader, SignalRow, StatusPill, TradingPageShell } from "../trading/TradingPageShell";
 import "./research.css";
 
@@ -79,6 +79,11 @@ export default function ResearchPage() {
 
   const [kline, setKline] = useState<KlineAnalysisPayload | null>(null);
   const [signal, setSignal] = useState<SignalAnalysisPayload | null>(null);
+  const [web3News, setWeb3News] = useState<Web3NewsPayload | null>(null);
+  const [newsSourceFilter, setNewsSourceFilter] = useState("all");
+  const [newsTopicFilter, setNewsTopicFilter] = useState("all");
+  const [newsRiskOnly, setNewsRiskOnly] = useState(false);
+  const [newsSearch, setNewsSearch] = useState("");
   const [tickerMeta, setTickerMeta] = useState<{
     price?: number;
     changeRate?: number;
@@ -102,15 +107,17 @@ export default function ResearchPage() {
     }
   }, []);
 
-  const loadKline = useCallback(async () => {
+  const loadKline = useCallback(async (refreshNews = false) => {
     setKlineBusy(true);
     setError(null);
     try {
-      const [klinePayload, tickersPayload] = await Promise.all([
+      const [klinePayload, tickersPayload, newsPayload] = await Promise.all([
         fetchKlineAnalysis(pair, klineType),
         fetchMarketTickers(300),
+        fetchWeb3News(80, { refresh: refreshNews }),
       ]);
       setKline(klinePayload);
+      setWeb3News(newsPayload);
       const row = (tickersPayload.tickers || []).find(
         (item) => String((item as { symbol?: string }).symbol || "").toUpperCase() === pair,
       ) as { last?: number; changeRate?: number; high?: number; low?: number; volValue?: number } | undefined;
@@ -232,6 +239,54 @@ export default function ResearchPage() {
     }));
   }, [signal?.kline]);
 
+  const topNewsAssets = useMemo(() => (web3News?.metrics?.top_assets || []).slice(0, 6), [web3News?.metrics?.top_assets]);
+  const topNewsTopics = useMemo(() => (web3News?.metrics?.top_topics || []).slice(0, 6), [web3News?.metrics?.top_topics]);
+  const newsSentimentTone = (web3News?.metrics?.sentiment_score ?? 0) >= 0 ? "research-positive" : "research-negative";
+  const sourceOptions = useMemo(
+    () => [
+      { label: "全部来源", value: "all" },
+      ...(web3News?.sources ?? [])
+        .filter((source) => source.ok && source.id)
+        .map((source) => ({ label: source.name ?? source.id ?? "source", value: source.id ?? "source" })),
+    ],
+    [web3News?.sources],
+  );
+  const topicOptions = useMemo(() => {
+    const topicSet = new Set<string>();
+    (web3News?.metrics?.top_topics ?? []).forEach(([topic]) => topicSet.add(topic));
+    (web3News?.items ?? []).forEach((item) => (item.topics ?? []).forEach((topic) => topicSet.add(topic)));
+    return [
+      { label: "全部主题", value: "all" },
+      ...Array.from(topicSet)
+        .sort()
+        .map((topic) => ({ label: topic, value: topic })),
+    ];
+  }, [web3News?.items, web3News?.metrics?.top_topics]);
+  const filteredNewsItems = useMemo(() => {
+    const query = newsSearch.trim().toLowerCase();
+    return (web3News?.items ?? []).filter((item) => {
+      if (newsSourceFilter !== "all" && item.source_id !== newsSourceFilter) return false;
+      if (newsTopicFilter !== "all" && !(item.topics ?? []).includes(newsTopicFilter)) return false;
+      if (newsRiskOnly && !item.risk_event) return false;
+      if (!query) return true;
+      const haystack = `${item.title} ${item.summary ?? ""} ${item.source ?? ""} ${(item.assets ?? []).join(" ")} ${(item.topics ?? []).join(" ")}`.toLowerCase();
+      return haystack.includes(query);
+    });
+  }, [newsRiskOnly, newsSearch, newsSourceFilter, newsTopicFilter, web3News?.items]);
+  const sourceHealth = useMemo(() => {
+    const sources = web3News?.sources ?? [];
+    const okSources = sources.filter((source) => source.ok);
+    return {
+      ok: okSources.length,
+      total: sources.length,
+      failed: sources.filter((source) => !source.ok),
+      top: okSources
+        .slice()
+        .sort((left, right) => (right.count ?? 0) - (left.count ?? 0))
+        .slice(0, 3),
+    };
+  }, [web3News?.sources]);
+
   return (
     <TradingPageShell
       eyebrow="Research / Analysis"
@@ -254,7 +309,7 @@ export default function ResearchPage() {
             icon={<ReloadOutlined />}
             loading={klineBusy || signalBusy}
             onClick={() => {
-              void loadKline();
+              void loadKline(true);
               void loadLlmSignal();
             }}
           >
@@ -529,6 +584,232 @@ export default function ResearchPage() {
             <span>执行准备度 · {signal?.analysis?.executionReadiness ?? "—"}</span>
             <span>模型 · {signal?.engineMeta?.displayModel ?? signal?.engineMeta?.model ?? "DeepSeek V4 Pro"}</span>
             <span>恐贪指数 · {signal?.onchainMetrics?.fearGreed ?? "—"}</span>
+          </div>
+        </QuantGlowCard>
+      </section>
+
+      <section className="trading-grid research-news-workbench">
+        <QuantGlowCard
+          className="trading-span-12 research-news-cockpit"
+          title={
+            <SectionHeader
+              title="Web3 消息面情报"
+              description={`No-key RSS/GDELT · ${web3News?.source ?? "loading"} · ${web3News?.updated_at ?? "—"}`}
+            />
+          }
+          badge={<StatusPill tone={(web3News?.metrics?.risk_event_count ?? 0) > 0 ? "loss" : "neutral"}>News</StatusPill>}
+        >
+          <div className="research-news-dashboard">
+            <div className="research-news-brief">
+              <span>Market Intelligence</span>
+              <strong>{filteredNewsItems.length}</strong>
+              <p>
+                当前筛选命中 / 全量 {web3News?.metrics?.article_count ?? "—"} 条 · 来源{" "}
+                {sourceHealth.ok}/{sourceHealth.total || "—"}
+              </p>
+              <div className="research-news-focus">
+                <span>
+                  热门资产：
+                  {topNewsAssets.length ? topNewsAssets.map(([asset, count]) => `${asset} ${count}`).join(" / ") : "—"}
+                </span>
+                <span>
+                  热门主题：
+                  {topNewsTopics.length ? topNewsTopics.map(([topic, count]) => `${topic} ${count}`).join(" / ") : "—"}
+                </span>
+              </div>
+            </div>
+            <div className="research-news-controls">
+              <Input
+                allowClear
+                prefix={<SearchOutlined />}
+                placeholder="搜索新闻、资产、主题"
+                value={newsSearch}
+                onChange={(event) => setNewsSearch(event.target.value)}
+              />
+              <Select value={newsSourceFilter} options={sourceOptions} onChange={setNewsSourceFilter} />
+              <Select value={newsTopicFilter} options={topicOptions} onChange={setNewsTopicFilter} />
+              <label className="research-news-switch">
+                <Switch size="small" checked={newsRiskOnly} onChange={setNewsRiskOnly} />
+                只看风险事件
+              </label>
+            </div>
+          </div>
+
+          <div className="research-news-metrics">
+            <div>
+              <span>新闻热度</span>
+              <strong>{web3News?.metrics?.article_count ?? "—"}</strong>
+            </div>
+            <div>
+              <span>情绪均值</span>
+              <strong className={newsSentimentTone}>{web3News?.metrics?.sentiment_score?.toFixed(2) ?? "—"}</strong>
+            </div>
+            <div>
+              <span>风险事件</span>
+              <strong className="research-negative">{web3News?.metrics?.risk_event_count ?? "—"}</strong>
+            </div>
+            <div>
+              <span>正面占比</span>
+              <strong>
+                {web3News?.metrics?.positive_ratio != null ? `${(web3News.metrics.positive_ratio * 100).toFixed(1)}%` : "—"}
+              </strong>
+            </div>
+            <div>
+              <span>来源广度</span>
+              <strong>{web3News?.metrics?.source_breadth ?? "—"}</strong>
+            </div>
+          </div>
+
+          <div className="research-news-insight-strip">
+            <div className="research-source-summary">
+              <span className={sourceHealth.failed.length ? "warn" : "ok"}>
+                来源 {sourceHealth.ok}/{sourceHealth.total || "—"}
+              </span>
+              <p>
+                {sourceHealth.top.length
+                  ? sourceHealth.top.map((source) => `${source.name ?? source.id} ${source.count ?? 0}`).join(" / ")
+                  : "等待来源更新"}
+              </p>
+            </div>
+            <div className="research-news-chip-row" aria-label="Top assets">
+              {topNewsAssets.map(([asset, count]) => (
+                <button key={asset} type="button" onClick={() => setNewsSearch(asset)}>
+                  {asset}
+                  <b>{count}</b>
+                </button>
+              ))}
+            </div>
+            <div className="research-news-chip-row" aria-label="Top topics">
+              {topNewsTopics.map(([topic, count]) => (
+                <button
+                  key={topic}
+                  type="button"
+                  className={newsTopicFilter === topic ? "active" : ""}
+                  onClick={() => setNewsTopicFilter(newsTopicFilter === topic ? "all" : topic)}
+                >
+                  {topic}
+                  <b>{count}</b>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="research-news-layout">
+            <div className="research-news-feed">
+              {filteredNewsItems.slice(0, 12).map((item, index) => (
+                <a
+                  key={`${item.source_id}-${item.url || item.title}`}
+                  className={`research-news-item${item.risk_event ? " risk" : ""}`}
+                  href={item.url || "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-disabled={!item.url}
+                  onClick={(event) => {
+                    if (!item.url) {
+                      event.preventDefault();
+                    }
+                  }}
+                >
+                  <div className="research-news-rank">{String(index + 1).padStart(2, "0")}</div>
+                  <div className="research-news-body">
+                    <div className="research-news-meta">
+                      <span>{item.source ?? "source"}</span>
+                      <span>{(item.assets ?? []).join(", ") || "market"}</span>
+                      <span>{(item.topics ?? []).join(", ") || "general"}</span>
+                      <span>{item.published_at ?? "—"}</span>
+                    </div>
+                    <strong>{item.title}</strong>
+                    {item.summary ? <p>{item.summary}</p> : null}
+                  </div>
+                  <StatusPill tone={item.risk_event ? "loss" : (item.sentiment ?? 0) > 0 ? "profit" : "neutral"}>
+                    {item.risk_event ? "Risk" : (item.sentiment ?? 0) > 0 ? "Bullish" : "Neutral"}
+                  </StatusPill>
+                </a>
+              ))}
+              {!filteredNewsItems.length ? (
+                <div className="research-news-empty">当前筛选没有命中新闻，放宽来源、主题或搜索条件。</div>
+              ) : null}
+            </div>
+          </div>
+        </QuantGlowCard>
+      </section>
+
+      <section className="trading-grid research-news-section research-news-legacy">
+        <QuantGlowCard
+          className="trading-span-12"
+          title={
+            <SectionHeader
+              title="Web3 消息面情报"
+              description={`No-key RSS/GDELT · ${web3News?.source ?? "loading"} · ${web3News?.updated_at ?? "—"}`}
+            />
+          }
+          badge={<StatusPill tone={(web3News?.metrics?.risk_event_count ?? 0) > 0 ? "loss" : "neutral"}>News</StatusPill>}
+        >
+          <div className="research-stat-row">
+            <div className="research-stat-card">
+              <div className="label">新闻热度</div>
+              <div className="value">{web3News?.metrics?.article_count ?? "—"}</div>
+            </div>
+            <div className="research-stat-card">
+              <div className="label">情绪均值</div>
+              <div className={`value ${newsSentimentTone}`}>
+                {web3News?.metrics?.sentiment_score?.toFixed(2) ?? "—"}
+              </div>
+            </div>
+            <div className="research-stat-card">
+              <div className="label">风险事件</div>
+              <div className="value research-negative">{web3News?.metrics?.risk_event_count ?? "—"}</div>
+            </div>
+            <div className="research-stat-card">
+              <div className="label">正面占比</div>
+              <div className="value">
+                {web3News?.metrics?.positive_ratio != null
+                  ? `${(web3News.metrics.positive_ratio * 100).toFixed(1)}%`
+                  : "—"}
+              </div>
+            </div>
+            <div className="research-stat-card">
+              <div className="label">热门资产</div>
+              <div className="value">
+                {topNewsAssets.length ? topNewsAssets.map(([asset, count]) => `${asset} ${count}`).join(" / ") : "—"}
+              </div>
+            </div>
+            <div className="research-stat-card">
+              <div className="label">热门主题</div>
+              <div className="value">
+                {topNewsTopics.length ? topNewsTopics.map(([topic, count]) => `${topic} ${count}`).join(" / ") : "—"}
+              </div>
+            </div>
+          </div>
+          <div className="trading-list">
+            {(web3News?.items ?? []).slice(0, 12).map((item) => (
+              <a
+                key={`${item.source_id}-${item.url || item.title}`}
+                className="trading-list-row research-news-link"
+                href={item.url || "#"}
+                target="_blank"
+                rel="noreferrer"
+                aria-disabled={!item.url}
+                onClick={(event) => {
+                  if (!item.url) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <div>
+                  <strong>{item.title}</strong>
+                  <span>
+                    {item.source ?? "source"} · {(item.assets ?? []).join(", ") || "market"} ·{" "}
+                    {(item.topics ?? []).join(", ") || "general"} · {item.published_at ?? "—"}
+                  </span>
+                </div>
+                {
+                  <StatusPill tone={item.risk_event ? "loss" : (item.sentiment ?? 0) > 0 ? "profit" : "neutral"}>
+                    {item.risk_event ? "Risk" : (item.sentiment ?? 0) > 0 ? "Bullish" : "Neutral"}
+                  </StatusPill>
+                }
+              </a>
+            ))}
           </div>
         </QuantGlowCard>
       </section>

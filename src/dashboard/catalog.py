@@ -19,6 +19,7 @@ SNAPSHOT_NAMES = (
     "onchain",
     "dex_trending",
     "market_tickers",
+    "web3_news",
     "opportunity_scan",
     "market_candles",
 )
@@ -66,6 +67,7 @@ DATASET_CHECKS: dict[str, DatasetCheck] = {
     else (False, "missing fearGreed.value"),
     "dex_trending": lambda payload: _has_items(payload, "tokens", minimum=1),
     "market_tickers": lambda payload: _has_items(payload, "tickers", minimum=1),
+    "web3_news": lambda payload: _has_items(payload, "items", minimum=1),
     "opportunity_scan": _check_opportunity_scan,
     "market_candles": _check_market_candles,
     "valuescan_token_full": lambda payload: (

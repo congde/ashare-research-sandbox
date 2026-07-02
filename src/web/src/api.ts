@@ -10,6 +10,7 @@ import type {
   RuntimeConfig,
   SignalAnalysisPayload,
   StrategyValidationResult,
+  Web3NewsPayload,
   RollingBacktestPayload,
   RollingBacktestStrategy,
   BacktestComparePayload,
@@ -79,6 +80,12 @@ export function fetchDexTrending(chain = "solana", limit = 5) {
 export function fetchMarketTickers(limit = 300, options?: { refresh?: boolean }) {
   return fetchDashboard<{ ok: boolean; count?: number; tickers?: unknown[] }>(
     withRefresh(`/api/market/tickers?quote=USDT&limit=${limit}`, options?.refresh),
+  );
+}
+
+export function fetchWeb3News(limit = 50, options?: { refresh?: boolean }) {
+  return fetchDashboard<Web3NewsPayload>(
+    withRefresh(`/api/dashboard/web3-news?limit=${limit}`, options?.refresh),
   );
 }
 

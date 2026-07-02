@@ -244,6 +244,10 @@ class Handler(BaseHTTPRequestHandler):
                 limit=qi("limit", 300),
                 refresh=qb("refresh"),
             ),
+            "/api/dashboard/web3-news": lambda: dashboard_api.web3_news(
+                limit=qi("limit", 50),
+                refresh=qb("refresh"),
+            ),
             "/api/market/ticker": lambda: dashboard_api.ticker_stats(
                 q("symbol", "BTC-USDT"),
                 refresh=qb("refresh"),

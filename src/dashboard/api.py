@@ -10,7 +10,7 @@ from config.web3_trading import (
     get_watch_symbols,
     primary_market_symbol,
 )
-from dashboard import dexscan, market, opportunity, valuescan
+from dashboard import dexscan, market, news, opportunity, valuescan
 from dashboard.fixtures import load_offline
 from dashboard.mode import dashboard_data_mode, prefer_offline, serve_offline_first, try_live_public
 from dashboard.resolve import try_cached_first
@@ -318,6 +318,47 @@ def market_tickers(*, quote: str = "USDT", limit: int = 300, refresh: bool = Fal
     return trim_market_tickers(payload, quote=quote, limit=limit)
 
 
+def web3_news(*, limit: int = 50, refresh: bool = False) -> dict[str, Any]:
+    load_env()
+    clipped_limit = max(1, min(100, limit))
+
+    def _refresh() -> None:
+        web3_news(limit=clipped_limit, refresh=True)
+
+    cached = try_cached_first(
+        "web3_news",
+        refresh=refresh,
+        background_key="web3_news",
+        fetch_live=_refresh,
+    )
+    if cached is not None:
+        payload = dict(cached)
+        payload["items"] = (payload.get("items") or [])[:clipped_limit]
+        return payload
+
+    hit = _try_upstream("/api/dashboard/web3-news", {"limit": clipped_limit})
+    if hit:
+        maybe_persist("web3_news", hit)
+        hit["items"] = (hit.get("items") or [])[:clipped_limit]
+        return hit
+    if prefer_offline():
+        payload = load_offline("web3_news")
+        payload["items"] = (payload.get("items") or [])[:clipped_limit]
+        return payload
+    if try_live_public():
+        try:
+            payload = news.fetch_web3_news(watch_symbols=get_watch_symbols(), limit=clipped_limit)
+            maybe_persist("web3_news", payload)
+            return payload
+        except Exception:
+            payload = annotate_cached(load_offline("web3_news"))
+            payload["items"] = (payload.get("items") or [])[:clipped_limit]
+            return payload
+    payload = load_offline("web3_news")
+    payload["items"] = (payload.get("items") or [])[:clipped_limit]
+    return payload
+
+
 def _offline_ticker_stats(symbol: str) -> dict[str, Any] | None:
     pair = symbol.strip().upper()
     if "-" not in pair:
@@ -570,12 +611,14 @@ def sources_status() -> dict[str, Any]:
         "valuescan": valuescan.configured(),
         "dexscan": dexscan.configured(),
         "web3_exchange_public": True,
+        "web3_news_public": True,
         "fear_greed_public": True,
         "data_mode": dashboard_data_mode(),
         "upstream": cfg["upstream"],
     }
     probes: list[dict[str, Any]] = []
     checks = [
+        ("web3_news", "Web3 news", lambda: web3_news(limit=5)),
         ("web3_exchange", "web3交易所 行情", lambda: market_tickers(limit=5)),
         ("valuescan", "ValueScan", ai_picks),
         ("dexscan", "DexScan", lambda: dex_trending(limit=3)),

@@ -7,17 +7,22 @@ import urllib.request
 from typing import Any
 
 
-def http_get(url: str, *, headers: dict[str, str] | None = None, timeout: float = 15) -> Any:
+def http_get_text(url: str, *, headers: dict[str, str] | None = None, timeout: float = 15) -> str:
     request = urllib.request.Request(url, headers=headers or {}, method="GET")
     context = ssl.create_default_context()
     try:
         with urllib.request.urlopen(request, timeout=timeout, context=context) as response:
-            raw = response.read().decode("utf-8")
+            charset = response.headers.get_content_charset() or "utf-8"
+            return response.read().decode(charset, errors="replace")
     except urllib.error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"HTTP {exc.code}: {body[:300]}") from exc
     except urllib.error.URLError as exc:
         raise RuntimeError(str(exc.reason)) from exc
+
+
+def http_get(url: str, *, headers: dict[str, str] | None = None, timeout: float = 15) -> Any:
+    raw = http_get_text(url, headers=headers, timeout=timeout)
     return json.loads(raw) if raw else {}
 
 

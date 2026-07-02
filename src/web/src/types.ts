@@ -175,6 +175,46 @@ export interface DashboardSourcesStatus {
   probes?: Array<{ id: string; name: string; ok: boolean; source?: string; error?: string }>;
 }
 
+export interface Web3NewsItem {
+  source?: string;
+  source_id?: string;
+  title: string;
+  url?: string;
+  published_at?: string | null;
+  summary?: string;
+  assets?: string[];
+  topics?: string[];
+  sentiment?: number;
+  risk_event?: boolean;
+}
+
+export interface Web3NewsPayload {
+  ok: boolean;
+  source?: string;
+  updated_at?: string;
+  sources?: Array<{ id?: string; name?: string; url?: string; ok?: boolean; count?: number; error?: string }>;
+  metrics?: {
+    article_count?: number;
+    positive_count?: number;
+    negative_count?: number;
+    risk_event_count?: number;
+    positive_ratio?: number;
+    sentiment_score?: number;
+    source_breadth?: number;
+    top_topics?: Array<[string, number]>;
+    top_assets?: Array<[string, number]>;
+  };
+  factor_signals?: {
+    news_heat_24h?: number;
+    risk_event_count_24h?: number;
+    positive_news_ratio_24h?: number;
+    asset_mention_count_24h?: Record<string, number>;
+    source_breadth_24h?: number;
+  };
+  items?: Web3NewsItem[];
+  message?: string;
+}
+
 export interface RuntimeConfig {
   ok: boolean;
   upstream?: {

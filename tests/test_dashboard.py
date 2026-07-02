@@ -61,3 +61,11 @@ def test_market_tickers_fixture_shape() -> None:
     payload = dashboard_api.market_tickers(limit=5)
     assert payload["ok"] is True
     assert isinstance(payload.get("tickers"), list)
+
+
+def test_web3_news_fixture_shape() -> None:
+    payload = dashboard_api.web3_news(limit=5)
+    assert payload["ok"] is True
+    assert isinstance(payload.get("items"), list)
+    assert payload["metrics"]["article_count"] >= 1
+    assert "news_heat_24h" in payload["factor_signals"]
